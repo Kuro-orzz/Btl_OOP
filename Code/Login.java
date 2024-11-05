@@ -17,7 +17,7 @@ public class Login {
 
         LoadImage loginImageLoader = new LoadImage();
 
-        Label loginLabel = new Label("Login");
+        Label loginLabel = new Label("My Library");
         loginLabel.setStyle("-fx-font-size: 100px");
         loginLabel.setTranslateY(-170);
 
@@ -60,7 +60,13 @@ public class Login {
         vbox.getChildren().addAll(pane1, pane2);
 
         Button loginButton = new Button("Login");
+        loginButton.setStyle("-fx-font-size: 16px; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        loginButton.setPrefWidth(100);
+        loginButton.setPrefHeight(40);
+        loginButton.setTranslateX(0);
         loginButton.setTranslateY(100);
+
+        //check Log In succeed then turn into main interface of the App
         loginButton.setOnAction(event -> {
             if (authenticate(usernameField.getText(), passwordField.getText())) {
                 mainApp.showSidebarScene();
