@@ -1,5 +1,7 @@
 .sidebar {
-
+    -fx-padding: 30px;
+    -fx-spacing: 10px;
+    -fx-background-color: #1D2D50;
 }
 
 .title {

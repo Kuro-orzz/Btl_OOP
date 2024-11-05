@@ -1,6 +1,5 @@
 package Code;
 
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,13 +8,14 @@ import javafx.scene.layout.VBox;
 
 public class Sidebar {
     public Scene getSidebarScene() {
+        // default sidebar
         VBox sidebar = new VBox();
-        sidebar.setPadding(new Insets(30));
-        sidebar.setSpacing(10);
-        sidebar.setStyle("-fx-background-color: #1D2D50;");
+        sidebar.getStylesheets().add(getClass().getResource("/styles/sidebar.css").toExternalForm());
+        sidebar.getStyleClass().add("sidebar");
 
+        // title
         Label title = new Label("Library\nmanagement");
-        title.getStylesheets().add(getClass().getResource("/styles/sideBar.css").toExternalForm());
+        title.getStylesheets().add(getClass().getResource("/styles/sidebar.css").toExternalForm());
         title.getStyleClass().add("title");
 
         sidebar.getChildren().addAll(
@@ -35,9 +35,9 @@ public class Sidebar {
         return new Scene(layout, 1280, 720);
     }
 
-    private Button createSidebarButton(String text) {
+    public Button createSidebarButton(String text) {
         Button button = new Button(text);
-        button.getStylesheets().add(getClass().getResource("/styles/sideBar.css").toExternalForm());
+        button.getStylesheets().add(getClass().getResource("/styles/sidebar.css").toExternalForm());
         button.getStyleClass().add("sidebar-button");
         return button;
     }

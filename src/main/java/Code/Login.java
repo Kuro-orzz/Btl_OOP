@@ -6,14 +6,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.lang.reflect.Field;
-
 public class Login {
     private static final String USERNAME = "admin";
     private static final String PASSWORD = "password";
 
     public Scene getLoginScene(MainApp mainApp) {
-
         LoadImage loginImageLoader = new LoadImage();
 
         // login label
@@ -29,11 +26,11 @@ public class Login {
         TextInputControl passwordField = createInputField("password");
         Pane passwordPane = createPane(passwordField, 540, 330);
 
-        // Login button
-        Button loginButton = createLoginButton(mainApp, usernameField, passwordField);
-
         VBox vbox = new VBox();
         vbox.getChildren().addAll(usernamePane, passwordPane);
+
+        // Login button
+        Button loginButton = createLoginButton(mainApp, usernameField, passwordField);
 
         StackPane stPane = new StackPane();
         stPane.getChildren().addAll(loginImageLoader.loadLoginImage(), loginLabel, vbox, loginButton);
@@ -51,6 +48,7 @@ public class Login {
             textInput.setPromptText("Enter Password");
         }
         TextInputControl finalTextInput = textInput;
+        assert textInput != null;
         textInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 40) {
                 // only get 40 character
