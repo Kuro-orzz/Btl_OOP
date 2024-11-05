@@ -20,11 +20,11 @@ public class Login {
 
         // Enter Username
         TextInputControl usernameField = createInputField("username");
-        Pane usernamePane = createPane(usernameField, 540, 300);
+        Pane usernamePane = createPane(usernameField, 530, 300);
 
         // Enter Password
         TextInputControl passwordField = createInputField("password");
-        Pane passwordPane = createPane(passwordField, 540, 330);
+        Pane passwordPane = createPane(passwordField, 530, 330);
 
         VBox vbox = new VBox();
         vbox.getChildren().addAll(usernamePane, passwordPane);
