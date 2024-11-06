@@ -4,8 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class LoadImage {
-    private static final String IMG_LOGIN_PATH = "/GUI/theme_login.jpg";
-
+    private static final String IMG_LOGIN_PATH = "/GUI/loginImage.jpg";
     public ImageView loadLoginImage() {
         ImageView imageView = new ImageView();
         try {
@@ -20,4 +19,5 @@ public class LoadImage {
         }
         return imageView;
     }
+
 }

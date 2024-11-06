@@ -1,5 +1,9 @@
 .login-label {
-    -fx-font-size: 100px;
+    -fx-font-size: 80px;
+    -fx-font-family: "Futura", sans-serif;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%, #4A90E2, #243A73);
+    -fx-effect: dropshadow(gaussian, rgba(141, 132, 132, 0.75), 10, 0.5, 2, 2);
+    -fx-font-weight: bold;
     -fx-translate-x: 0px;
     -fx-translate-y: -170px;
 }
@@ -20,7 +24,7 @@
     -fx-pref-width: 100px;
     -fx-pref-height: 40px;
     -fx-translate-x: 0px;
-    -fx-translate-y: 100px;
+    -fx-translate-y: 120px;
 }
 
 .login-button:hover {

@@ -21,3 +21,7 @@
 .sidebar-button:hover {
     -fx-background-color: #3A4E8D;
 }
+
+.sidebar-button.selected {
+    -fx-background-color: #3A4E8D;
+}

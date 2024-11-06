@@ -10,21 +10,26 @@ public class Login {
     private static final String USERNAME = "admin";
     private static final String PASSWORD = "password";
 
+    /**
+     * Create a scene where we log in.
+     * @param mainApp main app controller
+     * @return login scene to be showed
+     */
     public Scene getLoginScene(MainApp mainApp) {
         LoadImage loginImageLoader = new LoadImage();
 
         // login label
-        Label loginLabel = new Label("Login");
+        Label loginLabel = new Label("     Library\nManagement");
         loginLabel.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         loginLabel.getStyleClass().add("login-label");
 
         // Enter Username
         TextInputControl usernameField = createInputField("username");
-        Pane usernamePane = createPane(usernameField, 530, 300);
+        Pane usernamePane = createPane(usernameField, 530, 330);
 
         // Enter Password
         TextInputControl passwordField = createInputField("password");
-        Pane passwordPane = createPane(passwordField, 530, 330);
+        Pane passwordPane = createPane(passwordField, 530, 350);
 
         VBox vbox = new VBox();
         vbox.getChildren().addAll(usernamePane, passwordPane);
@@ -38,6 +43,11 @@ public class Login {
         return new Scene(stPane, 1280, 720);
     }
 
+    /**
+     * Create text input field to get username or password from keyboard.
+     * @param type select which field to get password and which to get username
+     * @return Text input field
+     */
     public TextInputControl createInputField(String type) {
         TextInputControl textInput = null;
         if (type.equals("username")) {
@@ -62,6 +72,13 @@ public class Login {
         return textInput;
     }
 
+    /**
+     * Create a pane including text field with position (X,Y)
+     * @param textInput text field
+     * @param posX x index for positioning
+     * @param posY y index for positioning
+     * @return Pane
+     */
     public Pane createPane(TextInputControl textInput, int posX, int posY) {
         Pane pane = new Pane(textInput);
         pane.setTranslateX(posX);
@@ -69,6 +86,13 @@ public class Login {
         return pane;
     }
 
+    /**
+     * Create button to log in when click on it.
+     * @param mainApp the main app controller
+     * @param usernameField where to get username
+     * @param passwordField where to get password
+     * @return login Button
+     */
     public Button createLoginButton(MainApp mainApp, TextInputControl usernameField, TextInputControl passwordField) {
         Button loginButton = new Button("Login");
         loginButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());

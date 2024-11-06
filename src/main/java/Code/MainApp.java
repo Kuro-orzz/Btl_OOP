@@ -20,6 +20,9 @@ public class MainApp extends Application {
         showLoginScene();
     }
 
+    /**
+     * Present log in scene on the screen.
+     */
     private void showLoginScene() {
         Login login = new Login();
         Scene loginScene = login.getLoginScene(this);
