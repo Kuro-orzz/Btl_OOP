@@ -2,13 +2,22 @@ package Code;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+
+import Logic.Account;
+import Logic.AccountList;
 
 public class Login {
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "password";
+    protected AccountList accountList = new AccountList();
+
+    public Login() {
+        Account account = new Account("admin", "password", true);
+        accountList.addAccount(account);
+    }
 
     /**
      * Create a scene where we log in.
@@ -16,7 +25,17 @@ public class Login {
      * @return login scene to be showed
      */
     public Scene getLoginScene(MainApp mainApp) {
-        LoadImage loginImageLoader = new LoadImage();
+        ImageView backgroundImage = new ImageView();
+        try {
+            Image loginImage = new Image(getClass().getResourceAsStream("/GUI/loginImage.jpg"));
+            backgroundImage.setImage(loginImage);
+            backgroundImage.setFitWidth(1280);
+            backgroundImage.setFitHeight(720);
+            backgroundImage.setStyle("-fx-opacity: 0.6");
+            backgroundImage.setPreserveRatio(true);
+        } catch (Exception e) {
+            System.out.println("Error loading image: " + e.getMessage());
+        }
 
         // login label
         Label loginLabel = new Label("     Library\nManagement");
@@ -38,7 +57,9 @@ public class Login {
         Button loginButton = createLoginButton(mainApp, usernameField, passwordField);
 
         StackPane stPane = new StackPane();
-        stPane.getChildren().addAll(loginImageLoader.loadLoginImage(), loginLabel, vbox, loginButton);
+        stPane.getChildren().addAll(backgroundImage, loginLabel, vbox, loginButton);
+
+        
 
         return new Scene(stPane, 1280, 720);
     }
@@ -114,6 +135,7 @@ public class Login {
      * @return true if account is available and false if unavailable
      */
     private boolean authenticate(String username, String password) {
-        return USERNAME.equals(username) && PASSWORD.equals(password);
+        Account accountToCheck = new Account(username, password);
+        return accountList.searchAccounts(accountToCheck);
     }
 }
