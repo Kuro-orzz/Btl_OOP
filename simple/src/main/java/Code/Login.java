@@ -58,8 +58,4 @@ public class Login extends AccountList {
     public boolean checkLogin() {
         return isLogin;
     }
-
-    public boolean equal(Object obj) {
-        return super.equals(obj);
-    }
 }
