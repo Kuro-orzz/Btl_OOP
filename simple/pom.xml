@@ -47,6 +47,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+<!--Add csv reader-->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

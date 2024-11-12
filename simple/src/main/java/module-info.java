@@ -5,6 +5,7 @@ module org.example.simple {
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
     requires java.xml;
+    requires opencsv;
 
     opens org.example.simple to javafx.fxml;
     exports org.example.simple;

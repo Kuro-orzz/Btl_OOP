@@ -1,44 +1,54 @@
 package Code;
 
-public class Book {
-    private int id;
-    private String name;
+public class Book extends HashingMultipleBase {
+    private String isbn;
+    private String title;
     private String author;
     private int yearOfPublication;
-    private int pages;
-    private String category;
     private String publisher;
-    private String isbn;
+    private String IMG_PATH_SIZE_S;
+    private String IMG_PATH_SIZE_M;
+    private String IMG_PATH_SIZE_L;
+    public HashingMultipleBase hashIsbn, hashTitle, hashAuthor, hashPublisher;
 
     public Book() {}
 
-    public Book(int id, String name, String author) {
-        this.id = id;
-        this.name = name;
+    public Book(String title, String author) {
+        this.title = title;
         this.author = author;
+        hashTitle = hashInit(title);
+        hashAuthor = hashInit(author);
     }
 
-    public Book(int id, String name, String author, int yearOfPublication) {
-        this.id = id;
-        this.name = name;
-        this.author = author;
-        this.yearOfPublication = yearOfPublication;
+    public Book(String[] data) {
+        this.isbn = data[0];
+        this.title = data[1];
+        this.author = data[2];
+        this.yearOfPublication = Integer.parseInt(data[3]);
+        this.publisher = data[4];
+        this.IMG_PATH_SIZE_S = data[5];
+        this.IMG_PATH_SIZE_M = data[6];
+        this.IMG_PATH_SIZE_L = data[7];
+        hashIsbn = hashInit(isbn);
+        hashTitle = hashInit(title);
+        hashAuthor = hashInit(author);
+        hashPublisher = hashInit(publisher);
     }
 
-    public int getId() {
-        return id;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getAuthor() {
@@ -57,22 +67,6 @@ public class Book {
         this.yearOfPublication = yearOfPublication;
     }
 
-    public int getPages() {
-        return pages;
-    }
-
-    public void setPages(int pages) {
-        this.pages = pages;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public String getPublisher() {
         return publisher;
     }
@@ -81,11 +75,14 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getInfo() {
+        return isbn + "; " + title + "; " + author + "; " + yearOfPublication + "; " + publisher;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public HashingMultipleBase hashInit(String info) {
+        HashingMultipleBase hash = new HashingMultipleBase(info.length());
+        hash.hash(info, 1);
+        hash.hash(info, 2);
+        return hash;
     }
 }
