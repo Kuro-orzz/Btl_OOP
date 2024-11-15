@@ -1,42 +1,85 @@
 package Code;
 
-import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
-public class MainApp extends Application {
-    private Stage primaryStage;
+public class MainApp {
+    private Button selectedButton; // To keep track of the currently selected button
+    protected BorderPane layout = new BorderPane(); // Layout of application
+    private AppController controller = new AppController();
+    private boolean isAdmin; // Stores if the logged-in user is an admin
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage stage) {
-        Image icon = new Image(getClass().getResourceAsStream("/GUI/appIcon.png"));
-        stage.getIcons().add(icon);
-        this.primaryStage = stage;
-        showLoginScene();
+    public MainApp(AppController controller, boolean isAdmin) {
+        this.controller = controller;
+        this.isAdmin = isAdmin;
     }
 
     /**
-     * Present log in scene on the screen.
+     * Create a sidebar to choose what to do with the LMS.
+     * @return sidebar scene (javafx)
      */
-    private void showLoginScene() {
-        Login login = new Login();
-        Scene loginScene = login.getLoginScene(this);
+    public Scene getMainAppScene() {
+        // Default sidebar
+        VBox sidebar = new VBox();
+        sidebar.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        sidebar.getStyleClass().add("sidebar");
 
-        primaryStage.setTitle("My Library");
-        primaryStage.setScene(loginScene);
-        primaryStage.resizableProperty().setValue(Boolean.FALSE);
-        primaryStage.show();
+        // Title
+        Label title = new Label("Library\nManagement");
+        title.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        title.getStyleClass().add("title");
+
+        sidebar.getChildren().addAll(
+                title,
+                createSidebarButton("Home"),
+                createSidebarButton("Library"),
+                createSidebarButton("Borrow Request"),
+                createSidebarButton("Borrow"),
+                createSidebarButton("Return")
+        );
+
+        layout.setLeft(sidebar);
+        StackPane welcome = new StackPane();
+        welcome.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        Label welcomeLabel = new Label("Welcome to Library!");
+        welcomeLabel.getStyleClass().add("welcome-label");
+        welcome.setStyle("-fx-background-color: #F2F4F7;");
+        welcome.getChildren().addAll(welcomeLabel);
+        layout.setCenter(welcome);
+
+        return new Scene(layout, 1280, 720);
     }
 
-    public void showSidebarScene() {
-        Sidebar sidebar = new Sidebar();
-        Scene sidebarScene = sidebar.getSidebarScene();
-        primaryStage.setScene(sidebarScene);
-        primaryStage.setTitle("Library Management System");
+    /**
+     * Create button on sidebar to switch the function being used in the app.
+     * @param text the button name
+     * @return button (javafx)
+     */
+    public Button createSidebarButton(String text) {
+        Button button = new Button(text);
+        button.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        button.getStyleClass().add("sidebar-button");
+
+        button.setOnAction(event -> {
+            if (selectedButton != null) {
+                selectedButton.getStyleClass().remove("selected");
+            }
+
+            button.getStyleClass().add("selected");
+            selectedButton = button;
+
+            // Check if the button is "Home"
+            if (text.equals("Home")) {
+                Home home = new Home(controller);
+                StackPane homeView = home.getHomeStackPane(isAdmin);
+                layout.setCenter(homeView);
+            }
+        });
+
+        return button;
     }
 }

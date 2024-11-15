@@ -1,5 +1,6 @@
 package Code;
 
+import Logic.UserInfo;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -15,16 +16,17 @@ public class Login {
     protected AccountList accountList = new AccountList();
 
     public Login() {
-        Account account = new Account("admin", "password", true);
+        UserInfo admin = new UserInfo("admin", 18, true);
+        Account account = new Account("admin", "password", true, admin);
         accountList.addAccount(account);
     }
 
     /**
      * Create a scene where we log in.
-     * @param mainApp main app controller
+     * @param appController main app controller
      * @return login scene to be showed
      */
-    public Scene getLoginScene(MainApp mainApp) {
+    public Scene getLoginScene(AppController appController) {
         ImageView backgroundImage = new ImageView();
         try {
             Image loginImage = new Image(getClass().getResourceAsStream("/GUI/loginImage.jpg"));
@@ -54,12 +56,10 @@ public class Login {
         vbox.getChildren().addAll(usernamePane, passwordPane);
 
         // Login button
-        Button loginButton = createLoginButton(mainApp, usernameField, passwordField);
+        Button loginButton = createLoginButton(appController, usernameField, passwordField);
 
         StackPane stPane = new StackPane();
         stPane.getChildren().addAll(backgroundImage, loginLabel, vbox, loginButton);
-
-        
 
         return new Scene(stPane, 1280, 720);
     }
@@ -109,18 +109,20 @@ public class Login {
 
     /**
      * Create button to log in when click on it.
-     * @param mainApp the main app controller
+     * @param appController the main app controller
      * @param usernameField where to get username
      * @param passwordField where to get password
      * @return login Button
      */
-    public Button createLoginButton(MainApp mainApp, TextInputControl usernameField, TextInputControl passwordField) {
+    public Button createLoginButton(AppController appController, TextInputControl usernameField, TextInputControl passwordField) {
         Button loginButton = new Button("Login");
         loginButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         loginButton.getStyleClass().add("login-button");
         loginButton.setOnAction(event -> {
             if (authenticate(usernameField.getText(), passwordField.getText())) {
-                mainApp.showSidebarScene();
+                Account account = accountList.getAccountByUsername(usernameField.getText());
+                boolean isAdmin = account.isAdmin();
+                appController.showMainAppScene(isAdmin);
             } else {
                 System.out.println("Invalid Account!");
             }
