@@ -77,6 +77,10 @@ public class MainApp {
                 Home home = new Home(controller);
                 StackPane homeView = home.getHomeStackPane(isAdmin);
                 layout.setCenter(homeView);
+            } else if (text.equals("Library")) {
+                Library lib = new Library(controller);
+                StackPane libView = lib.getLibraryStackPane();
+                layout.setCenter(libView);
             }
         });
 
