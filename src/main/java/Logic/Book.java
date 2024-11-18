@@ -1,10 +1,13 @@
 package Logic;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+
 public class Book extends HashingMultipleBase {
     private String isbn;
     private String title;
     private String author;
-    private int yearOfPublication;
+    private String yearOfPublication;
     private String publisher;
     private String IMG_PATH_SIZE_S;
     private String IMG_PATH_SIZE_M;
@@ -13,9 +16,12 @@ public class Book extends HashingMultipleBase {
 
     public Book() {}
 
-    public Book(String title, String author) {
+    public Book(String isbn, String title, String author, String yearOfPublication, String publisher) {
         this.title = title;
         this.author = author;
+        this.isbn = isbn;
+        this.yearOfPublication = yearOfPublication;
+        this.publisher = publisher;
         hashTitle = hashInit(title);
         hashAuthor = hashInit(author);
     }
@@ -24,7 +30,7 @@ public class Book extends HashingMultipleBase {
         this.isbn = data[0];
         this.title = data[1];
         this.author = data[2];
-        this.yearOfPublication = Integer.parseInt(data[3]);
+        this.yearOfPublication = data[3];
         this.publisher = data[4];
         this.IMG_PATH_SIZE_S = data[5];
         this.IMG_PATH_SIZE_M = data[6];
@@ -59,11 +65,11 @@ public class Book extends HashingMultipleBase {
         this.author = author;
     }
 
-    public int getYearOfPublication() {
+    public String getYearOfPublication() {
         return yearOfPublication;
     }
 
-    public void setYearOfPublication(int yearOfPublication) {
+    public void setYearOfPublication(String yearOfPublication) {
         this.yearOfPublication = yearOfPublication;
     }
 
@@ -84,5 +90,25 @@ public class Book extends HashingMultipleBase {
         hash.hash(info, 1);
         hash.hash(info, 2);
         return hash;
+    }
+
+    public ObservableValue<String> isbnProperty() {
+        return new SimpleStringProperty(isbn);
+    }
+
+    public ObservableValue<String> titleProperty() {
+        return new SimpleStringProperty(title);
+    }
+
+    public ObservableValue<String> authorProperty() {
+        return new SimpleStringProperty(author);
+    }
+
+    public ObservableValue<String> yearOfPublicationProperty() {
+        return new SimpleStringProperty(yearOfPublication);
+    }
+
+    public ObservableValue<String> publisherProperty() {
+        return new SimpleStringProperty(publisher);
     }
 }

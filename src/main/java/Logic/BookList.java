@@ -30,6 +30,10 @@ public class BookList extends CsvReader {
         bookList.set(index, book);
     }
 
+    public List<Book> getBookList() {
+        return bookList;
+    }
+
     public List<Book> searchIsbn(String keyword) {
         String a = keyword.toLowerCase();
         long hash1 = new HashingMultipleBase().hashInfo(a, 1);

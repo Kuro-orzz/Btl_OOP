@@ -7,13 +7,13 @@
    <center>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="896.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView prefHeight="576.0" prefWidth="896.0" style="-fx-border-style: solid; -fx-border-color: #CCCCCC;" AnchorPane.leftAnchor="0.0">
+            <TableView fx:id="tableView" prefHeight="576.0" prefWidth="896.0" style="-fx-border-style: solid; -fx-border-color: #CCCCCC;" AnchorPane.leftAnchor="0.0">
                <columns>
-                  <TableColumn prefWidth="75.0"  text="ISBN" />
-                  <TableColumn prefWidth="456.0" text="Book Title" />
-                  <TableColumn minWidth="0.0" prefWidth="110.0" text="Author" />
-                  <TableColumn prefWidth="115.0" text="Publication Year" />
-                  <TableColumn prefWidth="140.0" text="Publisher" />
+                  <TableColumn fx:id="isbnColumn" prefWidth="75.0" text="ISBN" />
+                  <TableColumn fx:id="titleColumn" prefWidth="456.0" text="Book Title" />
+                  <TableColumn fx:id="authorColumn" prefWidth="110.0" text="Author" />
+                  <TableColumn fx:id="yearColumn" prefWidth="115.0" text="Publication Year" />
+                  <TableColumn fx:id="publisherColumn" prefWidth="140.0" text="Publisher" />
                </columns>
             </TableView>
          </children>

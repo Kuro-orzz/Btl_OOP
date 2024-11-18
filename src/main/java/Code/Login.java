@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 
 import Logic.Account;
 import Logic.AccountList;
@@ -58,6 +59,19 @@ public class Login {
         // Login button
         Button loginButton = createLoginButton(appController, usernameField, passwordField);
 
+        // Add Enter key handler to username and password fields
+        usernameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin(appController, usernameField, passwordField);
+            }
+        });
+
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin(appController, usernameField, passwordField);
+            }
+        });
+
         StackPane stPane = new StackPane();
         stPane.getChildren().addAll(backgroundImage, loginLabel, vbox, loginButton);
 
@@ -82,7 +96,7 @@ public class Login {
         assert textInput != null;
         textInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 40) {
-                // only get 40 character
+                // only get 40 characters
                 finalTextInput.setText(newValue.substring(0, 40));
             }
         });
@@ -118,16 +132,25 @@ public class Login {
         Button loginButton = new Button("Login");
         loginButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         loginButton.getStyleClass().add("login-button");
-        loginButton.setOnAction(event -> {
-            if (authenticate(usernameField.getText(), passwordField.getText())) {
-                Account account = accountList.getAccountByUsername(usernameField.getText());
-                boolean isAdmin = account.isAdmin();
-                appController.showMainAppScene(isAdmin);
-            } else {
-                System.out.println("Invalid Account!");
-            }
-        });
+        loginButton.setOnAction(event -> handleLogin(appController, usernameField, passwordField));
         return loginButton;
+    }
+
+    /**
+     * Handle login logic.
+     * @param appController the main app controller
+     * @param usernameField where to get username
+     * @param passwordField where to get password
+     */
+    private void handleLogin(AppController appController, TextInputControl usernameField, TextInputControl passwordField) {
+        if (authenticate(usernameField.getText(), passwordField.getText())) {
+            Account account = accountList.getAccountByUsername(usernameField.getText());
+            boolean isAdmin = account.isAdmin();
+            appController.showMainAppScene(isAdmin);
+            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome!");
+        } else {
+             showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
+        }
     }
 
     /**
@@ -139,5 +162,13 @@ public class Login {
     private boolean authenticate(String username, String password) {
         Account accountToCheck = new Account(username, password);
         return accountList.searchAccounts(accountToCheck);
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
