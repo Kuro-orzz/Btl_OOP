@@ -1,7 +1,7 @@
 package Code;
 
-import Logic.Book;
-import Logic.BookList;
+import BookData.Book;
+import BookData.BookList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

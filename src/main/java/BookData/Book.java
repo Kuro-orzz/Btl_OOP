@@ -1,9 +1,9 @@
-package Logic;
+package BookData;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
-public class Book extends HashingMultipleBase {
+public class Book {
     private String isbn;
     private String title;
     private String author;
@@ -12,7 +12,6 @@ public class Book extends HashingMultipleBase {
     private String IMG_PATH_SIZE_S;
     private String IMG_PATH_SIZE_M;
     private String IMG_PATH_SIZE_L;
-    public HashingMultipleBase hashIsbn, hashTitle, hashAuthor, hashPublisher;
 
     public Book() {}
 
@@ -22,8 +21,6 @@ public class Book extends HashingMultipleBase {
         this.isbn = isbn;
         this.yearOfPublication = yearOfPublication;
         this.publisher = publisher;
-        hashTitle = hashInit(title);
-        hashAuthor = hashInit(author);
     }
 
     public Book(String[] data) {
@@ -35,10 +32,6 @@ public class Book extends HashingMultipleBase {
         this.IMG_PATH_SIZE_S = data[5];
         this.IMG_PATH_SIZE_M = data[6];
         this.IMG_PATH_SIZE_L = data[7];
-        hashIsbn = hashInit(isbn);
-        hashTitle = hashInit(title);
-        hashAuthor = hashInit(author);
-        hashPublisher = hashInit(publisher);
     }
 
     public String getIsbn() {
@@ -83,13 +76,6 @@ public class Book extends HashingMultipleBase {
 
     public String getInfo() {
         return isbn + "; " + title + "; " + author + "; " + yearOfPublication + "; " + publisher;
-    }
-
-    public HashingMultipleBase hashInit(String info) {
-        HashingMultipleBase hash = new HashingMultipleBase(info.length());
-        hash.hash(info, 1);
-        hash.hash(info, 2);
-        return hash;
     }
 
     public ObservableValue<String> isbnProperty() {

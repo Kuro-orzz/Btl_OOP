@@ -1,4 +1,6 @@
-package Logic;
+package AccountData;
+
+import Logic.UserInfo;
 
 public class Account {
     private static int counter = 1;
@@ -30,6 +32,13 @@ public class Account {
     public Account(String username, String password, int t) {
         this.username = username;
         this.password = password;
+    }
+
+    public Account(String[] data) {
+        this.username = data[0];
+        this.password = data[1];
+        this.isAdmin = Boolean.parseBoolean(data[2]);
+        info = new UserInfo(data[3], Integer.parseInt(data[4]), Boolean.parseBoolean(data[5]));
     }
 
     public int getId() {
@@ -70,10 +79,6 @@ public class Account {
 
     public void setInfo(UserInfo info) {
         this.info = info;
-    }
-
-    public String getFullName(){
-        return info.getFullName();
     }
 
     public boolean equals(Object obj) {

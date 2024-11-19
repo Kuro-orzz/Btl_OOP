@@ -1,9 +1,12 @@
 package Logic;
 
+import AccountData.Account;
+import BookData.Book;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,12 +52,17 @@ public class CsvReader {
             return null;
         }
         try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
-            List<String[]> records = reader.readAll();
+            List<String[]> records = new ArrayList<>();
+            String[] line;
+            while ((line = reader.readNext()) != null) {
+                String tmp = Arrays.toString(line);
+                tmp = tmp.substring(1, tmp.length() - 1);
+                line = tmp.split(", ");
+                records.add(line);
+            }
             List<Account> accounts = new ArrayList<>();
-            for (String[] record : records) {
-                UserInfo userInfo = new UserInfo(record[3], Integer.parseInt(record[4]), Boolean.parseBoolean(record[5]));
-                Account account = new Account(record[0], record[1], Boolean.parseBoolean(record[2]), userInfo);
-                accounts.add(account);
+            for (int i = 1; i < records.size(); i++) {
+                accounts.add(new Account(records.get(i)));
             }
             return accounts;
         } catch (IOException | CsvException e) {
@@ -64,25 +72,40 @@ public class CsvReader {
     }
 
     public void appendAccountToFile(Account account, String fileName) {
-        String filePath;
+        String filePath = "src/main/resources/" + fileName;
+        File file = new File(filePath);
         try {
-            filePath = CsvReader.class.getClassLoader().getResource(fileName).getPath();
-        } catch (NullPointerException e) {
-            System.out.println("File not found in resources: " + fileName);
-            return;
-        }
-        try (CSVWriter writer = new CSVWriter(new FileWriter(filePath, true))) {
-            String[] record = {
-                    account.getUsername(),
-                    account.getPassword(),
-                    String.valueOf(account.isAdmin()),
-                    account.getFullName(),
-                    String.valueOf(account.getInfo().getAge()),
-                    String.valueOf(account.getInfo().getGender())
-            };
-            writer.writeNext(record);
+            FileWriter outputfile = new FileWriter(file, true);
+            CSVWriter writer = new CSVWriter(outputfile);
+            UserInfo userInfo = account.getInfo();
+            String[] info = {account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
+                    , userInfo.getFullName(), Integer.toString(userInfo.getAge()), Boolean.toString(userInfo.getGender())};
+            writer.writeNext(info);
+            System.out.println("wrote info nextLine");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+//    public void createAccountDataFile(String fileName, List<Account> data) {
+//        String filePath = "src/main/resources/" + fileName;
+//        File file = new File(filePath);
+//        try {
+//            FileWriter outputfile = new FileWriter(file, true);
+//            CSVWriter writer = new CSVWriter(outputfile);
+//            String[] header = {"Username", "Password", "Isadmin", "Fullname", "age", "gender"};
+//            writer.writeNext(header);
+//            for (int i = 0; i < data.size(); i++) {
+//                Account account = data.get(i);
+//                UserInfo userInfo = account.getInfo();
+//                String[] info = {account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
+//                        , userInfo.getFullName(), Integer.toString(userInfo.getAge()), Boolean.toString(userInfo.getGender())};
+//                writer.writeNext(info);
+//            }
+//            writer.close();
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

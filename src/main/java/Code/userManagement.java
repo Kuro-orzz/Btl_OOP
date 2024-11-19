@@ -1,6 +1,6 @@
 package Code;
 
-import Logic.Account;
+import AccountData.Account;
 import Logic.CsvReader;
 import Logic.UserInfo;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,13 +18,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class userManagement {
@@ -56,7 +53,7 @@ public class userManagement {
 
         TableColumn<Account, String> fullNameColumn = new TableColumn<>("Full Name");
         fullNameColumn.setPrefWidth(150);
-        fullNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFullName()));
+        fullNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getInfo().getFullName()));
 
         TableColumn<Account, String> ageColumn = new TableColumn<>("Age");
         ageColumn.setPrefWidth(60);
@@ -122,7 +119,7 @@ public class userManagement {
                 String lowerCaseFilter = newValue.toLowerCase();
                 switch (searchMode) {
                     case "Full Name":
-                        return account.getFullName().toLowerCase().contains(lowerCaseFilter);
+                        return account.getInfo().getFullName().toLowerCase().contains(lowerCaseFilter);
                     case "Age":
                         return String.valueOf(account.getInfo().getAge()).contains(lowerCaseFilter);
                     case "Gender":

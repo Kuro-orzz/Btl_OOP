@@ -1,15 +1,21 @@
-package Logic;
+package AccountData;
+
+import Logic.CsvReader;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountList extends CsvReader{
+public class AccountList extends CsvReader {
     private List<Account> accountList = new ArrayList<Account>();
 
     public AccountList() {}
 
     public AccountList(String fileName) {
         accountList = new CsvReader().getAccountsFromFile(fileName);
+    }
+
+    public List<Account> getAccountList() {
+        return accountList;
     }
 
     public void addAccount(Account a) {
@@ -25,7 +31,7 @@ public class AccountList extends CsvReader{
         }
     }
 
-    public boolean searchAccounts(Account account) {
+    public boolean isAccountsExist(Account account) {
         for (Account a : accountList) {
             if (account.equals(a)) {
                 return true;
