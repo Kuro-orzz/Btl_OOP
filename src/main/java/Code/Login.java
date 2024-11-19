@@ -146,8 +146,8 @@ public class Login {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
             Account account = accountList.getAccountByUsername(usernameField.getText());
             boolean isAdmin = account.isAdmin();
+            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getFullName());
             appController.showMainAppScene(isAdmin);
-            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome!");
         } else {
              showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
         }

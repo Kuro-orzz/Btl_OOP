@@ -3,25 +3,30 @@ package Logic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountList {
-    List<Account> Accounts = new ArrayList<Account>();
+public class AccountList extends CsvReader{
+    private List<Account> accountList = new ArrayList<Account>();
+
     public AccountList() {}
 
+    public AccountList(String fileName) {
+        accountList = new CsvReader().getAccountsFromFile(fileName);
+    }
+
     public void addAccount(Account a) {
-        Accounts.add(a);
+        accountList.add(a);
     }
 
     public void removeAccounts(Account account) {
-        for (Account a : Accounts) {
+        for (Account a : accountList) {
             if (account.getId() == a.getId()) {
-                Accounts.remove(a);
+                accountList.remove(a);
                 return;
             }
         }
     }
 
     public boolean searchAccounts(Account account) {
-        for (Account a : Accounts) {
+        for (Account a : accountList) {
             if (account.equals(a)) {
                 return true;
             }
@@ -30,7 +35,7 @@ public class AccountList {
     }
 
     public Account findAccount(Account account) {
-        for (Account a : Accounts) {
+        for (Account a : accountList) {
             if (account.equals(a)) {
                 return a;
             }
@@ -39,7 +44,7 @@ public class AccountList {
     }
 
     public Account getAccountByUsername(String username) {
-        for (Account account : Accounts) {
+        for (Account account : accountList) {
             if (account.getUsername().equals(username)) {
                 return account;
             }
