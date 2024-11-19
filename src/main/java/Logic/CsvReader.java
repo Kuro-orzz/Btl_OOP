@@ -37,4 +37,30 @@ public class CsvReader {
         }
         return null;
     }
+
+    public void createAccountDataFile(String fileName, List<Account> data) {
+        File file = new File(fileName);
+        try {
+            FileWriter outputfile = new FileWriter(file);
+
+            CSVWriter writer = new CSVWriter(outputfile);
+
+            String[] header = {"Username", "Password", "Isadmin", "Fullname", "age", "gender"};
+
+            writer.writeNext(header);
+
+            for (int i = 0; i < data.size(); i++) {
+                Account account = data.get(i);
+                UserInfo userInfo = account.getInfo();
+                String[] info = {account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
+                        , userInfo.getFullName(), Integer.toString(userInfo.getAge()), Boolean.toString(userInfo.getGender())};
+                writer.writeNext(info);
+            }
+
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
