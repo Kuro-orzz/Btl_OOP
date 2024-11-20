@@ -80,11 +80,10 @@ public class CsvReader {
             String[] header = {"ISBN", "Book-Title", "Book-Author", "Year-of-Publication", "Publisher",
                     "Quantity", "Image-URL-S", "Image-URL-M", "Image-URL-L"};
             writer.writeNext(header);
-            Random rng = new Random();
-            for (int i = 0; i < 10000; i++) {
+            for (int i = 0; i < bookList.size(); i++) {
                 Book book = bookList.get(i);
                 String[] info = {book.getIsbn(), book.getTitle(), book.getAuthor(), book.getYearOfPublication(),
-                    book.getPublisher(), String.valueOf(rng.nextInt(10, 101)),
+                    book.getPublisher(), book.getQuantity(),
                     book.getIMG_PATH_SIZE_S(), book.getIMG_PATH_SIZE_M(), book.getIMG_PATH_SIZE_L()};
                 writer.writeNext(info);
             }
@@ -103,6 +102,27 @@ public class CsvReader {
             UserInfo userInfo = account.getInfo();
             String[] info = {account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
                     , userInfo.getFullName(), Integer.toString(userInfo.getAge()), Boolean.toString(userInfo.getGender())};
+            writer.writeNext(info);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void appendBookToFile(Book newBook, String fileName) {
+        String filePath = "src/main/resources/" + fileName;
+        File file = new File(filePath);
+        try {
+            FileWriter outputfile = new FileWriter(file, true);
+            CSVWriter writer = new CSVWriter(outputfile);
+            String[] info = {
+                    newBook.getIsbn(),
+                    newBook.getTitle(),
+                    newBook.getAuthor(),
+                    newBook.getYearOfPublication(),
+                    newBook.getPublisher(),
+                    newBook.getQuantity()
+            };
             writer.writeNext(info);
             writer.close();
         } catch (IOException e) {

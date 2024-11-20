@@ -21,9 +21,9 @@ public class Main {
 //        for (Book book : data) {
 //            System.out.println(book.getInfo());
 //        }
-//        CsvReader csvReader = new CsvReader();
-//        BookList bookList = new BookList("books.csv");
-//        csvReader.updateDataFromList("books.csv", bookList.getBookList());
+        CsvReader csvReader = new CsvReader();
+        BookList bookList = new BookList("books.csv");
+        csvReader.updateDataFromList("books.csv", bookList.getBookList());
 //        csvReader.createAccountDataFile("accounts.csv", new AccountList().getAccountList());
 //        csvReader.appendAccountToFile(new Account("abc", "bcd", true, new UserInfo("abc", 12, true)), "accounts.csv");
 //        String[] header = {"ISBN", "Book-Title", "Book-Author", "Year-of-Publication", "Publisher",
