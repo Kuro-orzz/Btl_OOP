@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class CsvReader {
     public List<Book> getDataFromFile(String fileName) {
@@ -27,13 +28,10 @@ public class CsvReader {
             List<String[]> records = new ArrayList<>();
             String[] line;
             while ((line = reader.readNext()) != null) {
-                String tmp = Arrays.toString(line);
-                tmp = tmp.substring(1, tmp.length() - 1);
-                line = tmp.split("\";\"");
                 records.add(line);
             }
             List<Book> books = new ArrayList<>();
-            for (int i = 1; i <= 10000; i++) {
+            for (int i = 1; i < records.size(); i++) {
                 books.add(new Book(records.get(i)));
             }
             return books;
@@ -55,9 +53,6 @@ public class CsvReader {
             List<String[]> records = new ArrayList<>();
             String[] line;
             while ((line = reader.readNext()) != null) {
-                String tmp = Arrays.toString(line);
-                tmp = tmp.substring(1, tmp.length() - 1);
-                line = tmp.split(", ");
                 records.add(line);
             }
             List<Account> accounts = new ArrayList<>();
@@ -69,6 +64,34 @@ public class CsvReader {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * Use when delete book and need to rewrite all data
+     * @param fileName csv file
+     * @param bookList list of books in library
+     */
+    public void updateDataFromList(String fileName, List<Book> bookList) {
+        String filePath = "src/main/resources/" + fileName;
+        File file = new File(filePath);
+        try {
+            FileWriter outputfile = new FileWriter(file);
+            CSVWriter writer = new CSVWriter(outputfile);
+            String[] header = {"ISBN", "Book-Title", "Book-Author", "Year-of-Publication", "Publisher",
+                    "Quantity", "Image-URL-S", "Image-URL-M", "Image-URL-L"};
+            writer.writeNext(header);
+            Random rng = new Random();
+            for (int i = 0; i < 10000; i++) {
+                Book book = bookList.get(i);
+                String[] info = {book.getIsbn(), book.getTitle(), book.getAuthor(), book.getYearOfPublication(),
+                    book.getPublisher(), String.valueOf(rng.nextInt(10, 101)),
+                    book.getIMG_PATH_SIZE_S(), book.getIMG_PATH_SIZE_M(), book.getIMG_PATH_SIZE_L()};
+                writer.writeNext(info);
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void appendAccountToFile(Account account, String fileName) {

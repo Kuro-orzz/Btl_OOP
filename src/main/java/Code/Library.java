@@ -64,7 +64,7 @@ public class Library {
 
         TableColumn<Book, String> quantity = new TableColumn<>("Quantity");
         quantity.setPrefWidth(111);
-        quantity.setCellValueFactory(cellData -> new SimpleStringProperty("20"));
+        quantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
 
         tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn, yearColumn, publisherColumn, quantity);
     }
