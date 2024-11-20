@@ -10,8 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
-import Logic.Account;
-import Logic.AccountList;
+import AccountData.Account;
+import AccountData.AccountList;
 
 public class Login {
     protected AccountList accountList = new AccountList();
@@ -146,8 +146,8 @@ public class Login {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
             Account account = accountList.getAccountByUsername(usernameField.getText());
             boolean isAdmin = account.isAdmin();
+            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
             appController.showMainAppScene(isAdmin);
-            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome!");
         } else {
              showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
         }
@@ -161,7 +161,7 @@ public class Login {
      */
     private boolean authenticate(String username, String password) {
         Account accountToCheck = new Account(username, password);
-        return accountList.searchAccounts(accountToCheck);
+        return accountList.isAccountsExist(accountToCheck);
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
