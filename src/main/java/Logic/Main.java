@@ -1,5 +1,6 @@
 package Logic;
 
+import AccountData.Account;
 import AccountData.AccountList;
 
 import java.util.List;
@@ -18,5 +19,6 @@ public class Main {
 //        }
 //        CsvReader csvReader = new CsvReader();
 //        csvReader.createAccountDataFile("accounts.csv", new AccountList().getAccountList());
+//        csvReader.appendAccountToFile(new Account("abc", "bcd", true, new UserInfo("abc", 12, true)), "accounts.csv");
     }
 }

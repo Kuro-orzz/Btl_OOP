@@ -81,17 +81,19 @@ public class CsvReader {
             String[] info = {account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
                     , userInfo.getFullName(), Integer.toString(userInfo.getAge()), Boolean.toString(userInfo.getGender())};
             writer.writeNext(info);
-            System.out.println("wrote info nextLine");
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // add delete data
+
 //    public void createAccountDataFile(String fileName, List<Account> data) {
 //        String filePath = "src/main/resources/" + fileName;
 //        File file = new File(filePath);
 //        try {
-//            FileWriter outputfile = new FileWriter(file, true);
+//            FileWriter outputfile = new FileWriter(file);
 //            CSVWriter writer = new CSVWriter(outputfile);
 //            String[] header = {"Username", "Password", "Isadmin", "Fullname", "age", "gender"};
 //            writer.writeNext(header);
