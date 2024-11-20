@@ -3,7 +3,6 @@ package Code;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -38,6 +37,7 @@ public class MainApp {
                 title,
                 createSidebarButton("Home"),
                 createSidebarButton("Library"),
+                createSidebarButton("User Management"),
                 createSidebarButton("Borrow Request"),
                 createSidebarButton("Borrow"),
                 createSidebarButton("Return")
@@ -82,6 +82,10 @@ public class MainApp {
                 Library lib = new Library(controller);
                 StackPane libView = lib.getLibraryStackPane();
                 layout.setCenter(libView);
+            } else if (text.equals("User Management")) {
+                userManagement userManagement = new userManagement(controller);
+                StackPane userView = userManagement.getUserStackPane();
+                layout.setCenter(userView);
             }
         });
 

@@ -1,5 +1,8 @@
 package Logic;
 
+import AccountData.Account;
+import AccountData.AccountList;
+
 import java.util.Scanner;
 
 public class Login extends AccountList {
@@ -33,7 +36,7 @@ public class Login extends AccountList {
         String username = sc.nextLine();
         System.out.print("Password: ");
         String password = sc.nextLine();
-        if (searchAccounts(new Account(username, password, 1))) {
+        if (isAccountsExist(new Account(username, password, 1))) {
             System.out.println("Login successful");
             isLogin = true;
             System.out.println(findAccount(new Account(username, password, 1)).getId());

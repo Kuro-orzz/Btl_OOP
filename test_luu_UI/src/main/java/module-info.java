@@ -7,7 +7,4 @@ module org.example.demo {
 
     opens Code to javafx.fxml;
     exports Code;
-
-    opens Logic to javafx.fxml;
-    exports Logic;
 }

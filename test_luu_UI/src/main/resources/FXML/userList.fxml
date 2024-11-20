@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #E5E5E5;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="896.0" BorderPane.alignment="CENTER">
+            <children>
+                <TableView prefHeight="576.0" prefWidth="896.0" style="-fx-border-style: solid; -fx-border-color: #CCCCCC;" AnchorPane.leftAnchor="0.0">
+                    <columns>
+                        <TableColumn prefWidth="75.0"  text="ID" />
+                        <TableColumn prefWidth="456.0" text="Name" />
+                        <TableColumn minWidth="0.0" prefWidth="110.0" text="Age" />
+                    </columns>
+                </TableView>
+            </children>
+        </AnchorPane>
+    </center>
+    <top>
+        <AnchorPane prefHeight="110.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+            <children>
+                <TextField layoutX="172.0" layoutY="34.0" prefHeight="50.0" prefWidth="651.0" style="-fx-background-color: #ffffff;">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </TextField>
+                <Label layoutX="108.0" layoutY="55.0" text="SEARCH" />
+            </children>
+        </AnchorPane>
+    </top>
+</BorderPane>
