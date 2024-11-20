@@ -64,6 +64,14 @@ public class Account {
         isAdmin = admin;
     }
 
+    public UserInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(UserInfo info) {
+        this.info = info;
+    }
+
     public boolean equals(Object obj) {
         if (obj instanceof Account) {
             Account account = (Account) obj;
