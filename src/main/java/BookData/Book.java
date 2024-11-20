@@ -13,6 +13,7 @@ public class Book {
     private String IMG_PATH_SIZE_S;
     private String IMG_PATH_SIZE_M;
     private String IMG_PATH_SIZE_L;
+    public HashingMultipleBase hashIsbn, hashTitle, hashAuthor, hashYearOfPublication, hashPublisher;
 
     public Book() {}
 
@@ -23,6 +24,11 @@ public class Book {
         this.yearOfPublication = yearOfPublication;
         this.publisher = publisher;
         this.quantity = quantity;
+        hashIsbn = hashInit(isbn);
+        hashTitle = hashInit(title);
+        hashAuthor = hashInit(author);
+        hashYearOfPublication = hashInit(yearOfPublication);
+        hashPublisher = hashInit(publisher);
     }
 
     public Book(String[] data) {
@@ -35,6 +41,11 @@ public class Book {
         this.IMG_PATH_SIZE_S = data[6];
         this.IMG_PATH_SIZE_M = data[7];
         this.IMG_PATH_SIZE_L = data[8];
+        hashIsbn = hashInit(isbn);
+        hashTitle = hashInit(title);
+        hashAuthor = hashInit(author);
+        hashYearOfPublication = hashInit(yearOfPublication);
+        hashPublisher = hashInit(publisher);
     }
 
     public String getIsbn() {
@@ -107,6 +118,13 @@ public class Book {
 
     public void setIMG_PATH_SIZE_L(String IMG_PATH_SIZE_L) {
         this.IMG_PATH_SIZE_L = IMG_PATH_SIZE_L;
+    }
+
+    public HashingMultipleBase hashInit(String info) {
+        HashingMultipleBase hash = new HashingMultipleBase(info.length());
+        hash.hash(info, 1);
+        hash.hash(info, 2);
+        return hash;
     }
 
     public String getInfo() {
