@@ -1,22 +1,51 @@
 package Code;
 
+import Logic.CsvReader;
+import Logic.UserInfo;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+
+import AccountData.Account;
+import AccountData.AccountList;
+
+import java.util.List;
 
 public class Login {
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "password";
+    protected AccountList accountList = new AccountList();
+
+    public Login() {
+        List<Account> accounts = new CsvReader().getAccountsFromFile("accounts.csv");
+        if (accounts != null) {
+            for (Account account : accounts) {
+                accountList.addAccount(account);
+            }
+        }
+    }
+
 
     /**
      * Create a scene where we log in.
-     * @param mainApp main app controller
+     * @param appController main app controller
      * @return login scene to be showed
      */
-    public Scene getLoginScene(MainApp mainApp) {
-        LoadImage loginImageLoader = new LoadImage();
+    public Scene getLoginScene(AppController appController) {
+        ImageView backgroundImage = new ImageView();
+        try {
+            Image loginImage = new Image(getClass().getResourceAsStream("/GUI/loginImage.jpg"));
+            backgroundImage.setImage(loginImage);
+            backgroundImage.setFitWidth(1280);
+            backgroundImage.setFitHeight(720);
+            backgroundImage.setStyle("-fx-opacity: 0.6");
+            backgroundImage.setPreserveRatio(true);
+        } catch (Exception e) {
+            System.out.println("Error loading image: " + e.getMessage());
+        }
 
         // login label
         Label loginLabel = new Label("     Library\nManagement");
@@ -35,10 +64,23 @@ public class Login {
         vbox.getChildren().addAll(usernamePane, passwordPane);
 
         // Login button
-        Button loginButton = createLoginButton(mainApp, usernameField, passwordField);
+        Button loginButton = createLoginButton(appController, usernameField, passwordField);
+
+        // Add Enter key handler to username and password fields
+        usernameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin(appController, usernameField, passwordField);
+            }
+        });
+
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin(appController, usernameField, passwordField);
+            }
+        });
 
         StackPane stPane = new StackPane();
-        stPane.getChildren().addAll(loginImageLoader.loadLoginImage(), loginLabel, vbox, loginButton);
+        stPane.getChildren().addAll(backgroundImage, loginLabel, vbox, loginButton);
 
         return new Scene(stPane, 1280, 720);
     }
@@ -61,7 +103,7 @@ public class Login {
         assert textInput != null;
         textInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 40) {
-                // only get 40 character
+                // only get 40 characters
                 finalTextInput.setText(newValue.substring(0, 40));
             }
         });
@@ -88,23 +130,35 @@ public class Login {
 
     /**
      * Create button to log in when click on it.
-     * @param mainApp the main app controller
+     * @param appController the main app controller
      * @param usernameField where to get username
      * @param passwordField where to get password
      * @return login Button
      */
-    public Button createLoginButton(MainApp mainApp, TextInputControl usernameField, TextInputControl passwordField) {
+    public Button createLoginButton(AppController appController, TextInputControl usernameField, TextInputControl passwordField) {
         Button loginButton = new Button("Login");
         loginButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         loginButton.getStyleClass().add("login-button");
-        loginButton.setOnAction(event -> {
-            if (authenticate(usernameField.getText(), passwordField.getText())) {
-                mainApp.showSidebarScene();
-            } else {
-                System.out.println("Invalid Account!");
-            }
-        });
+        loginButton.setOnAction(event -> handleLogin(appController, usernameField, passwordField));
         return loginButton;
+    }
+
+    /**
+     * Handle login logic.
+     * @param appController the main app controller
+     * @param usernameField where to get username
+     * @param passwordField where to get password
+     */
+    private void handleLogin(AppController appController, TextInputControl usernameField, TextInputControl passwordField) {
+        if (authenticate(usernameField.getText(), passwordField.getText())) {
+            Account account = accountList.getAccountByUsername(usernameField.getText());
+            boolean isAdmin = account.isAdmin();
+            System.out.println(account.getId());
+            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
+            appController.showMainAppScene(isAdmin);
+        } else {
+             showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
+        }
     }
 
     /**
@@ -114,6 +168,15 @@ public class Login {
      * @return true if account is available and false if unavailable
      */
     private boolean authenticate(String username, String password) {
-        return USERNAME.equals(username) && PASSWORD.equals(password);
+        Account accountToCheck = new Account(username, password);
+        return accountList.isAccountsExist(accountToCheck);
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
