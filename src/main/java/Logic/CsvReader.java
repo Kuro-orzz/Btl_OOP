@@ -100,7 +100,7 @@ public class CsvReader {
             FileWriter outputfile = new FileWriter(file, true);
             CSVWriter writer = new CSVWriter(outputfile);
             UserInfo userInfo = account.getInfo();
-            String[] info = {account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
+            String[] info = {String.valueOf(account.getId()), account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
                     , userInfo.getFullName(), Integer.toString(userInfo.getAge()), Boolean.toString(userInfo.getGender())};
             writer.writeNext(info);
             writer.close();
@@ -138,12 +138,12 @@ public class CsvReader {
 //        try {
 //            FileWriter outputfile = new FileWriter(file);
 //            CSVWriter writer = new CSVWriter(outputfile);
-//            String[] header = {"Username", "Password", "Isadmin", "Fullname", "age", "gender"};
+//            String[] header = {"Id", "Username", "Password", "Isadmin", "Fullname", "age", "gender"};
 //            writer.writeNext(header);
 //            for (int i = 0; i < data.size(); i++) {
 //                Account account = data.get(i);
 //                UserInfo userInfo = account.getInfo();
-//                String[] info = {account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
+//                String[] info = {String.valueOf(i+1), account.getUsername(), account.getPassword(), Boolean.toString(account.isAdmin())
 //                        , userInfo.getFullName(), Integer.toString(userInfo.getAge()), Boolean.toString(userInfo.getGender())};
 //                writer.writeNext(info);
 //            }

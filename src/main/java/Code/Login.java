@@ -1,5 +1,6 @@
 package Code;
 
+import Logic.CsvReader;
 import Logic.UserInfo;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,14 +14,20 @@ import javafx.scene.input.KeyCode;
 import AccountData.Account;
 import AccountData.AccountList;
 
+import java.util.List;
+
 public class Login {
     protected AccountList accountList = new AccountList();
 
     public Login() {
-        UserInfo admin = new UserInfo("admin", 18, true);
-        Account account = new Account("admin", "password", true, admin);
-        accountList.addAccount(account);
+        List<Account> accounts = new CsvReader().getAccountsFromFile("accounts.csv");
+        if (accounts != null) {
+            for (Account account : accounts) {
+                accountList.addAccount(account);
+            }
+        }
     }
+
 
     /**
      * Create a scene where we log in.
@@ -146,6 +153,7 @@ public class Login {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
             Account account = accountList.getAccountByUsername(usernameField.getText());
             boolean isAdmin = account.isAdmin();
+            System.out.println(account.getId());
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
             appController.showMainAppScene(isAdmin);
         } else {
