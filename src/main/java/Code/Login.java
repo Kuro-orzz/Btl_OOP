@@ -153,6 +153,7 @@ public class Login {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
             Account account = accountList.getAccountByUsername(usernameField.getText());
             boolean isAdmin = account.isAdmin();
+            System.out.println(account.getId());
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
             appController.showMainAppScene(isAdmin);
         } else {

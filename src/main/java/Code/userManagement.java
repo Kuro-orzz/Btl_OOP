@@ -73,6 +73,8 @@ public class userManagement {
     private void loadAccountData() {
         CsvReader csvReader = new CsvReader();
         List<Account> accounts = csvReader.getAccountsFromFile("accounts.csv");
+        Account newSetting = new Account();
+        newSetting.setCounter(accounts.get(accounts.size() - 1).getId() + 1);
         if (accounts != null) {
             data.addAll(accounts);
         }
@@ -180,7 +182,7 @@ public class userManagement {
 
             UserInfo userInfo = new UserInfo(fullName, age, gender);
             Account newAccount = new Account(username, password, isAdmin, userInfo);
-
+            System.out.println(newAccount.getId());
             appendAccountToCSV(newAccount);
             data.add(newAccount); // Refresh the TableView
             stage.close();
