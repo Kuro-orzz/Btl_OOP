@@ -1,21 +1,31 @@
 package Code;
 
+import AccountData.Account;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.Optional;
+
 public class MainApp {
     private Button selectedButton; // To keep track of the currently selected button
     protected BorderPane layout = new BorderPane(); // Layout of application
     private AppController controller = new AppController();
-    private boolean isAdmin; // Stores if the logged-in user is an admin
+    private Account curAcc; // Stores if the logged-in user is an admin
 
-    public MainApp(AppController controller, boolean isAdmin) {
+    /**
+     * Constructor .
+     * @param controller controller
+     * @param acc account of user
+     */
+    public MainApp(AppController controller, Account acc) {
         this.controller = controller;
-        this.isAdmin = isAdmin;
+        this.curAcc = acc;
     }
 
     /**
@@ -40,7 +50,7 @@ public class MainApp {
                 createSidebarButton("User Management"),
                 createSidebarButton("Borrow Request"),
                 createSidebarButton("Borrow"),
-                createSidebarButton("Return"),
+                createSidebarButton("Log Out"),
                 new Clock().renderClock()
         );
 
@@ -77,7 +87,7 @@ public class MainApp {
             // Check if the button is "Home"
             if (text.equals("Home")) {
                 Home home = new Home(controller);
-                StackPane homeView = home.getHomeStackPane(isAdmin);
+                StackPane homeView = home.getHomeStackPane(curAcc);
                 layout.setCenter(homeView);
             } else if (text.equals("Library")) {
                 Library lib = new Library(controller);
@@ -87,6 +97,15 @@ public class MainApp {
                 userManagement userManagement = new userManagement(controller);
                 StackPane userView = userManagement.getUserStackPane();
                 layout.setCenter(userView);
+            } else if (text.equals("Log Out")) {
+                Alert logoutConfirmatio = new Alert(Alert.AlertType.CONFIRMATION);
+                logoutConfirmatio.setTitle("Confirm Logout");
+                logoutConfirmatio.setHeaderText("Are you sure to log out?");
+                logoutConfirmatio.setContentText("Click OK to proceed.");
+                Optional<ButtonType> result = logoutConfirmatio.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    controller.showLoginScene();
+                }
             }
         });
 

@@ -17,6 +17,15 @@ public class Book {
 
     public Book() {}
 
+    /**
+     * Full constructor.
+     * @param isbn isbn
+     * @param title title
+     * @param author author
+     * @param yearOfPublication year of publication
+     * @param publisher publisher
+     * @param quantity quantity
+     */
     public Book(String isbn, String title, String author, String yearOfPublication, String publisher, String quantity) {
         this.title = title;
         this.author = author;
@@ -31,6 +40,11 @@ public class Book {
         hashPublisher = hashInit(publisher);
     }
 
+    /**
+     * Create book from String Array.
+     *
+     * @param data String Array
+     */
     public Book(String[] data) {
         this.isbn = data[0];
         this.title = data[1];

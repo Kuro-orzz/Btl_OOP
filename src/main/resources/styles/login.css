@@ -27,6 +27,17 @@
     -fx-translate-y: 120px;
 }
 
+.register-button {
+    -fx-font-size: 16px;
+    -fx-background-color: #243A73;
+    -fx-text-fill: white;
+    -fx-pref-width: 160px;
+    -fx-pref-height: 40px;
+    -fx-translate-x: 0px;
+    -fx-translate-y: 180px;
+}
+
 .login-button:hover {
     -fx-background-color: #3A4E8D;
 }
+

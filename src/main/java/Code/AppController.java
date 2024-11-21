@@ -1,5 +1,6 @@
 package Code;
 
+import AccountData.Account;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -39,8 +40,8 @@ public class AppController extends javafx.application.Application {
         this.primaryStage.setScene(login.getLoginScene(this));
     }
 
-    public void showMainAppScene(boolean isAdmin) {
-        MainApp mainApp = new MainApp(this, isAdmin);
+    public void showMainAppScene(Account acc) {
+        MainApp mainApp = new MainApp(this, acc);
         Scene sidebarScene = mainApp.getMainAppScene();
         primaryStage.setScene(sidebarScene);
         primaryStage.setTitle("Library Management System");

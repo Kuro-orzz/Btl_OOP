@@ -29,6 +29,11 @@ public class userManagement {
     private ObservableList<Account> data;
     private FilteredList<Account> filteredData;
 
+    /**
+     * Constructor to create userManagement.
+     *
+     * @param controller the main controller
+     */
     public userManagement(AppController controller) {
         data = FXCollections.observableArrayList();
         filteredData = new FilteredList<>(data, p -> true);
@@ -42,6 +47,10 @@ public class userManagement {
         loadAccountData();
     }
 
+    /**
+     * Init table column with Cell Value.
+     *
+     */
     private void initializeTableColumns() {
         TableColumn<Account, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setPrefWidth(100);
@@ -70,16 +79,22 @@ public class userManagement {
         tableView.getColumns().addAll(usernameColumn, passwordColumn, fullNameColumn, ageColumn, genderColumn, adminColumn);
     }
 
+    /**
+     * Read file and load accounts data to ObservableList.
+     *
+     */
     private void loadAccountData() {
         CsvReader csvReader = new CsvReader();
         List<Account> accounts = csvReader.getAccountsFromFile("accounts.csv");
-        Account newSetting = new Account();
-        newSetting.setCounter(accounts.get(accounts.size() - 1).getId() + 1);
         if (accounts != null) {
             data.addAll(accounts);
         }
     }
 
+    /**
+     * Get User Management GUI Stackpane.
+     * @return StackPane
+     */
     public StackPane getUserStackPane() {
         // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
@@ -89,6 +104,8 @@ public class userManagement {
         ComboBox<String> searchModeComboBox = new ComboBox<>();
         searchModeComboBox.getItems().addAll("Username", "Full Name", "Age", "Gender", "Admin Status");
         searchModeComboBox.setValue("Username");
+        searchModeComboBox.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        searchModeComboBox.getStyleClass().add("button");
         searchModeComboBox.setLayoutX(160.0);
         searchModeComboBox.setLayoutY(60.0);
         searchModeComboBox.setPrefSize(104, 25);
@@ -105,6 +122,8 @@ public class userManagement {
         searchField.setPadding(new Insets(10, 10, 10, 10));
 
         Button addButton = new Button("Add Account");
+        addButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        addButton.getStyleClass().add("button");
         addButton.setLayoutX(800.0);
         addButton.setLayoutY(34.0);
         addButton.setOnAction(e -> openAddAccountStage());
@@ -146,6 +165,10 @@ public class userManagement {
         return pane;
     }
 
+    /**
+     * Open Pop-up stage to add account.
+     *
+     */
     private void openAddAccountStage() {
         Stage stage = new Stage();
         stage.setTitle("Add New Account");
@@ -172,6 +195,8 @@ public class userManagement {
         isAdminField.setPromptText("Is Admin (true/false)");
 
         Button doneButton = new Button("Done");
+        doneButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
@@ -182,9 +207,9 @@ public class userManagement {
 
             UserInfo userInfo = new UserInfo(fullName, age, gender);
             Account newAccount = new Account(username, password, isAdmin, userInfo);
-            System.out.println(newAccount.getId());
+
             appendAccountToCSV(newAccount);
-            data.add(newAccount); // Refresh the TableView
+            data.add(newAccount);
             stage.close();
         });
 
@@ -195,6 +220,11 @@ public class userManagement {
         stage.show();
     }
 
+    /**
+     * Append new account to accounts's storage file.
+     *
+     * @param account new acc to be appended
+     */
     private void appendAccountToCSV(Account account) {
             CsvReader csvReader = new CsvReader();
             csvReader.appendAccountToFile(account, "accounts.csv");

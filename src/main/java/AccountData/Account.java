@@ -35,19 +35,10 @@ public class Account {
     }
 
     public Account(String[] data) {
-        this.id = Integer.parseInt(data[0]);
-        this.username = data[1];
-        this.password = data[2];
-        this.isAdmin = Boolean.parseBoolean(data[3]);
-        info = new UserInfo(data[4], Integer.parseInt(data[5]), Boolean.parseBoolean(data[6]));
-    }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    public void setCounter(int counter) {
-        this.counter = counter;
+        this.username = data[0];
+        this.password = data[1];
+        this.isAdmin = Boolean.parseBoolean(data[2]);
+        info = new UserInfo(data[3], Integer.parseInt(data[4]), Boolean.parseBoolean(data[5]));
     }
 
     public int getId() {

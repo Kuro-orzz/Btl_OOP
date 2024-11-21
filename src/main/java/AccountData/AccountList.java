@@ -51,6 +51,11 @@ public class AccountList extends CsvReader {
         return null;
     }
 
+    /**
+     * Get account this a specific username.
+     * @param username username of account
+     * @return account that has that username
+     */
     public Account getAccountByUsername(String username) {
         for (Account account : accountList) {
             if (account.getUsername().equals(username)) {

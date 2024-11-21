@@ -19,6 +19,10 @@ import java.util.List;
 public class Login {
     protected AccountList accountList = new AccountList();
 
+    /**
+     * Constructor with accountList updated from accounts.csv
+     *
+     */
     public Login() {
         List<Account> accounts = new CsvReader().getAccountsFromFile("accounts.csv");
         if (accounts != null) {
@@ -31,6 +35,7 @@ public class Login {
 
     /**
      * Create a scene where we log in.
+     *
      * @param appController main app controller
      * @return login scene to be showed
      */
@@ -79,8 +84,15 @@ public class Login {
             }
         });
 
+        Button registerButton = new Button("New Account");
+        registerButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
+        registerButton.getStyleClass().add("register-button");
+        registerButton.setOnAction(event -> {
+            RegisterStage registerStage = new RegisterStage();
+        });
+
         StackPane stPane = new StackPane();
-        stPane.getChildren().addAll(backgroundImage, loginLabel, vbox, loginButton);
+        stPane.getChildren().addAll(backgroundImage, loginLabel, vbox, loginButton,registerButton );
 
         return new Scene(stPane, 1280, 720);
     }
@@ -153,9 +165,8 @@ public class Login {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
             Account account = accountList.getAccountByUsername(usernameField.getText());
             boolean isAdmin = account.isAdmin();
-            System.out.println(account.getId());
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
-            appController.showMainAppScene(isAdmin);
+            appController.showMainAppScene(account);
         } else {
              showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
         }
@@ -172,6 +183,12 @@ public class Login {
         return accountList.isAccountsExist(accountToCheck);
     }
 
+    /**
+     * Show alert pop-up.
+     * @param alertType type of alert
+     * @param title title of alert
+     * @param message message
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

@@ -1,11 +1,8 @@
 package Code;
 
-import AccountData.Account;
 import BookData.Book;
 import BookData.BookList;
 import Logic.CsvReader;
-import Logic.UserInfo;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -27,6 +24,10 @@ public class Library {
     private ObservableList<Book> data;
     private FilteredList<Book> filteredData;
 
+    /**
+     * Library constructor.
+     * @param controller the main controller.
+     */
     public Library(AppController controller) {
         data = FXCollections.observableArrayList();
         filteredData = new FilteredList<>(data);
@@ -43,7 +44,10 @@ public class Library {
         addBookFromData();
     }
 
-
+    /**
+     * Method init Book Table Column with Cell data.
+     *
+     */
     private void initializeBookTableColumns() {
         TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
         isbnColumn.setPrefWidth(75);
@@ -72,12 +76,19 @@ public class Library {
         tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn, yearColumn, publisherColumn, quantity);
     }
 
-    // Method to add a book to the TableView
+    /**
+     * Method to add a book to the TableView.
+     *
+     */
     public void addBookFromData() {
         List<Book> list = new BookList("books.csv").getBookList();
         data.addAll(list);
     }
 
+    /**
+     * Method create Library GUI.
+     * @return Library StackPane
+     */
     public StackPane getLibraryStackPane() {
         // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
@@ -87,6 +98,8 @@ public class Library {
         ComboBox<String> searchModeComboBox = new ComboBox<>();
         searchModeComboBox.getItems().addAll("Title", "ISBN", "Author", "Year of publication", "Publisher");
         searchModeComboBox.setValue("Title");
+        searchModeComboBox.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        searchModeComboBox.getStyleClass().add("combo-box");
         searchModeComboBox.setLayoutX(160.0);
         searchModeComboBox.setLayoutY(60.0);
         searchModeComboBox.setPrefSize(104, 25);
@@ -103,6 +116,8 @@ public class Library {
         searchField.setPadding(new Insets(10, 10, 10, 10));
 
         Button addButton = new Button("Add Book");
+        addButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        addButton.getStyleClass().add("button");
         addButton.setLayoutX(800.0);
         addButton.setLayoutY(34.0);
         addButton.setOnAction(e -> openAddBookStage());
@@ -151,6 +166,10 @@ public class Library {
         return pane;
     }
 
+    /**
+     * Pop up Stage to add Book.
+     *
+     */
     private void openAddBookStage() {
         Stage stage = new Stage();
         stage.setTitle("Add New Account");
@@ -169,6 +188,8 @@ public class Library {
         TextField quantityField = new TextField();
         quantityField.setPromptText("Quantity");
         Button doneButton = new Button("Done");
+        doneButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
             String isbn = isbnField.getText();
             String title = titledField.getText();
@@ -186,6 +207,11 @@ public class Library {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Method to append new Book to books's storage file.
+     * @param newBook book to be appended
+     */
     private void appendBookToCSV(Book newBook) {
         CsvReader csvReader = new CsvReader();
         csvReader.appendBookToFile(newBook, "books.csv");

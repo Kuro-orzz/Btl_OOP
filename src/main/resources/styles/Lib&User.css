@@ -1,0 +1,37 @@
+.button {
+    -fx-font-size: 12px;
+    -fx-background-color: #243A73;
+    -fx-text-fill: white;
+    -fx-font-family: 'Futura', sans-serif;
+}
+
+.combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #0078d7;
+    -fx-border-radius: 5px;
+    -fx-font-size: 12px;
+    -fx-font-family: 'Futura', sans-serif;
+}
+
+.combo-box:hover {
+    -fx-border-color: #005bb5;
+    -fx-background-color: #f0f8ff;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #3A4E8D;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #0078d7;
+    -fx-border-radius: 5px;
+}
+
+.combo-box .list-cell {
+    -fx-font-size: 12px;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #dbeeff;
+}

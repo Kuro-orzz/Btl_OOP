@@ -29,16 +29,16 @@ public class BookList extends CsvReader {
         }
     }
 
-//    public void updateBook(Book book) {
-//        int index = bookList.indexOf(book);
-//        bookList.set(index, book);
-//    }
-    // thiếu modify book
-
     public List<Book> getBookList() {
         return bookList;
     }
 
+    /**
+     * Method to search Book and display results on table.
+     * @param type type of keyword (isbn/title/author/publisher/yearofPublication)
+     * @param keyword keyword
+     * @return List of Book that contains keywords
+     */
     public List<Book> search(String type, String keyword) {
         String a = keyword.toLowerCase();
         long hash1 = new HashingMultipleBase().hashInfo(a, 1);
