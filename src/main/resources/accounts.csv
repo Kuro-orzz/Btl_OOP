@@ -1,0 +1,8 @@
+"Id","Username","Password","Isadmin","Fullname","age","gender"
+"1","abc","bcd","true","abc","12","true"
+"2","12","312","false","123","11","false"
+"3","admin","password","true","Nguyen Duc Luu","19","true"
+"4","test","test","true","hung","19","true"
+"5","test1","test2","true","hung","19","true"
+"6","hung","hung","true","hung","19","true"
+"7","hung1","hung2","true","dth","19","true"
