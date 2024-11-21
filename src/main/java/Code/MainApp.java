@@ -40,7 +40,8 @@ public class MainApp {
                 createSidebarButton("User Management"),
                 createSidebarButton("Borrow Request"),
                 createSidebarButton("Borrow"),
-                createSidebarButton("Return")
+                createSidebarButton("Return"),
+                new Clock().renderClock()
         );
 
         layout.setLeft(sidebar);

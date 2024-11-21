@@ -26,6 +26,13 @@
     -fx-background-color: #3A4E8D;
 }
 
+.clock {
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-padding: 160px 0 0 45px;
+    -fx-alignment: center;
+}
+
 .welcome-label {
     -fx-font-size: 80px;
     -fx-font-family: "Futura", sans-serif;
