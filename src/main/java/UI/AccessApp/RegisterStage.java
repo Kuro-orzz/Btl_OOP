@@ -2,7 +2,7 @@ package UI.AccessApp;
 
 import UI.Sidebar.UserManagement.AccountData.Account;
 import Logic.CsvReader;
-import Logic.UserInfo;
+import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

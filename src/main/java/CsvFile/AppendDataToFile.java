@@ -1,6 +1,6 @@
 package CsvFile;
 
-import Logic.UserInfo;
+import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import UI.Sidebar.BorrowBook.Borrow;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.UserManagement.AccountData.Account;

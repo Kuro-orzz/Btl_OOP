@@ -1,4 +1,4 @@
-package Logic;
+package UI.Sidebar.UserManagement.AccountData;
 
 public class UserInfo {
     private String fullName;

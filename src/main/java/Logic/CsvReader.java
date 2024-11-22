@@ -3,6 +3,7 @@ package Logic;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.BorrowBook.Borrow;
+import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;

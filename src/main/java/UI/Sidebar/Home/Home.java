@@ -2,7 +2,7 @@ package UI.Sidebar.Home;
 
 import UI.Sidebar.UserManagement.AccountData.Account;
 import Controller.AppController;
-import Logic.UserInfo;
+import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

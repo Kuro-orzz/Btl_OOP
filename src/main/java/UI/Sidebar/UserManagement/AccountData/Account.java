@@ -1,7 +1,5 @@
 package UI.Sidebar.UserManagement.AccountData;
 
-import Logic.UserInfo;
-
 public class Account {
     private static int counter = 1;
     private int id;

@@ -3,7 +3,7 @@ package UI.Sidebar.UserManagement;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import Controller.AppController;
 import Logic.CsvReader;
-import Logic.UserInfo;
+import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
