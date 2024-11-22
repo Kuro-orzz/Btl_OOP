@@ -28,10 +28,7 @@ public class UpdateDataFromListToFile extends InitCsvFile {
                         book.getAuthor(),
                         book.getYearOfPublication(),
                         book.getPublisher(),
-                        book.getQuantity(),
-                        book.getIMG_PATH_SIZE_S(),
-                        book.getIMG_PATH_SIZE_M(),
-                        book.getIMG_PATH_SIZE_L()
+                        book.getQuantity()
                 };
                 writer.writeNext(info);
             }

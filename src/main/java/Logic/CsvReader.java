@@ -76,14 +76,12 @@ public class CsvReader {
         try {
             FileWriter outputfile = new FileWriter(file);
             CSVWriter writer = new CSVWriter(outputfile);
-            String[] header = {"ISBN", "Book-Title", "Book-Author", "Year-of-Publication", "Publisher",
-                    "Quantity", "Image-URL-S", "Image-URL-M", "Image-URL-L"};
+            String[] header = {"ISBN", "Book-Title", "Book-Author", "Year-of-Publication", "Publisher", "Quantity"};
             writer.writeNext(header);
             for (int i = 0; i < bookList.size(); i++) {
                 Book book = bookList.get(i);
                 String[] info = {book.getIsbn(), book.getTitle(), book.getAuthor(), book.getYearOfPublication(),
-                    book.getPublisher(), book.getQuantity(),
-                    book.getIMG_PATH_SIZE_S(), book.getIMG_PATH_SIZE_M(), book.getIMG_PATH_SIZE_L()};
+                    book.getPublisher(), book.getQuantity()};
                 writer.writeNext(info);
             }
             writer.close();

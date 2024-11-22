@@ -10,9 +10,6 @@ public class Book {
     private String yearOfPublication;
     private String publisher;
     private String quantity;
-    private String IMG_PATH_SIZE_S;
-    private String IMG_PATH_SIZE_M;
-    private String IMG_PATH_SIZE_L;
     public HashingMultipleBase hashIsbn, hashTitle, hashAuthor, hashYearOfPublication, hashPublisher;
 
     public Book() {}
@@ -52,9 +49,6 @@ public class Book {
         this.yearOfPublication = data[3];
         this.publisher = data[4];
         this.quantity = data[5];
-        this.IMG_PATH_SIZE_S = data[6];
-        this.IMG_PATH_SIZE_M = data[7];
-        this.IMG_PATH_SIZE_L = data[8];
         hashIsbn = hashInit(isbn);
         hashTitle = hashInit(title);
         hashAuthor = hashInit(author);
@@ -108,30 +102,6 @@ public class Book {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public String getIMG_PATH_SIZE_S() {
-        return IMG_PATH_SIZE_S;
-    }
-
-    public void setIMG_PATH_SIZE_S(String IMG_PATH_SIZE_S) {
-        this.IMG_PATH_SIZE_S = IMG_PATH_SIZE_S;
-    }
-
-    public String getIMG_PATH_SIZE_M() {
-        return IMG_PATH_SIZE_M;
-    }
-
-    public void setIMG_PATH_SIZE_M(String IMG_PATH_SIZE_M) {
-        this.IMG_PATH_SIZE_M = IMG_PATH_SIZE_M;
-    }
-
-    public String getIMG_PATH_SIZE_L() {
-        return IMG_PATH_SIZE_L;
-    }
-
-    public void setIMG_PATH_SIZE_L(String IMG_PATH_SIZE_L) {
-        this.IMG_PATH_SIZE_L = IMG_PATH_SIZE_L;
     }
 
     public HashingMultipleBase hashInit(String info) {

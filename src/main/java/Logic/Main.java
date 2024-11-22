@@ -1,5 +1,9 @@
 package Logic;
 
+import UI.Sidebar.Library.BookData.Book;
+
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
 //        Option newOption = new Option();
@@ -12,7 +16,9 @@ public class Main {
 //        for (Book book : data) {
 //            System.out.println(book.getInfo());
 //        }
-//        CsvReader csvReader = new CsvReader();
+        CsvReader csvReader = new CsvReader();
+        List<Book> data = csvReader.getDataFromFile("books.csv");
+        csvReader.updateDataFromList("books.csv", data);
 //        csvReader.createAccountDataFile("accounts.csv", new AccountList("accounts.csv").getAccountList());
 //        BookList bookList = new BookList("books.csv");
 //        csvReader.updateDataFromList("books.csv", bookList.getBookList());

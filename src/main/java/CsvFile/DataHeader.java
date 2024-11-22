@@ -7,10 +7,7 @@ public class DataHeader {
             "Book-Author",
             "Year-of-Publication",
             "Publisher",
-            "Quantity",
-            "Image-URL-S",
-            "Image-URL-M",
-            "Image-URL-L"
+            "Quantity"
     };
     public final String[] AccountInfo = {
             "Id",
