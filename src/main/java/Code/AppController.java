@@ -45,5 +45,4 @@ public class AppController extends javafx.application.Application {
         primaryStage.setScene(sidebarScene);
         primaryStage.setTitle("Library Management System");
     }
-
 }

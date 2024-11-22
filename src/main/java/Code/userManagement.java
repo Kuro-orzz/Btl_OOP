@@ -182,7 +182,6 @@ public class userManagement {
 
             UserInfo userInfo = new UserInfo(fullName, age, gender);
             Account newAccount = new Account(username, password, isAdmin, userInfo);
-            System.out.println(newAccount.getId());
             appendAccountToCSV(newAccount);
             data.add(newAccount); // Refresh the TableView
             stage.close();

@@ -9,7 +9,9 @@ import java.util.List;
 public class BookList extends CsvReader {
     private List<Book> bookList = new ArrayList<Book>();
 
-    public BookList() {}
+    public BookList() {
+
+    }
 
     public BookList(String fileName) {
         bookList = new CsvReader().getDataFromFile(fileName);
