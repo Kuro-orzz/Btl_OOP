@@ -6,6 +6,8 @@
 }
 
 .combo-box {
+    -fx-pref-width: 104px;
+    -fx-pref-height: 25px; 
     -fx-background-color: #ffffff;
     -fx-border-color: #0078d7;
     -fx-border-radius: 5px;

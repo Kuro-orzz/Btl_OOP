@@ -102,7 +102,6 @@ public class Library {
         searchModeComboBox.getStyleClass().add("combo-box");
         searchModeComboBox.setLayoutX(160.0);
         searchModeComboBox.setLayoutY(60.0);
-        searchModeComboBox.setPrefSize(104, 25);
 
         Label searchLabel = new Label("SEARCH BY:");
         searchLabel.setLayoutX(180.0);
