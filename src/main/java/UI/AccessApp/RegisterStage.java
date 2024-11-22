@@ -1,6 +1,6 @@
-package Code;
+package UI.AccessApp;
 
-import AccountData.Account;
+import UI.Sidebar.UserManagement.AccountData.Account;
 import Logic.CsvReader;
 import Logic.UserInfo;
 import javafx.geometry.Insets;

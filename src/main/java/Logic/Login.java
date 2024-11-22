@@ -1,7 +1,7 @@
 package Logic;
 
-import AccountData.Account;
-import AccountData.AccountList;
+import UI.Sidebar.UserManagement.AccountData.Account;
+import UI.Sidebar.UserManagement.AccountData.AccountList;
 
 import java.util.Scanner;
 

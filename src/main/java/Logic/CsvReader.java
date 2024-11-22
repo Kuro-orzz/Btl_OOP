@@ -1,8 +1,8 @@
 package Logic;
 
-import AccountData.Account;
-import BookData.Book;
-import Code.Borrow;
+import UI.Sidebar.UserManagement.AccountData.Account;
+import UI.Sidebar.Library.BookData.Book;
+import UI.Sidebar.BorrowBook.Borrow;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
@@ -12,9 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class CsvReader {
     public List<Book> getDataFromFile(String fileName) {

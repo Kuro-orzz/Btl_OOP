@@ -1,4 +1,4 @@
-package Code;
+package UI.Sidebar;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
