@@ -30,7 +30,7 @@ public class Home {
         homeLabel.getStyleClass().add("home-label");
 
         //Home avatar
-        String imgPath = isAdmin ? "/GUI/adminAvatar.png" : "/Screen/userAvatar.jpg";
+        String imgPath = isAdmin ? "/GUI/adminAvatar.png" : "/GUI/userAvatar.jpg";
         ImageView avatar = new ImageView();
         try {
             Image avatarImage = new Image(getClass().getResourceAsStream(imgPath));

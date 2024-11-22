@@ -86,7 +86,11 @@ public class MainApp {
                 userManagement userManagement = new userManagement(controller);
                 StackPane userView = userManagement.getUserStackPane();
                 layout.setCenter(userView);
-            }
+            }  else if (text.equals("Borrow")) {
+            showBorrow borrow = new showBorrow(controller);
+            StackPane borrowView = borrow.getBorrowStackPane();
+            layout.setCenter(borrowView);
+        }
         });
 
         return button;

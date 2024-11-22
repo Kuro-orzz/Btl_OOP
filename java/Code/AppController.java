@@ -22,7 +22,7 @@ public class AppController extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) {
-        Image icon = new Image(getClass().getResourceAsStream("/Screen/appIcon.png"));
+        Image icon = new Image(getClass().getResourceAsStream("/GUI/appIcon.png"));
         stage.getIcons().add(icon);
         stage.setTitle("My Library");
         Scene loginScene = login.getLoginScene(this);
@@ -45,5 +45,4 @@ public class AppController extends javafx.application.Application {
         primaryStage.setScene(sidebarScene);
         primaryStage.setTitle("Library Management System");
     }
-
 }

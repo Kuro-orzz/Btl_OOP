@@ -1,5 +1,6 @@
 package Code;
 
+import Logic.CsvReader;
 import Logic.UserInfo;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -10,17 +11,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
-import Logic.Account;
-import Logic.AccountList;
+import AccountData.Account;
+import AccountData.AccountList;
+
+import java.util.List;
 
 public class Login {
     protected AccountList accountList = new AccountList();
 
     public Login() {
-        UserInfo admin = new UserInfo("admin", 18, true);
-        Account account = new Account("admin", "password", true, admin);
-        accountList.addAccount(account);
+        List<Account> accounts = new CsvReader().getAccountsFromFile("accounts.csv");
+        if (accounts != null) {
+            for (Account account : accounts) {
+                accountList.addAccount(account);
+            }
+        }
     }
+
 
     /**
      * Create a scene where we log in.
@@ -30,7 +37,7 @@ public class Login {
     public Scene getLoginScene(AppController appController) {
         ImageView backgroundImage = new ImageView();
         try {
-            Image loginImage = new Image(getClass().getResourceAsStream("/Screen/loginImage.jpg"));
+            Image loginImage = new Image(getClass().getResourceAsStream("/GUI/loginImage.jpg"));
             backgroundImage.setImage(loginImage);
             backgroundImage.setFitWidth(1280);
             backgroundImage.setFitHeight(720);
@@ -146,10 +153,11 @@ public class Login {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
             Account account = accountList.getAccountByUsername(usernameField.getText());
             boolean isAdmin = account.isAdmin();
+            System.out.println(account.getId());
+            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
             appController.showMainAppScene(isAdmin);
-            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome!");
         } else {
-            showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
+             showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
         }
     }
 
@@ -161,7 +169,7 @@ public class Login {
      */
     private boolean authenticate(String username, String password) {
         Account accountToCheck = new Account(username, password);
-        return accountList.searchAccounts(accountToCheck);
+        return accountList.isAccountsExist(accountToCheck);
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
@@ -172,4 +180,3 @@ public class Login {
         alert.showAndWait();
     }
 }
-
