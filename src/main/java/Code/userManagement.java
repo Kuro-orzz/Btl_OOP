@@ -86,6 +86,8 @@ public class userManagement {
     private void loadAccountData() {
         CsvReader csvReader = new CsvReader();
         List<Account> accounts = csvReader.getAccountsFromFile("accounts.csv");
+        Account newSetting = new Account();
+        newSetting.setCounter(accounts.get(accounts.size() - 1).getId() + 1);
         if (accounts != null) {
             data.addAll(accounts);
         }
