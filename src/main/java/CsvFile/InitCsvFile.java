@@ -9,6 +9,12 @@ import java.io.IOException;
 public class InitCsvFile extends DataHeader {
     public InitCsvFile() {}
 
+    /**
+     * Init Csv writer file by filename and status append or not.
+     * @param fileName name of file want to init
+     * @param isAppend status append or not
+     * @return File Csv writer
+     */
     public CSVWriter initCsvWriter(String fileName, boolean isAppend) {
         try {
             String filePath = "src/main/resources/" + fileName;
@@ -21,6 +27,10 @@ public class InitCsvFile extends DataHeader {
         return null;
     }
 
+    /**
+     * Create file database of books.
+     * @param fileName books database
+     */
     public void createBookDataFile(String fileName) {
         try {
             CSVWriter writer = initCsvWriter(fileName, false);
@@ -32,6 +42,10 @@ public class InitCsvFile extends DataHeader {
         }
     }
 
+    /**
+     * Create file database of accounts.
+     * @param fileName accounts database
+     */
     public void createAccountDataFile(String fileName) {
         try {
             CSVWriter writer = initCsvWriter(fileName, false);
@@ -43,6 +57,10 @@ public class InitCsvFile extends DataHeader {
         }
     }
 
+    /**
+     * Create file database of borrows.
+     * @param fileName borrows database
+     */
     public void createBorrowDataFile(String fileName) {
         try {
             CSVWriter writer = initCsvWriter(fileName, false);

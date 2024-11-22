@@ -13,8 +13,8 @@ public class UpdateDataFromListToFile extends InitCsvFile {
     public UpdateDataFromListToFile() {}
 
     /**
-     * Use when delete book and need to rewrite all data
-     * @param fileName csv file
+     * Use when delete book and need to rewrite all data.
+     * @param fileName database of books
      * @param booksList list of books in library
      */
     public void updateBooks(String fileName, List<Book> booksList) {
@@ -38,6 +38,11 @@ public class UpdateDataFromListToFile extends InitCsvFile {
         }
     }
 
+    /**
+     * Use when delete account and need to rewrite all data.
+     * @param fileName database of accounts
+     * @param accountsList list of accounts in library
+     */
     public void updateAccounts(String fileName, List<Account> accountsList) {
         try {
             CSVWriter writer = initCsvWriter(fileName, false);
@@ -61,6 +66,11 @@ public class UpdateDataFromListToFile extends InitCsvFile {
         }
     }
 
+    /**
+     * Use when delete borrow and need to rewrite all data.
+     * @param fileName database of borrows
+     * @param borrowsList list of borrows in library
+     */
     public void updateBorrows(String fileName, List<Borrow> borrowsList) {
         try {
             CSVWriter writer = initCsvWriter(fileName, false);

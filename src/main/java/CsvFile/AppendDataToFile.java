@@ -11,6 +11,11 @@ import java.io.IOException;
 public class AppendDataToFile extends InitCsvFile {
     public AppendDataToFile() {}
 
+    /**
+     * Append book to the end of file.
+     * @param fileName file that book will be appended
+     * @param newBook book append to file
+     */
     public void appendBook(String fileName, Book newBook) {
         try {
             CSVWriter writer = initCsvWriter(fileName, true);
@@ -29,6 +34,11 @@ public class AppendDataToFile extends InitCsvFile {
         }
     }
 
+    /**
+     * Append account to the end of file.
+     * @param fileName file that account will be appended
+     * @param account account append to file
+     */
     public void appendAccount(String fileName, Account account) {
         try {
             CSVWriter writer = initCsvWriter(fileName, true);
@@ -49,6 +59,11 @@ public class AppendDataToFile extends InitCsvFile {
         }
     }
 
+    /**
+     * Append borrow to the end of file.
+     * @param fileName file that borrow will be appended
+     * @param borrow borrow append to file
+     */
     public void appendBorrow(String fileName, Borrow borrow) {
         try {
             CSVWriter writer = initCsvWriter(fileName, true);
