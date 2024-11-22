@@ -2,6 +2,7 @@ package Logic;
 
 import AccountData.Account;
 import BookData.Book;
+import Code.Borrow;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
@@ -129,6 +130,65 @@ public class CsvReader {
             e.printStackTrace();
         }
     }
+
+    public List<Borrow> getListBorrowFromFile(String fileName) {
+        String filePath;
+        try {
+            filePath = CsvReader.class.getClassLoader().getResource(fileName).getPath();
+        } catch (NullPointerException e) {
+            System.out.println("File not found in resources: " + fileName);
+            return null;
+        }
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            List<String[]> records = new ArrayList<>();
+            String[] line;
+            while ((line = reader.readNext()) != null) {
+                records.add(line);
+            }
+            List<Borrow> listBorrow = new ArrayList<>();
+            for (int i = 1; i < records.size(); i++) {
+                listBorrow.add(new Borrow(records.get(i)));
+            }
+            return listBorrow;
+        } catch (IOException | CsvException e) {
+            System.out.println("Error reading the file: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void appendBorrowToFile(String fileName, Borrow borrow) {
+        String filePath = "src/main/resources/" + fileName;
+        File file = new File(filePath);
+        try {
+            FileWriter outputfile = new FileWriter(file, true);
+            CSVWriter writer = new CSVWriter(outputfile);
+            String[] row = {
+                    borrow.getUsername(),
+                    borrow.getBookTitle(),
+                    borrow.getStatus(),
+                    borrow.getBorrowDate()
+            };
+            writer.writeNext(row);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void createBorrowDataFile(String fileName) {
+//        String filePath = "src/main/resources/" + fileName;
+//        File file = new File(filePath);
+//        try {
+//            FileWriter outputfile = new FileWriter(file);
+//            CSVWriter writer = new CSVWriter(outputfile);
+//            String[] header = {"Username", "Title", "Status", "Borrowed Date"};
+//            writer.writeNext(header);
+//            writer.close();
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     // add delete data
 
