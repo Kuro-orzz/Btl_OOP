@@ -32,6 +32,9 @@ public class BookList extends CsvReader {
         return bookList;
     }
 
+    public void setBookList(List<Book> bookList) {
+        this.bookList = bookList;
+    }
     /**
      * Method to search Book and display results on table.
      * @param type type of keyword (isbn/title/author/publisher/yearofPublication)
