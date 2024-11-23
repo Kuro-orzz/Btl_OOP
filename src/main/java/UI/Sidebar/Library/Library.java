@@ -128,7 +128,8 @@ public class Library {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             ObservableList<Book> filteredData = FXCollections.observableArrayList();
             String searchMode = searchModeComboBox.getValue();
-            BookList list = new BookList("books.csv");
+            BookList list = new BookList();
+            list.setBookList(FXCollections.observableArrayList(data));
             if (newValue == null || newValue.isEmpty()) {
                 filteredData.setAll(list.getBookList());
             } else {
