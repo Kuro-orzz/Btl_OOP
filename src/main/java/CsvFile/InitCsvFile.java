@@ -58,13 +58,13 @@ public class InitCsvFile extends DataHeader {
     }
 
     /**
-     * Create file database of borrows.
-     * @param fileName borrows database
+     * Create file database of borrowed.
+     * @param fileName borrowed database
      */
-    public void createBorrowDataFile(String fileName) {
+    public void createBorrowedDataFile(String fileName) {
         try {
             CSVWriter writer = initCsvWriter(fileName, false);
-            writer.writeNext(BorrowInfo);
+            writer.writeNext(BorrowedInfo);
             writer.close();
         }
         catch (IOException e) {
@@ -72,4 +72,18 @@ public class InitCsvFile extends DataHeader {
         }
     }
 
+    /**
+     * Create file database of borrows request.
+     * @param fileName borrows request database
+     */
+    public void createBorrowRequestDataFile(String fileName) {
+        try {
+            CSVWriter writer = initCsvWriter(fileName, false);
+            writer.writeNext(BorrowRequestInfo);
+            writer.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

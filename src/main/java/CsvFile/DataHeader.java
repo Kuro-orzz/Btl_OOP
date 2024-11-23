@@ -18,10 +18,19 @@ public class DataHeader {
             "age",
             "gender"
     };
-    public final String[] BorrowInfo = {
-            "Username",
-            "Title",
-            "Status",
-            "Borrowed Date"
+    public final String[] BorrowRequestInfo = {
+            "Id",
+            "Full name",
+            "ISBN",
+            "Request date",
+            "Status"
+    };
+    public final String[] BorrowedInfo = {
+            "Id",
+            "Full name",
+            "ISBN",
+            "Borrowed date",
+            "Due date",
+            "Status"
     };
 }

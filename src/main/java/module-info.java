@@ -19,4 +19,6 @@ module org.example.demo {
     opens UI.Sidebar to javafx.fxml;
     exports UI.Sidebar.BorrowBook;
     opens UI.Sidebar.BorrowBook to javafx.fxml;
+    exports UI.Sidebar.BorrowBook.BorrowedData;
+    opens UI.Sidebar.BorrowBook.BorrowedData to javafx.fxml;
 }

@@ -1,34 +1,39 @@
 package UI.Sidebar.UserManagement.AccountData;
 
-import Logic.CsvReader;
+import CsvFile.AppendDataToFile;
+import CsvFile.GetDataFromFile;
+import CsvFile.UpdateDataFromListToFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountList extends CsvReader {
+public class AccountList {
     private List<Account> accountList = new ArrayList<Account>();
 
     public AccountList() {}
 
     public AccountList(String fileName) {
-        accountList = new CsvReader().getAccountsFromFile(fileName);
+        accountList = new GetDataFromFile().getAccountsFromFile(fileName);
     }
 
     public List<Account> getAccountList() {
         return accountList;
     }
 
-    public void addAccount(Account a) {
-        accountList.add(a);
+    public void setAccountList(List<Account> accountList) {
+        this.accountList = accountList;
+    }
+
+    public void addAccount(Account account) {
+        accountList.add(account);
+        AppendDataToFile append = new AppendDataToFile();
+        append.appendAccount("accounts.csv", account);
     }
 
     public void removeAccounts(Account account) {
-        for (Account a : accountList) {
-            if (account.getId() == a.getId()) {
-                accountList.remove(a);
-                return;
-            }
-        }
+        accountList.remove(account);
+        UpdateDataFromListToFile update = new UpdateDataFromListToFile();
+        update.updateAccounts("accounts.csv", accountList);
     }
 
     public boolean isAccountsExist(Account account) {

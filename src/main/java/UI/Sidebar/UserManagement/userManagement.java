@@ -1,8 +1,9 @@
 package UI.Sidebar.UserManagement;
 
+import CsvFile.AppendDataToFile;
+import CsvFile.GetDataFromFile;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import Controller.AppController;
-import Logic.CsvReader;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -85,7 +86,7 @@ public class userManagement {
      *
      */
     private void loadAccountData() {
-        CsvReader csvReader = new CsvReader();
+        GetDataFromFile csvReader = new GetDataFromFile();
         List<Account> accounts = csvReader.getAccountsFromFile("accounts.csv");
         Account newSetting = new Account();
         newSetting.setCounter(accounts.get(accounts.size() - 1).getId() + 1);
@@ -223,12 +224,11 @@ public class userManagement {
     }
 
     /**
-     * Append new account to accounts's storage file.
-     *
-     * @param account new acc to be appended
+     * Append new account to file.
+     * @param account new account to be appended
      */
     private void appendAccountToCSV(Account account) {
-            CsvReader csvReader = new CsvReader();
-            csvReader.appendAccountToFile(account, "accounts.csv");
+            AppendDataToFile csvReader = new AppendDataToFile();
+            csvReader.appendAccount("accounts.csv", account);
     }
 }

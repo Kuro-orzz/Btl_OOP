@@ -1,10 +1,5 @@
 package Logic;
 
-import UI.Sidebar.Library.BookData.Book;
-import UI.Sidebar.BorrowBook.Borrow;
-
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
 //        Option newOption = new Option();
@@ -18,14 +13,9 @@ public class Main {
 //            System.out.println(book.getInfo());
 //        }
 //        CsvReader csvReader = new CsvReader();
-//        csvReader.createBorrowDataFile("borrows.csv");
-//        csvReader.appendBorrowToFile("borrows.csv", new Borrow("user1",
-//                "0123", "book1","YES"));
-//        csvReader.appendBorrowToFile("borrows.csv", new Borrow("user2",
-//                "01234", "book2","NO"));
-//        csvReader.appendBorrowToFile("borrows.csv", new Borrow("user3",
-//                "012345", "book3","YES"));
-//        CsvReader csvReader = new CsvReader();
+//        InitCsvFile csv = new InitCsvFile();
+//        csv.createBorrowRequestDataFile("borrowsRequest.csv");
+//        csv.createBorrowedDataFile("borrowed.csv");
 //        List<Book> data = csvReader.getDataFromFile("books.csv");
 //        csvReader.updateDataFromList("books.csv", data);
 //        csvReader.createAccountDataFile("accounts.csv", new AccountList("accounts.csv").getAccountList());

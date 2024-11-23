@@ -1,7 +1,7 @@
 package UI.AccessApp;
 
+import CsvFile.AppendDataToFile;
 import UI.Sidebar.UserManagement.AccountData.Account;
-import Logic.CsvReader;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -69,7 +69,7 @@ public class RegisterStage {
      * @param account account to be appended
      */
     private void appendAccountToCSV(Account account) {
-        CsvReader csvReader = new CsvReader();
-        csvReader.appendAccountToFile(account, "accounts.csv");
+        AppendDataToFile csvReader = new AppendDataToFile();
+        csvReader.appendAccount("accounts.csv", account);
     }
 }

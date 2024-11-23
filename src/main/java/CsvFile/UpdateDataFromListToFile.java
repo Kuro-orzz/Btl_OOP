@@ -1,7 +1,8 @@
 package CsvFile;
 
+import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
+import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
-import UI.Sidebar.BorrowBook.Borrow;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import com.opencsv.CSVWriter;
@@ -67,20 +68,47 @@ public class UpdateDataFromListToFile extends InitCsvFile {
     }
 
     /**
-     * Use when delete borrow and need to rewrite all data.
-     * @param fileName database of borrows
-     * @param borrowsList list of borrows in library
+     * Use when delete borrowed and need to rewrite all data.
+     * @param fileName database of borrowed
+     * @param borrowedList list of borrowed in library
      */
-    public void updateBorrows(String fileName, List<Borrow> borrowsList) {
+    public void updateBorrowed(String fileName, List<Borrowed> borrowedList) {
         try {
             CSVWriter writer = initCsvWriter(fileName, false);
-            writer.writeNext(AccountInfo);
-            for (Borrow borrow : borrowsList) {
+            writer.writeNext(BorrowedInfo);
+            for (Borrowed borrowed : borrowedList) {
                 String[] info = {
-                        borrow.getUsername(),
-                        borrow.getBookTitle(),
-                        borrow.getStatus(),
-                        borrow.getBorrowDate()
+                        String.valueOf(borrowed.getId()),
+                        borrowed.getFullName(),
+                        borrowed.getIsbn(),
+                        borrowed.getBorrowedDate(),
+                        borrowed.getDueDate(),
+                        borrowed.getStatus()
+                };
+                writer.writeNext(info);
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Use when delete borrow request and need to rewrite all data.
+     * @param fileName database of borrow request
+     * @param borrowRequestList list of borrow request in library
+     */
+    public void updateBorrowRequest(String fileName, List<BorrowRequest> borrowRequestList) {
+        try {
+            CSVWriter writer = initCsvWriter(fileName, false);
+            writer.writeNext(BorrowRequestInfo);
+            for (BorrowRequest borrowRequest : borrowRequestList) {
+                String[] info = {
+                        String.valueOf(borrowRequest.getId()),
+                        borrowRequest.getFullName(),
+                        borrowRequest.getIsbn(),
+                        borrowRequest.getRequestDate(),
+                        borrowRequest.getStatus()
                 };
                 writer.writeNext(info);
             }

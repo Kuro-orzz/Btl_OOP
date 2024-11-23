@@ -1,31 +1,19 @@
 package UI.Sidebar.Library.BookData;
 
-import Logic.CsvReader;
+import CsvFile.AppendDataToFile;
+import CsvFile.GetDataFromFile;
+import CsvFile.UpdateDataFromListToFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookList extends CsvReader {
+public class BookList {
     private List<Book> bookList = new ArrayList<Book>();
 
     public BookList() {}
 
     public BookList(String fileName) {
-        bookList = new CsvReader().getDataFromFile(fileName);
-    }
-
-    public void addBook(Book book) {
-        bookList.add(book);
-    }
-
-    public void removeBook(Book book) {
-        for (int i = 0; i < bookList.size(); i++) {
-            if (bookList.get(i).getIsbn() == book.getIsbn()) {
-                bookList.remove(i);
-                updateDataFromList("books.csv", bookList);
-                return;
-            }
-        }
+        bookList = new GetDataFromFile().getBooksFromFile(fileName);
     }
 
     public List<Book> getBookList() {
@@ -35,6 +23,19 @@ public class BookList extends CsvReader {
     public void setBookList(List<Book> bookList) {
         this.bookList = bookList;
     }
+
+    public void addBook(Book book) {
+        bookList.add(book);
+        AppendDataToFile append = new AppendDataToFile();
+        append.appendBook("books.csv", book);
+    }
+
+    public void removeBook(Book book) {
+        bookList.remove(book);
+        UpdateDataFromListToFile update = new UpdateDataFromListToFile();
+        update.updateBooks("books.csv", bookList);
+    }
+
     /**
      * Method to search Book and display results on table.
      * @param type type of keyword (isbn/title/author/publisher/yearofPublication)

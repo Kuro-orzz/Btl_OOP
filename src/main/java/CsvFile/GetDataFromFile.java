@@ -1,6 +1,7 @@
 package CsvFile;
 
-import UI.Sidebar.BorrowBook.Borrow;
+import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
+import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import com.opencsv.CSVReader;
@@ -87,16 +88,35 @@ public class GetDataFromFile {
     }
 
     /**
-     * Get all borrows data from file.
-     * @param fileName name of file having borrows data
-     * @return list of borrows data
+     * Get all borrowed data from file.
+     * @param fileName name of file having borrowed data
+     * @return list of borrowed data
      */
-    public List<Borrow> getBorrowsFromFile(String fileName) {
+    public List<Borrowed> getBorrowedFromFile(String fileName) {
         try (CSVReader reader = initCsvReader(fileName)) {
             List<String[]> records = readData(reader);
-            List<Borrow> borrows = new ArrayList<>();
+            List<Borrowed> borrows = new ArrayList<>();
             for (int i = 1; i < records.size(); i++) {
-                borrows.add(new Borrow(records.get(i)));
+                borrows.add(new Borrowed(records.get(i)));
+            }
+            return borrows;
+        } catch (IOException e) {
+            System.out.println("File not found in resources: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Get all borrow request data from file.
+     * @param fileName name of file having borrow request data
+     * @return list of borrow request data
+     */
+    public List<BorrowRequest> getBorrowRequestFromFile(String fileName) {
+        try (CSVReader reader = initCsvReader(fileName)) {
+            List<String[]> records = readData(reader);
+            List<BorrowRequest> borrows = new ArrayList<>();
+            for (int i = 1; i < records.size(); i++) {
+                borrows.add(new BorrowRequest(records.get(i)));
             }
             return borrows;
         } catch (IOException e) {

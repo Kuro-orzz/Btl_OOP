@@ -1,9 +1,9 @@
 package UI.Sidebar.Library;
 
+import CsvFile.AppendDataToFile;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.Library.BookData.BookList;
 import Controller.AppController;
-import Logic.CsvReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -214,7 +214,7 @@ public class Library {
      * @param newBook book to be appended
      */
     private void appendBookToCSV(Book newBook) {
-        CsvReader csvReader = new CsvReader();
-        csvReader.appendBookToFile(newBook, "books.csv");
+        AppendDataToFile csvReader = new AppendDataToFile();
+        csvReader.appendBook("books.csv", newBook);
     }
 }

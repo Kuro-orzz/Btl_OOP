@@ -1,7 +1,7 @@
 package UI.AccessApp;
 
 import Controller.AppController;
-import Logic.CsvReader;
+import CsvFile.GetDataFromFile;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -24,7 +24,7 @@ public class Login {
      *
      */
     public Login() {
-        List<Account> accounts = new CsvReader().getAccountsFromFile("accounts.csv");
+        List<Account> accounts = new GetDataFromFile().getAccountsFromFile("accounts.csv");
         if (accounts != null) {
             for (Account account : accounts) {
                 accountList.addAccount(account);

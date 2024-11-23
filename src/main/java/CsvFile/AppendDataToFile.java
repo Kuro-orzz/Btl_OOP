@@ -1,7 +1,8 @@
 package CsvFile;
 
+import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
+import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
-import UI.Sidebar.BorrowBook.Borrow;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import com.opencsv.CSVWriter;
@@ -60,20 +61,44 @@ public class AppendDataToFile extends InitCsvFile {
     }
 
     /**
-     * Append borrow to the end of file.
-     * @param fileName file that borrow will be appended
-     * @param borrow borrow append to file
+     * Append borrowed to the end of file.
+     * @param fileName file that borrowed will be appended
+     * @param borrowed borrowed append to file
      */
-    public void appendBorrow(String fileName, Borrow borrow) {
+    public void appendBorrowed(String fileName, Borrowed borrowed) {
         try {
             CSVWriter writer = initCsvWriter(fileName, true);
-            String[] row = {
-                    borrow.getUsername(),
-                    borrow.getBookTitle(),
-                    borrow.getStatus(),
-                    borrow.getBorrowDate()
+            String[] info = {
+                    String.valueOf(borrowed.getId()),
+                    borrowed.getFullName(),
+                    borrowed.getIsbn(),
+                    borrowed.getBorrowedDate(),
+                    borrowed.getDueDate(),
+                    borrowed.getStatus()
             };
-            writer.writeNext(row);
+            writer.writeNext(info);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Append borrow request to the end of file.
+     * @param fileName file that borrow request will be appended
+     * @param borrowRequest borrow request append to file
+     */
+    public void appendBorrowRequest(String fileName, BorrowRequest borrowRequest) {
+        try {
+            CSVWriter writer = initCsvWriter(fileName, true);
+            String[] info = {
+                    String.valueOf(borrowRequest.getId()),
+                    borrowRequest.getFullName(),
+                    borrowRequest.getIsbn(),
+                    borrowRequest.getRequestDate(),
+                    borrowRequest.getStatus()
+            };
+            writer.writeNext(info);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
