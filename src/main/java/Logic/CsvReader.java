@@ -161,6 +161,7 @@ public class CsvReader {
             CSVWriter writer = new CSVWriter(outputfile);
             String[] row = {
                     borrow.getUsername(),
+                    borrow.getIsbn(),
                     borrow.getBookTitle(),
                     borrow.getStatus(),
                     borrow.getBorrowDate()

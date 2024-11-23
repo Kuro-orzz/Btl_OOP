@@ -1,10 +1,12 @@
 package Controller;
 
+import UI.Sidebar.BorrowBook.Borrow;
 import UI.Sidebar.Clock;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import UI.Sidebar.Home.Home;
 import UI.Sidebar.Library.Library;
 import UI.Sidebar.UserManagement.userManagement;
+import UI.Sidebar.BorrowBook.showBorrow;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -101,6 +103,10 @@ public class MainApp {
                 userManagement userManagement = new userManagement(controller);
                 StackPane userView = userManagement.getUserStackPane();
                 layout.setCenter(userView);
+            } else if (text.equals("Borrow")) {
+                showBorrow borrow = new showBorrow(controller);
+                StackPane borrowView = borrow.getBorrowStackPane();
+                layout.setCenter(borrowView);
             } else if (text.equals("Log Out")) {
                 Alert logoutConfirmatio = new Alert(Alert.AlertType.CONFIRMATION);
                 logoutConfirmatio.setTitle("Confirm Logout");
@@ -112,7 +118,6 @@ public class MainApp {
                 }
             }
         });
-
         return button;
     }
 }
