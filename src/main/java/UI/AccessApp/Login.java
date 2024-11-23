@@ -17,25 +17,12 @@ import UI.Sidebar.UserManagement.AccountData.AccountList;
 import java.util.List;
 
 public class Login {
-    protected AccountList accountList = new AccountList();
+    protected AccountList accountList = new AccountList("accounts.csv");
 
-    /**
-     * Constructor with accountList updated from accounts.csv
-     *
-     */
-    public Login() {
-        List<Account> accounts = new GetDataFromFile().getAccountsFromFile("accounts.csv");
-        if (accounts != null) {
-            for (Account account : accounts) {
-                accountList.addAccount(account);
-            }
-        }
-    }
-
+    public Login() {}
 
     /**
      * Create a scene where we log in.
-     *
      * @param appController main app controller
      * @return login scene to be showed
      */

@@ -42,11 +42,12 @@ public class GetDataFromFile {
             while ((line = reader.readNext()) != null) {
                 data.add(line);
             }
+            return data;
         } catch (IOException | CsvValidationException e) {
             System.out.println("Error reading csv file: " + e.getMessage());
             e.printStackTrace();
         }
-        return data;
+        return null;
     }
 
     /**
