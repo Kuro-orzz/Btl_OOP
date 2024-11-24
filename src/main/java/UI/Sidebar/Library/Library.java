@@ -33,8 +33,9 @@ public class Library {
         data = FXCollections.observableArrayList();
         filteredData = new FilteredList<>(data);
         tableView = new TableView<>(filteredData);
-        tableView.setPrefSize(840, 576);
-        tableView.setStyle("-fx-border-style: solid; -fx-border-color: #CCCCCC;");
+        tableView.getStylesheets().add(getClass()
+                .getResource("/styles/library.css").toExternalForm());
+        tableView.getStyleClass().add("table-view");
         tableView.setLayoutX(75);
         tableView.setLayoutY(100);
 
@@ -51,30 +52,31 @@ public class Library {
      */
     private void initializeBookTableColumns() {
         TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
-        isbnColumn.setPrefWidth(75);
+        isbnColumn.getStyleClass().add("isbn-column");
         isbnColumn.setCellValueFactory(cellData -> cellData.getValue().isbnProperty());
 
         TableColumn<Book, String> titleColumn = new TableColumn<>("Book Title");
-        titleColumn.setPrefWidth(345);
+        titleColumn.getStyleClass().add("title-column");
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
 
         TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
-        authorColumn.setPrefWidth(110);
+        authorColumn.getStyleClass().add("author-column");
         authorColumn.setCellValueFactory(cellData -> cellData.getValue().authorProperty());
 
         TableColumn<Book, String> yearColumn = new TableColumn<>("Year of publication");
-        yearColumn.setPrefWidth(115);
+        yearColumn.getStyleClass().add("year-column");
         yearColumn.setCellValueFactory(cellData -> cellData.getValue().yearOfPublicationProperty());
 
         TableColumn<Book, String> publisherColumn = new TableColumn<>("Publisher");
-        publisherColumn.setPrefWidth(140);
+        publisherColumn.getStyleClass().add("publisher-column");
         publisherColumn.setCellValueFactory(cellData -> cellData.getValue().publisherProperty());
 
         TableColumn<Book, String> quantity = new TableColumn<>("Quantity");
-        quantity.setPrefWidth(111);
+        quantity.getStyleClass().add("quantity-column");
         quantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
 
-        tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn, yearColumn, publisherColumn, quantity);
+        tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn,
+                yearColumn, publisherColumn, quantity);
     }
 
     /**
@@ -93,13 +95,15 @@ public class Library {
     public StackPane getLibraryStackPane() {
         // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
-        topPane.setPrefSize(1024, 110);
+        topPane.getStyleClass().add("top-pane");
 
         // Create search mode ComboBox and search Label
         ComboBox<String> searchModeComboBox = new ComboBox<>();
-        searchModeComboBox.getItems().addAll("Title", "ISBN", "Author", "Year of publication", "Publisher");
+        searchModeComboBox.getItems().addAll("Title", "ISBN", "Author",
+                "Year of publication", "Publisher");
         searchModeComboBox.setValue("Title");
-        searchModeComboBox.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        searchModeComboBox.getStylesheets()
+                .add(getClass().getResource("/styles/library.css").toExternalForm());
         searchModeComboBox.getStyleClass().add("combo-box");
         searchModeComboBox.setLayoutX(160.0);
         searchModeComboBox.setLayoutY(60.0);
@@ -109,6 +113,9 @@ public class Library {
         searchLabel.setLayoutY(32.0);
 
         TextField searchField = new TextField();
+        searchField.getStylesheets().add(getClass()
+                .getResource("/styles/library.css").toExternalForm());
+        searchField.getStyleClass().add("search-field");
         searchField.setLayoutX(272.0);
         searchField.setLayoutY(34.0);
         searchField.setPrefSize(500, 50);
@@ -116,7 +123,8 @@ public class Library {
         searchField.setPadding(new Insets(10, 10, 10, 10));
 
         Button addButton = new Button("Add Book");
-        addButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        addButton.getStylesheets().add(getClass()
+                .getResource("/styles/library.css").toExternalForm());
         addButton.getStyleClass().add("button");
         addButton.setLayoutX(800.0);
         addButton.setLayoutY(34.0);
@@ -175,7 +183,7 @@ public class Library {
         Stage stage = new Stage();
         stage.setTitle("Add New Account");
         VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20, 20, 20, 20));
+        vbox.getStyleClass().add("vbox");
         TextField isbnField = new TextField();
         isbnField.setPromptText("ISBN");
         TextField titledField = new TextField();
@@ -189,7 +197,8 @@ public class Library {
         TextField quantityField = new TextField();
         quantityField.setPromptText("Quantity");
         Button doneButton = new Button("Done");
-        doneButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        doneButton.getStylesheets().add(getClass()
+                .getResource("/styles/library.css").toExternalForm());
         doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
             String isbn = isbnField.getText();
@@ -203,7 +212,8 @@ public class Library {
             data.add(newBook); // Refresh the TableView
             stage.close();
         });
-        vbox.getChildren().addAll(isbnField, titledField, authorField, yOpField, publisherField, quantityField, doneButton);
+        vbox.getChildren().addAll(isbnField, titledField, authorField, yOpField,
+                publisherField, quantityField, doneButton);
         Scene scene = new Scene(vbox, 300, 400);
         stage.setScene(scene);
         stage.show();

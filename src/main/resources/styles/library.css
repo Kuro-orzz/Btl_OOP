@@ -1,0 +1,90 @@
+.table-view{
+    -fx-pref-width: 840px;
+    -fx-pref-height: 576px;
+    -fx-border-style: solid;
+    -fx-border-color: #CCCCCC;
+}
+
+.table-view .column {
+    -fx-pref-width: 75px;
+}
+
+.isbn-column {
+    -fx-pref-width: 75px;
+}
+
+.title-column {
+    -fx-pref-width: 345px;
+}
+
+.author-column {
+    -fx-pref-width: 110px;
+}
+
+.year-column {
+    -fx-pref-width: 115px;
+}
+
+.publisher-column {
+    -fx-pref-width: 140px;
+}
+
+.quantity-column {
+    -fx-pref-width: 111px;
+}
+
+.top-pane {
+    -fx-pref-width: 1024px;
+    -fx-pref-height: 110px;
+}
+
+.combo-box {
+    -fx-pref-width: 104px;
+    -fx-pref-height: 25px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #0078d7;
+    -fx-border-radius: 5px;
+    -fx-font-size: 12px;
+    -fx-font-family: 'Futura', sans-serif;
+}
+
+.combo-box:hover {
+    -fx-border-color: #005bb5;
+    -fx-background-color: #f0f8ff;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #3A4E8D;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #0078d7;
+    -fx-border-radius: 5px;
+}
+
+.combo-box .list-cell {
+    -fx-font-size: 12px;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #dbeeff;
+}
+
+.search-field {
+        -fx-pref-width: 500px;
+        -fx-pref-height: 50px;
+        -fx-background-color: #ffffff;
+        -fx-padding: 10px 10px 10px 10px;
+    }
+
+.button {
+    -fx-font-size: 12px;
+    -fx-background-color: #243A73;
+    -fx-text-fill: white;
+    -fx-font-family: 'Futura', sans-serif;
+}
+
+.vbox {
+    -fx-padding: 20px 20px 20px 20px;
+}

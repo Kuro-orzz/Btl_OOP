@@ -22,7 +22,7 @@ public class RegisterStage {
         register.setTitle("Register");
         register.setResizable(false);
         VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20, 20, 20, 20));
+        vbox.getStyleClass().add("vbox");
 
         TextField usernameField = new TextField();
         usernameField.setPromptText("Username");

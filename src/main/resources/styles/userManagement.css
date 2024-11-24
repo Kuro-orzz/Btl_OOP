@@ -1,3 +1,34 @@
+.table-view{
+    -fx-pref-width: 840px;
+    -fx-pref-height: 576px;
+    -fx-border-style: solid;
+    -fx-border-color: #CCCCCC;
+}
+
+.username-column {
+    -fx-pref-width: 100px;
+}
+
+.password-column {
+    -fx-pref-width: 100px;
+}
+
+.fullname-column {
+    -fx-pref-width: 150px;
+}
+
+.age-column {
+    -fx-pref-width: 60px;
+}
+
+.gender-column {
+    -fx-pref-width: 60px;
+}
+
+.admin-column {
+    -fx-pref-width: 90px;
+}
+
 .button {
     -fx-font-size: 12px;
     -fx-background-color: #243A73;
@@ -36,4 +67,16 @@
 
 .combo-box .list-cell:hover {
     -fx-background-color: #dbeeff;
+}
+
+.top-pane {
+    -fx-pref-width: 1024px;
+    -fx-pref-height: 110px;
+}
+
+.search-field {
+    -fx-pref-width: 500px;
+    -fx-pref-height: 50px;
+    -fx-background-color: #ffffff;
+    -fx-padding: 10px 10px 10px 10px;
 }

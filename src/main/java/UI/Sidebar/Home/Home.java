@@ -25,7 +25,8 @@ public class Home {
         //Home label
         String label = currentAcc.isAdmin() ? "Admin Profile" : "User Profile";
         Label homeLabel = new Label(label);
-        homeLabel.getStylesheets().add(getClass().getResource("/styles/home.css").toExternalForm());
+        homeLabel.getStylesheets().add(getClass()
+                .getResource("/styles/home.css").toExternalForm());
         homeLabel.getStyleClass().add("home-label");
 
         //Home avatar
@@ -49,7 +50,8 @@ public class Home {
         Label ageLabel = new Label("Age: " + userInfo.getAge());
         Label genderLabel = new Label("Gender: " + userInfo.getGender());
 
-        VBox detailBox = new VBox(10, usernameLabel, passwordLabel, fullnameLabel, ageLabel, genderLabel);
+        VBox detailBox = new VBox(10, usernameLabel, passwordLabel,
+                fullnameLabel, ageLabel, genderLabel);
         detailBox.setPadding(new Insets(10));
 
         //main StackPane

@@ -40,8 +40,9 @@ public class userManagement {
         data = FXCollections.observableArrayList();
         filteredData = new FilteredList<>(data, p -> true);
         tableView = new TableView<>(filteredData);
-        tableView.setPrefSize(840, 576);
-        tableView.setStyle("-fx-border-style: solid; -fx-border-color: #CCCCCC;");
+        tableView.getStylesheets().add(getClass()
+                .getResource("/styles/userManagement.css").toExternalForm());
+        tableView.getStyleClass().add("table-view");
         tableView.setLayoutX(75);
         tableView.setLayoutY(100);
 
@@ -55,30 +56,38 @@ public class userManagement {
      */
     private void initializeTableColumns() {
         TableColumn<Account, String> usernameColumn = new TableColumn<>("Username");
-        usernameColumn.setPrefWidth(100);
-        usernameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+        usernameColumn.getStyleClass().add("username-column");
+        usernameColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getUsername()));
 
         TableColumn<Account, String> passwordColumn = new TableColumn<>("Password");
-        passwordColumn.setPrefWidth(100);
-        passwordColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPassword()));
+        passwordColumn.getStyleClass().add("password-column");
+        passwordColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getPassword()));
 
         TableColumn<Account, String> fullNameColumn = new TableColumn<>("Full Name");
-        fullNameColumn.setPrefWidth(150);
-        fullNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getInfo().getFullName()));
+        fullNameColumn.getStyleClass().add("fullname-column");
+        fullNameColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getInfo().getFullName()));
 
         TableColumn<Account, String> ageColumn = new TableColumn<>("Age");
-        ageColumn.setPrefWidth(60);
-        ageColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getInfo().getAge())));
+        ageColumn.getStyleClass().add("age-column");
+        ageColumn.setCellValueFactory(cellData -> new
+                SimpleStringProperty(String.valueOf(cellData.getValue().getInfo().getAge())));
 
         TableColumn<Account, String> genderColumn = new TableColumn<>("Gender");
-        genderColumn.setPrefWidth(60);
-        genderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getInfo().getGender() ? "Male" : "Female"));
+        genderColumn.getStyleClass().add("gender-column");
+        genderColumn.setCellValueFactory(cellData -> new
+                SimpleStringProperty(cellData.getValue().getInfo()
+                .getGender() ? "Male" : "Female"));
 
         TableColumn<Account, String> adminColumn = new TableColumn<>("Admin Status");
-        adminColumn.setPrefWidth(90);
-        adminColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isAdmin() ? "Yes" : "No"));
+        adminColumn.getStyleClass().add("admin-column");
+        adminColumn.setCellValueFactory(cellData -> new
+                SimpleStringProperty(cellData.getValue().isAdmin() ? "Yes" : "No"));
 
-        tableView.getColumns().addAll(usernameColumn, passwordColumn, fullNameColumn, ageColumn, genderColumn, adminColumn);
+        tableView.getColumns().addAll(usernameColumn, passwordColumn,
+                fullNameColumn, ageColumn, genderColumn, adminColumn);
     }
 
     /**
@@ -102,13 +111,15 @@ public class userManagement {
     public StackPane getUserStackPane() {
         // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
-        topPane.setPrefSize(1024, 110);
+        topPane.getStyleClass().add("top-pane");
 
         // Create search mode ComboBox and search Label
         ComboBox<String> searchModeComboBox = new ComboBox<>();
-        searchModeComboBox.getItems().addAll("Username", "Full Name", "Age", "Gender", "Admin Status");
+        searchModeComboBox.getItems().addAll("Username", "Full Name", "Age",
+                "Gender", "Admin Status");
         searchModeComboBox.setValue("Username");
-        searchModeComboBox.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        searchModeComboBox.getStylesheets().add(getClass()
+                .getResource("/styles/userManagement.css").toExternalForm());
         searchModeComboBox.getStyleClass().add("button");
         searchModeComboBox.setLayoutX(160.0);
         searchModeComboBox.setLayoutY(60.0);
@@ -118,6 +129,9 @@ public class userManagement {
         searchLabel.setLayoutY(32.0);
 
         TextField searchField = new TextField();
+        searchField.getStylesheets().add(getClass()
+                .getResource("/styles/userManagement.css").toExternalForm());
+        searchField.getStyleClass().add("search-field");
         searchField.setLayoutX(272.0);
         searchField.setLayoutY(34.0);
         searchField.setPrefSize(500, 50);
@@ -125,7 +139,8 @@ public class userManagement {
         searchField.setPadding(new Insets(10, 10, 10, 10));
 
         Button addButton = new Button("Add Account");
-        addButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        addButton.getStylesheets().add(getClass()
+                .getResource("/styles/userManagement.css").toExternalForm());
         addButton.getStyleClass().add("button");
         addButton.setLayoutX(800.0);
         addButton.setLayoutY(34.0);
@@ -143,15 +158,20 @@ public class userManagement {
                 String lowerCaseFilter = newValue.toLowerCase();
                 switch (searchMode) {
                     case "Full Name":
-                        return account.getInfo().getFullName().toLowerCase().contains(lowerCaseFilter);
+                        return account.getInfo().getFullName().toLowerCase()
+                                .contains(lowerCaseFilter);
                     case "Age":
-                        return String.valueOf(account.getInfo().getAge()).contains(lowerCaseFilter);
+                        return String.valueOf(account.getInfo().getAge())
+                                .contains(lowerCaseFilter);
                     case "Gender":
-                        return (account.getInfo().getGender() ? "male" : "female").contains(lowerCaseFilter);
+                        return (account.getInfo().getGender() ? "male" : "female")
+                                .contains(lowerCaseFilter);
                     case "Admin Status":
-                        return (account.isAdmin() ? "yes" : "no").contains(lowerCaseFilter);
+                        return (account.isAdmin() ? "yes" : "no")
+                                .contains(lowerCaseFilter);
                     default:
-                        return account.getUsername().toLowerCase().contains(lowerCaseFilter);
+                        return account.getUsername().toLowerCase()
+                                .contains(lowerCaseFilter);
                 }
             });
         });
@@ -177,7 +197,7 @@ public class userManagement {
         stage.setTitle("Add New Account");
 
         VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20, 20, 20, 20));
+        vbox.getStyleClass().add("vbox");
 
         TextField usernameField = new TextField();
         usernameField.setPromptText("Username");
@@ -198,7 +218,8 @@ public class userManagement {
         isAdminField.setPromptText("Is Admin (true/false)");
 
         Button doneButton = new Button("Done");
-        doneButton.getStylesheets().add(getClass().getResource("/styles/Lib&User.css").toExternalForm());
+        doneButton.getStylesheets().add(getClass()
+                .getResource("/styles/userManagement.css").toExternalForm());
         doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
             String username = usernameField.getText();
@@ -216,7 +237,8 @@ public class userManagement {
             stage.close();
         });
 
-        vbox.getChildren().addAll(usernameField, passwordField, fullNameField, ageField, genderField, isAdminField, doneButton);
+        vbox.getChildren().addAll(usernameField, passwordField,
+                fullNameField, ageField, genderField, isAdminField, doneButton);
 
         Scene scene = new Scene(vbox, 300, 400);
         stage.setScene(scene);
