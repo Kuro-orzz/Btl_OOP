@@ -8,15 +8,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Borrowed extends HashingMultipleBase {
-    private final int id;
+    private final String id;
     private final String fullName;
     private final String isbn;
     private final String borrowedDate;
     private final String dueDate;
     private String status;
-    HashingMultipleBase hashFullName, hashIsbn, hashStatus;
+    HashingMultipleBase hashId, hashFullName, hashIsbn, hashStatus;
 
-    public Borrowed(int id, String fullName, String isbn, String borrowedDate, String status) {
+    public Borrowed(String id, String fullName, String isbn, String borrowedDate, String status) {
         this.id = id;
         this.fullName = fullName;
         this.isbn = isbn;
@@ -25,24 +25,26 @@ public class Borrowed extends HashingMultipleBase {
         LocalDate currentTime = LocalDate.parse(borrowedDate, formatter).plusDays(30);
         this.dueDate = currentTime.format(formatter);
         this.status = status;
+        hashId = hashInit(id);
         hashFullName = hashInit(fullName);
         hashIsbn = hashInit(isbn);
         hashStatus = hashInit(status);
     }
 
     public Borrowed(String[] data) {
-        this.id = Integer.parseInt(data[0]);
+        this.id = data[0];
         this.fullName = data[1];
         this.isbn = data[2];
         this.borrowedDate = data[3];
         this.dueDate = data[4];
         this.status = data[5];
+        hashId = hashInit(id);
         hashFullName = hashInit(fullName);
         hashIsbn = hashInit(isbn);
         hashStatus = hashInit(status);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -71,7 +73,7 @@ public class Borrowed extends HashingMultipleBase {
     }
 
     public ObservableValue<String> idProperty() {
-        return new SimpleStringProperty(String.valueOf(id));
+        return new SimpleStringProperty(id);
     }
 
     public ObservableValue<String> fullNameProperty() {

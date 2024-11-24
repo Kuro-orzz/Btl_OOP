@@ -153,9 +153,8 @@ public class showBorrowRequest {
             } else {
                 List<BorrowRequest> searchResults = new ArrayList<>();
                 switch (searchMode) {
-                    // fix to id later, will search using hashmap but not implement yet.
-                    case "Full name":
-                        searchResults = borrowRequestList.search("Full name", newValue);
+                    case "Id":
+                        searchResults = borrowRequestList.search("Id", newValue);
                         break;
                     case "Isbn":
                         searchResults = borrowRequestList.search("Isbn", newValue);

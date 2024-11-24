@@ -39,7 +39,7 @@ public class BorrowRequestList {
 
     /**
      * Search borrow request in borrow request list using rolling hash.
-     * @param type type of keyword (full name / isbn / status)
+     * @param type type of keyword (id / full name / isbn / status)
      * @param keyword keyword
      * @return List of Book that contains keywords
      */
@@ -50,7 +50,9 @@ public class BorrowRequestList {
         List<BorrowRequest> searchResult = new ArrayList<>();
         for (BorrowRequest borrowRequest : borrowRequestList) {
             int length = 0;
-            if (type.equals("Full name")) {
+            if (type.equals("Id")) {
+                length = borrowRequest.getId().length();
+            } else if (type.equals("Full name")) {
                 length = borrowRequest.getFullName().length();
             } else if (type.equals("Isbn")) {
                 length = borrowRequest.getIsbn().length();
@@ -64,7 +66,9 @@ public class BorrowRequestList {
             try {
                 for (int j = 1; j <= length - keyword.length() + 1; j++) {
                     HashingMultipleBase hash = new HashingMultipleBase();
-                    if (type.equals("Full name")) {
+                    if (type.equals("Id")) {
+                        hash = borrowRequest.hashId;
+                    } else if (type.equals("Full name")) {
                         hash = borrowRequest.hashFullName;
                     } else if (type.equals("Isbn")) {
                         hash = borrowRequest.hashIsbn;

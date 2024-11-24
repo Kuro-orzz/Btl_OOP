@@ -37,6 +37,6 @@ public class Testing {
         InitCsvFile initCsvFile = new InitCsvFile();
         initCsvFile.createBorrowRequestDataFile("borrowRequest.csv");
         AppendDataToFile appendDataToFile = new AppendDataToFile();
-        appendDataToFile.appendBorrowRequest("borrowRequest.csv", new BorrowRequest(12, "DTH", "0123", "24/11/2024", "Pending"));
+        appendDataToFile.appendBorrowRequest("borrowRequest.csv", new BorrowRequest("12", "DTH", "0123", "24/11/2024", "Pending"));
     }
 }

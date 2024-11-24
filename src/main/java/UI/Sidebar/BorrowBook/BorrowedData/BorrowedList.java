@@ -40,7 +40,7 @@ public class BorrowedList {
 
     /**
      * Search borrowed in borrowed list using rolling hash.
-     * @param type type of keyword (full name / isbn / status)
+     * @param type type of keyword (id / full name / isbn / status)
      * @param keyword keyword
      * @return List of Book that contains keywords
      */
@@ -51,7 +51,9 @@ public class BorrowedList {
         List<Borrowed> searchResult = new ArrayList<>();
         for (Borrowed borrowed : borrowedList) {
             int length = 0;
-            if (type.equals("Full name")) {
+            if (type.equals("Id")) {
+                length = borrowed.getId().length();
+            } else if (type.equals("Full name")) {
                 length = borrowed.getFullName().length();
             } else if (type.equals("Isbn")) {
                 length = borrowed.getIsbn().length();
@@ -63,7 +65,9 @@ public class BorrowedList {
             try {
                 for (int j = 1; j <= length - keyword.length() + 1; j++) {
                     HashingMultipleBase hash = new HashingMultipleBase();
-                    if (type.equals("Full name")) {
+                    if (type.equals("Id")) {
+                        hash = borrowed.hashId;
+                    } else if (type.equals("Full name")) {
                         hash = borrowed.hashFullName;
                     } else if (type.equals("Isbn")) {
                         hash = borrowed.hashIsbn;

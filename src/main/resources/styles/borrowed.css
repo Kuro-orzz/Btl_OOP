@@ -26,7 +26,7 @@
 }
 
 .borrowedDate-column {
-    -fx-pref-width: 150px;
+    -fx-pref-width: 100px;
 }
 
 .dueDate-column {

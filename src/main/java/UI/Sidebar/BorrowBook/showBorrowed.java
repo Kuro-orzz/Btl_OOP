@@ -128,9 +128,8 @@ public class showBorrowed {
             } else {
                 List<Borrowed> searchResults = new ArrayList<>();
                 switch (searchMode) {
-                    // fix to id later, will search using hashmap but not implement yet.
-                    case "Full name":
-                        searchResults = borrowedList.search("Full name", newValue);
+                    case "Id":
+                        searchResults = borrowedList.search("Id", newValue);
                         break;
                     case "Isbn":
                         searchResults = borrowedList.search("Isbn", newValue);

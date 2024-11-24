@@ -7,15 +7,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
 public class BorrowRequest extends HashingMultipleBase {
-    private final int id;
+    private final String id;
     private final String fullName;
     private final String isbn;
     private final String requestDate;
     private String status;
     private BooleanProperty accept, decline;
-    HashingMultipleBase hashFullName, hashIsbn, hashRequestDate, hashStatus;
+    HashingMultipleBase hashId, hashFullName, hashIsbn, hashRequestDate, hashStatus;
 
-    public BorrowRequest(int id, String fullName, String isbn, String requestDate, String status) {
+    public BorrowRequest(String id, String fullName, String isbn, String requestDate, String status) {
         this.id = id;
         this.fullName = fullName;
         this.isbn = isbn;
@@ -23,6 +23,7 @@ public class BorrowRequest extends HashingMultipleBase {
         this.status = status;
         this.accept = new SimpleBooleanProperty(false);
         this.decline = new SimpleBooleanProperty(false);
+        hashId = hashInit(id);
         hashFullName = hashInit(fullName);
         hashIsbn = hashInit(isbn);
         hashRequestDate = hashInit(requestDate);
@@ -30,20 +31,21 @@ public class BorrowRequest extends HashingMultipleBase {
     }
 
     public BorrowRequest(String[] data) {
-        this.id = Integer.parseInt(data[0]);
+        this.id = data[0];
         this.fullName = data[1];
         this.isbn = data[2];
         this.requestDate = data[3];
         this.status = data[4];
         this.accept = new SimpleBooleanProperty(false);
         this.decline = new SimpleBooleanProperty(false);
+        hashId = hashInit(id);
         hashFullName = hashInit(fullName);
         hashIsbn = hashInit(isbn);
         hashRequestDate = hashInit(requestDate);
         hashStatus = hashInit(status);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
