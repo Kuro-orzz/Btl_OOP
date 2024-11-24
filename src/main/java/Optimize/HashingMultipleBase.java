@@ -1,4 +1,4 @@
-package UI.Sidebar.Library.BookData;
+package Optimize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,13 @@ public class HashingMultipleBase {
         for (int i = 1; i <= strLength; i++) {
             pow2.add((pow2.get(i-1) * base2) % mod2);
         }
+    }
+
+    public HashingMultipleBase hashInit(String info) {
+        HashingMultipleBase hash = new HashingMultipleBase(info.length());
+        hash.hash(info, 1);
+        hash.hash(info, 2);
+        return hash;
     }
 
     public List<Long> hash(String info, int option) {

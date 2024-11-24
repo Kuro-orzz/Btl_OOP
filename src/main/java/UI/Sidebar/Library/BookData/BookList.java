@@ -3,6 +3,7 @@ package UI.Sidebar.Library.BookData;
 import CsvFile.AppendDataToFile;
 import CsvFile.GetDataFromFile;
 import CsvFile.UpdateDataFromListToFile;
+import Optimize.HashingMultipleBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +38,17 @@ public class BookList {
     }
 
     /**
-     * Method to search Book and display results on table.
-     * @param type type of keyword (isbn/title/author/publisher/yearofPublication)
+     * Search book in book list using rolling hash.
+     * @param type type of keyword (isbn/title/author/publisher/yearOfPublication)
      * @param keyword keyword
-     * @return List of Book that contains keywords
+     * @return list book that have substring keyword
      */
     public List<Book> search(String type, String keyword) {
         String a = keyword.toLowerCase();
         long hash1 = new HashingMultipleBase().hashInfo(a, 1);
         long hash2 = new HashingMultipleBase().hashInfo(a, 2);
         List<Book> searchResult = new ArrayList<>();
-        for (int i = 0; i < bookList.size(); i++) {
-            Book book = bookList.get(i);
+        for (Book book : bookList) {
             int length = 0;
             if (type.equals("isbn")) {
                 length = book.getIsbn().length();

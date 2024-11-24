@@ -1,9 +1,10 @@
 package UI.Sidebar.Library.BookData;
 
+import Optimize.HashingMultipleBase;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
-public class Book {
+public class Book extends HashingMultipleBase {
     private String isbn;
     private String title;
     private String author;
@@ -102,13 +103,6 @@ public class Book {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public HashingMultipleBase hashInit(String info) {
-        HashingMultipleBase hash = new HashingMultipleBase(info.length());
-        hash.hash(info, 1);
-        hash.hash(info, 2);
-        return hash;
     }
 
     public String getInfo() {

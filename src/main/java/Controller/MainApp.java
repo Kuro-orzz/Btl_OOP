@@ -1,5 +1,6 @@
 package Controller;
 
+import UI.Sidebar.BorrowBook.showBorrowed;
 import UI.Sidebar.Clock;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import UI.Sidebar.Home.Home;
@@ -53,7 +54,7 @@ public class MainApp {
                 createSidebarButton("Library"),
                 createSidebarButton("User Management"),
                 createSidebarButton("Borrow Request"),
-                createSidebarButton("Borrow"),
+                createSidebarButton("Borrowed"),
                 createSidebarButton("Log Out"),
                 new Clock().renderClock()
         );
@@ -102,9 +103,9 @@ public class MainApp {
                 StackPane userView = userManagement.getUserStackPane();
                 layout.setCenter(userView);
             } else if (text.equals("Borrowed")) {
-//                showBorrow borrow = new showBorrow(controller);
-//                StackPane borrowView = borrow.getBorrowStackPane();
-//                layout.setCenter(borrowView);
+                showBorrowed borrow = new showBorrowed(controller);
+                StackPane borrowView = borrow.getBorrowedStackPane();
+                layout.setCenter(borrowView);
             } else if (text.equals("Log Out")) {
                 Alert logoutConfirmatio = new Alert(Alert.AlertType.CONFIRMATION);
                 logoutConfirmatio.setTitle("Confirm Logout");
