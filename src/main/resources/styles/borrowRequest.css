@@ -25,16 +25,20 @@
     -fx-pref-width: 75px;
 }
 
-.borrowedDate-column {
+.requestDate-column {
     -fx-pref-width: 150px;
-}
-
-.dueDate-column {
-    -fx-pref-width: 75px;
 }
 
 .status-column {
     -fx-pref-width: 75px;
+}
+
+.accept-column {
+    -fx-pref-width: 60px;
+}
+
+.decline-column {
+    -fx-pref-width: 60px;
 }
 
 .top-pane {

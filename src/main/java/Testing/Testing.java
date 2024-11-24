@@ -1,7 +1,8 @@
 package Testing;
 
 import CsvFile.AppendDataToFile;
-import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
+import CsvFile.InitCsvFile;
+import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
 
 public class Testing {
     public static void main(String[] args) {
@@ -33,7 +34,9 @@ public class Testing {
 //        s = s.replaceAll("\\[|\\]", "\"");
 //        s = s.replaceAll(", ", "\";\"");
 //        System.out.println(s);
+        InitCsvFile initCsvFile = new InitCsvFile();
+        initCsvFile.createBorrowRequestDataFile("borrowRequest.csv");
         AppendDataToFile appendDataToFile = new AppendDataToFile();
-        appendDataToFile.appendBorrowed("borrowed.csv", new Borrowed(12, "DTH", "0123", "24/11/2024", "Borrowing"));
+        appendDataToFile.appendBorrowRequest("borrowRequest.csv", new BorrowRequest(12, "DTH", "0123", "24/11/2024", "Pending"));
     }
 }
