@@ -32,8 +32,8 @@ public class showBorrowed {
         tableView.getStylesheets().add(getClass()
                 .getResource("/styles/borrowed.css").toExternalForm());
         tableView.getStyleClass().add("table-view");
-        tableView.setLayoutX(75);
-        tableView.setLayoutY(100);
+        tableView.setLayoutX(100);
+        tableView.setLayoutY(20);
 
         //init table columns containing data
         initializeBorrowedTableColumns();

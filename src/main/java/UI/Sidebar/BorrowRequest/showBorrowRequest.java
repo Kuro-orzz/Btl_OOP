@@ -34,8 +34,8 @@ public class showBorrowRequest {
         tableView.getStylesheets().add(getClass()
                 .getResource("/styles/borrowRequest.css").toExternalForm());
         tableView.getStyleClass().add("table-view");
-        tableView.setLayoutX(75);
-        tableView.setLayoutY(100);
+        tableView.setLayoutX(100);
+        tableView.setLayoutY(20);
 
         initializeBorrowRequestTableColumns();
 

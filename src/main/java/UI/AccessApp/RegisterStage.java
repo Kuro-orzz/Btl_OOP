@@ -2,9 +2,10 @@ package UI.AccessApp;
 
 import CsvFile.AppendDataToFile;
 import UI.Sidebar.UserManagement.AccountData.Account;
+import UI.Sidebar.UserManagement.AccountData.AccountList;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -51,10 +52,15 @@ public class RegisterStage {
             boolean gender = Boolean.parseBoolean(genderField.getText());
             boolean isAdmin = Boolean.parseBoolean(isAdminField.getText());
 
-            UserInfo userInfo = new UserInfo(fullName, age, gender);
-            Account newAccount = new Account(username, password, isAdmin, userInfo);
-
-            appendAccountToCSV(newAccount);
+            AccountList accountList = new AccountList("accounts.csv");
+            if (accountList.isUserNameExists(username)) {
+                showAlert(Alert.AlertType.INFORMATION,"Unavailable Username", "Username already exists. Please choose a different username.");
+                return;
+            } else {
+                UserInfo userInfo = new UserInfo(fullName, age, gender);
+                Account newAccount = new Account(username, password, isAdmin, userInfo);
+                appendAccountToCSV(newAccount);
+            }
             register.close();
         });
 
@@ -71,5 +77,19 @@ public class RegisterStage {
     private void appendAccountToCSV(Account account) {
         AppendDataToFile csvReader = new AppendDataToFile();
         csvReader.appendAccount("accounts.csv", account);
+    }
+
+    /**
+     * Show alert pop-up.
+     * @param alertType type of alert
+     * @param title title of alert
+     * @param message message
+     */
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

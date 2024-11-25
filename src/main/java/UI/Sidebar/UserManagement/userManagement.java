@@ -22,7 +22,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.commons.text.TextRandomProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,8 +43,8 @@ public class userManagement {
         tableView.getStylesheets().add(getClass()
                 .getResource("/styles/userManagement.css").toExternalForm());
         tableView.getStyleClass().add("table-view");
-        tableView.setLayoutX(75);
-        tableView.setLayoutY(100);
+        tableView.setLayoutX(100);
+        tableView.setLayoutY(20);
 
         initializeTableColumns();
         loadAccountData();

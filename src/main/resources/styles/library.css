@@ -1,20 +1,9 @@
-.table-view{
-    -fx-pref-width: 860px;
-    -fx-pref-height: 576px;
-    -fx-border-style: solid;
-    -fx-border-color: #CCCCCC;
-}
-
-.table-view .column {
-    -fx-pref-width: 75px;
-}
-
 .isbn-column {
     -fx-pref-width: 75px;
 }
 
 .title-column {
-    -fx-pref-width: 320px;
+    -fx-pref-width: 150px;
 }
 
 .author-column {

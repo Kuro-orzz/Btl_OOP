@@ -36,10 +36,10 @@ public class Library {
         data = FXCollections.observableArrayList();
         filteredData = new FilteredList<>(data);
         tableView = new TableView<>(filteredData);
-        tableView.getStylesheets().add(getClass()
-                .getResource("/styles/library.css").toExternalForm());
-        tableView.getStyleClass().add("table-view");
-        tableView.setLayoutX(75);
+        tableView.getStylesheets().add(getClass().getResource("/styles/library.css").toExternalForm());
+        tableView.setPrefSize(840, 576);
+        tableView.setStyle("-fx-border-style: solid; -fx-border-color: #CCCCCC;");
+        tableView.setLayoutX(100);
         tableView.setLayoutY(20);
 
         //init table columns containing data

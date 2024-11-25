@@ -36,6 +36,15 @@ public class AccountList {
         update.updateAccounts("accounts.csv", accountList);
     }
 
+    public boolean isUserNameExists(String userName) {
+        for (Account account : accountList) {
+            if (account.getUsername().equals(userName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isAccountsExist(Account account) {
         for (Account a : accountList) {
             if (account.getUsername().equals(a.getUsername()) &&

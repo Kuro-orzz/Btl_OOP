@@ -9,9 +9,7 @@ public class Account {
 
     private UserInfo info;
 
-    public Account() {
-        this.id = counter++;
-    }
+    public Account() {}
 
     public Account(String username, String password) {
         this.username = username;

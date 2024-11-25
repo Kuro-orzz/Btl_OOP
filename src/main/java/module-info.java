@@ -4,7 +4,6 @@ module org.example.demo {
 
     requires org.kordamp.bootstrapfx.core;
     requires opencsv;
-    requires org.apache.commons.text;
 
     opens Controller to javafx.fxml;
     exports Controller;
