@@ -69,16 +69,16 @@ public class BorrowRequest extends HashingMultipleBase {
         this.status = status;
     }
 
-    public BooleanProperty getAccept() {
-        return accept;
+    public boolean getAccept() {
+        return accept.get();
     }
 
     public void setAccept(boolean accept) {
         this.accept.set(accept);
     }
 
-    public BooleanProperty getDecline() {
-        return decline;
+    public boolean getDecline() {
+        return decline.get();
     }
 
     public void setDecline(boolean decline) {

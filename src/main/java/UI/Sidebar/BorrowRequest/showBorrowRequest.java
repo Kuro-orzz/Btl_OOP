@@ -4,6 +4,7 @@ import Controller.AppController;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequestList;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
@@ -82,21 +83,16 @@ public class showBorrowRequest {
 
         tableView.setEditable(true);
 
-        // Need to fix allow one checkbox only
-//        tableView.getItems().forEach(item -> {
-//                item.acceptProperty().addListener((obs, wasSelected, isNowSelected) -> {
-//                    if (isNowSelected) {
-//                        System.out.println("select accept");
-//                        item.setDecline(false);
-//                    }
-//                });
-//                item.declineProperty().addListener((obs, wasSelected, isNowSelected) -> {
-//                    if (isNowSelected) {
-//                        item.setAccept(false);
-//                    }
-//                });
-//            }
-//        );
+        // add listener(allow only one check at the moment) to all new borrow request added to table
+        tableView.getItems().addListener((ListChangeListener<BorrowRequest>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (BorrowRequest newItem : change.getAddedSubList()) {
+                        addListenersToBorrowRequest(newItem);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -105,6 +101,23 @@ public class showBorrowRequest {
     public void addBookFromData() {
         List<BorrowRequest> list = new BorrowRequestList("borrowRequest.csv").getBorrowRequestList();
         data.addAll(list);
+    }
+
+    /**
+     * Add listener to one borrow request
+     * @param borrowRequest borrow request that will be added listener
+     */
+    public void addListenersToBorrowRequest(BorrowRequest borrowRequest) {
+        borrowRequest.acceptProperty().addListener((obs, wasSelected, isNowSelected) -> {
+            if (isNowSelected) {
+                borrowRequest.setDecline(false);
+            }
+        });
+        borrowRequest.declineProperty().addListener((obs, wasSelected, isNowSelected) -> {
+            if (isNowSelected) {
+                borrowRequest.setAccept(false);
+            }
+        });
     }
 
     /**
