@@ -1,9 +1,11 @@
 package UI.Sidebar.Library;
 
 import CsvFile.AppendDataToFile;
+import CsvFile.UpdateDataFromListToFile;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.Library.BookData.BookList;
 import Controller.AppController;
+import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -19,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Library {
     private TableView<Book> tableView;
@@ -37,13 +40,16 @@ public class Library {
                 .getResource("/styles/library.css").toExternalForm());
         tableView.getStyleClass().add("table-view");
         tableView.setLayoutX(75);
-        tableView.setLayoutY(100);
+        tableView.setLayoutY(20);
 
         //init table columns containing data
         initializeBookTableColumns();
 
         //get Books' data
         addBookFromData();
+
+        //add context menu
+        addTableContextMenu();
     }
 
     /**
@@ -90,9 +96,10 @@ public class Library {
 
     /**
      * Method create Library GUI.
+     * @param account current account
      * @return Library StackPane
      */
-    public StackPane getLibraryStackPane() {
+    public StackPane getLibraryStackPane(Account account) {
         // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
         topPane.getStyleClass().add("top-pane");
@@ -226,5 +233,146 @@ public class Library {
     private void appendBookToCSV(Book newBook) {
         AppendDataToFile csvReader = new AppendDataToFile();
         csvReader.appendBook("books.csv", newBook);
+    }
+
+    /**
+     * Method to add context menu to table rows.
+     */
+    private void addTableContextMenu() {
+        tableView.setRowFactory(tv -> {
+            TableRow<Book> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem viewDetails = new MenuItem("View Details");
+            viewDetails.setOnAction(event -> {
+                Book selectedBook = row.getItem();
+                if (selectedBook != null) {
+                    showBookDetails(selectedBook);
+                }
+            });
+
+            MenuItem editItem = new MenuItem("Edit");
+            editItem.setOnAction(event -> {
+                Book selectedBook = row.getItem();
+                if (selectedBook != null) {
+                    openEditBookStage(selectedBook);
+                }
+            });
+
+            MenuItem deleteItem = new MenuItem("Delete");
+            deleteItem.setOnAction(event -> {
+                Book selectedBook = row.getItem();
+                if (selectedBook != null) {
+                    deleteBook(selectedBook);
+                }
+            });
+
+            contextMenu.getItems().addAll(viewDetails, editItem, deleteItem);
+
+            row.contextMenuProperty().bind(
+                    javafx.beans.binding.Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(contextMenu)
+            );
+
+            return row;
+        });
+    }
+
+    private void openEditBookStage(Book book) {
+        Stage stage = new Stage();
+        stage.setTitle("Edit Book");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+
+        TextField isbnField = new TextField(book.getIsbn());
+        isbnField.setPromptText("ISBN");
+        TextField titleField = new TextField(book.getTitle());
+        titleField.setPromptText("Title");
+        TextField authorField = new TextField(book.getAuthor());
+        authorField.setPromptText("Author");
+        TextField yOpField = new TextField(book.getYearOfPublication());
+        yOpField.setPromptText("Year of Publication");
+        TextField publisherField = new TextField(book.getPublisher());
+        publisherField.setPromptText("Publisher");
+        TextField quantityField = new TextField(book.getQuantity());
+        quantityField.setPromptText("Quantity");
+
+        Button doneButton = new Button("Done");
+        doneButton.getStylesheets().add(getClass().getResource("/styles/library.css").toExternalForm());
+        doneButton.getStyleClass().add("button");
+        doneButton.setOnAction(e -> {
+            book.setIsbn(isbnField.getText());
+            book.setTitle(titleField.getText());
+            book.setAuthor(authorField.getText());
+            book.setYearOfPublication(yOpField.getText());
+            book.setPublisher(publisherField.getText());
+            book.setQuantity(quantityField.getText());
+
+            updateBookInCSV(book);
+            tableView.refresh();
+            stage.close();
+        });
+        vbox.getChildren().addAll(isbnField, titleField, authorField, yOpField, publisherField, quantityField, doneButton);
+        Scene scene = new Scene(vbox, 400, 500);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void updateBookInCSV(Book book) {
+        // Implement method to update the book information in the CSV file
+        UpdateDataFromListToFile csvWriter = new UpdateDataFromListToFile();
+        List<Book> books = new BookList("books.csv").getBookList();
+        books.removeIf(b -> b.getIsbn().equals(book.getIsbn())); // Remove old book entry
+        books.add(book); // Add updated book entry
+        csvWriter.updateBooks("books.csv", books);
+    }
+
+    private void deleteBook(Book book) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Book");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete this book?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            data.remove(book);
+            removeBookFromCSV(book);
+        }
+    }
+
+    private void removeBookFromCSV(Book book) {
+        UpdateDataFromListToFile csvWriter = new UpdateDataFromListToFile();
+        List<Book> books = new BookList("books.csv").getBookList();
+        books.removeIf(b -> b.getIsbn().equals(book.getIsbn())); // Remove the book
+        csvWriter.updateBooks( "books.csv", books);
+    }
+
+
+
+    /**
+     * Method to show book details in a new stage.
+     * @param book the selected book to display details for.
+     */
+    private void showBookDetails(Book book) {
+        Stage stage = new Stage();
+        stage.setTitle("Book Details");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+
+        Label isbnLabel = new Label("ISBN: " + book.getIsbn());
+        Label titleLabel = new Label("Title: " + book.getTitle());
+        Label authorLabel = new Label("Author: " + book.getAuthor());
+        Label yearLabel = new Label("Year of Publication: " + book.getYearOfPublication());
+        Label publisherLabel = new Label("Publisher: " + book.getPublisher());
+        Label quantityLabel = new Label("Quantity: " + book.getQuantity());
+
+        vbox.getChildren().addAll(isbnLabel, titleLabel, authorLabel, yearLabel, publisherLabel, quantityLabel);
+
+        Scene scene = new Scene(vbox, 300, 200);
+        stage.setScene(scene);
+        stage.show();
     }
 }

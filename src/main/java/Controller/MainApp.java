@@ -97,11 +97,11 @@ public class MainApp {
                 layout.setCenter(homeView);
             } else if (text.equals("Library")) {
                 Library lib = new Library(controller);
-                StackPane libView = lib.getLibraryStackPane();
+                StackPane libView = lib.getLibraryStackPane(curAcc);
                 layout.setCenter(libView);
             } else if (text.equals("User Management")) {
                 userManagement userManagement = new userManagement(controller);
-                StackPane userView = userManagement.getUserStackPane();
+                StackPane userView = userManagement.getUserStackPane(curAcc);
                 layout.setCenter(userView);
             } else if (text.equals("Borrow Request")) {
                 showBorrowRequest borrow = new showBorrowRequest(controller);

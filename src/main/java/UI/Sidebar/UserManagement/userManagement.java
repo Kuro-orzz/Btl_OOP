@@ -2,8 +2,12 @@ package UI.Sidebar.UserManagement;
 
 import CsvFile.AppendDataToFile;
 import CsvFile.GetDataFromFile;
+import CsvFile.UpdateDataFromListToFile;
+import UI.Sidebar.Library.BookData.Book;
+import UI.Sidebar.Library.BookData.BookList;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import Controller.AppController;
+import UI.Sidebar.UserManagement.AccountData.AccountList;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -12,19 +16,16 @@ import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.commons.text.TextRandomProvider;
 
 import java.util.List;
+import java.util.Optional;
 
 public class userManagement {
     private TableView<Account> tableView;
@@ -48,6 +49,8 @@ public class userManagement {
 
         initializeTableColumns();
         loadAccountData();
+
+        addTableContextMenu();
     }
 
     /**
@@ -106,9 +109,10 @@ public class userManagement {
 
     /**
      * Get User Management GUI Stackpane.
+     * @param currentAccount current Account
      * @return StackPane
      */
-    public StackPane getUserStackPane() {
+    public StackPane getUserStackPane(Account currentAccount) {
         // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
         topPane.getStyleClass().add("top-pane");
@@ -252,5 +256,150 @@ public class userManagement {
     private void appendAccountToCSV(Account account) {
             AppendDataToFile csvReader = new AppendDataToFile();
             csvReader.appendAccount("accounts.csv", account);
+    }
+
+    /**
+     * Method to add context menu to table rows.
+     */
+    private void addTableContextMenu() {
+        tableView.setRowFactory(tv -> {
+            TableRow<Account> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem viewDetails = new MenuItem("View Details");
+            viewDetails.setOnAction(event -> {
+                Account selectedAcc = row.getItem();
+                if (selectedAcc != null) {
+                    showAccountDetails(selectedAcc);
+                }
+            });
+
+            MenuItem editItem = new MenuItem("Edit");
+            editItem.setOnAction(event -> {
+                Account selectedAcc = row.getItem();
+                if (selectedAcc != null) {
+                    openEditAccountStage(selectedAcc);
+                }
+            });
+
+            MenuItem deleteItem = new MenuItem("Delete");
+            deleteItem.setOnAction(event -> {
+                Account selectedAcc = row.getItem();
+                if (selectedAcc != null) {
+                    deleteAccount(selectedAcc);
+                }
+            });
+
+            contextMenu.getItems().addAll(viewDetails, editItem, deleteItem);
+
+            row.contextMenuProperty().bind(
+                    javafx.beans.binding.Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(contextMenu)
+            );
+            return row;
+        });
+    }
+
+    private void openEditAccountStage(Account account) {
+        Stage stage = new Stage();
+        stage.setTitle("Edit Book");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+
+        TextField usernameField = new TextField(account.getUsername());
+        usernameField.setPromptText("Username");
+        TextField passwordField = new TextField(account.getPassword());
+        passwordField.setPromptText("Password");
+        TextField isAdminField = new TextField(Boolean.toString(account.isAdmin()));
+        isAdminField.setPromptText("Is Admin");
+        TextField fullnameField = new TextField(account.getInfo().getFullName());
+        fullnameField.setPromptText("Full Name");
+        TextField ageField = new TextField(String.valueOf(account.getInfo().getAge()));
+        ageField.setPromptText("Age");
+        TextField genderField = new TextField(String.valueOf(account.getInfo().getGender()));
+        genderField.setPromptText("Gender (true for male, false for female)");
+
+        Button doneButton = new Button("Done");
+        doneButton.getStylesheets().add(getClass().getResource("/styles/userManagement.css").toExternalForm());
+        doneButton.getStyleClass().add("button");
+        doneButton.setOnAction(e -> {
+            account.setUsername(usernameField.getText());
+            account.setPassword(passwordField.getText());
+            account.setAdmin(Boolean.parseBoolean(isAdminField.getText()));
+            UserInfo info = new UserInfo(fullnameField.getText(), Integer.parseInt(ageField.getText()), Boolean.parseBoolean(genderField.getText()));
+            account.setInfo(info);
+
+            updateAccountInCsv(account);
+            tableView.refresh();
+            stage.close();
+        });
+        vbox.getChildren().addAll(usernameField, passwordField, isAdminField, fullnameField, ageField, genderField, doneButton);
+        Scene scene = new Scene(vbox, 400, 500);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void updateAccountInCsv(Account account) {
+        // Implement method to update the account information in the CSV file
+        UpdateDataFromListToFile csvWriter = new UpdateDataFromListToFile();
+        List<Account> accounts = new AccountList("accounts.csv").getAccountList();
+        accounts.removeIf(b -> b.getUsername().equals(account.getUsername())); // Remove old book entry
+        accounts.add(account); // Add updated book entry
+        csvWriter.updateAccounts("accounts.csv", accounts);
+    }
+
+    private void deleteAccount(Account account) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Account");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete this account?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            data.remove(account);
+            removeAccountFromCSV(account);
+        }
+    }
+
+    private void removeAccountFromCSV(Account account) {
+        UpdateDataFromListToFile csvWriter = new UpdateDataFromListToFile();
+        List<Account> accounts = new AccountList("accounts.csv").getAccountList();
+        accounts.removeIf(b -> b.getUsername().equals(account.getUsername())); // Remove the book
+        csvWriter.updateAccounts( "accounts.csv", accounts);
+    }
+
+    /**
+     * Method to show book details in a new stage.
+     * @param account the selected book to display details for.
+     */
+    private void showAccountDetails(Account account) {
+        Stage stage = new Stage();
+        stage.setTitle("Book Details");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+//
+//        Label isbnLabel = new Label("ISBN: " + account.getIsbn());
+//        Label titleLabel = new Label("Title: " + book.getTitle());
+//        Label authorLabel = new Label("Author: " + book.getAuthor());
+//        Label yearLabel = new Label("Year of Publication: " + book.getYearOfPublication());
+//        Label publisherLabel = new Label("Publisher: " + book.getPublisher());
+//        Label quantityLabel = new Label("Quantity: " + book.getQuantity());
+//
+//        vbox.getChildren().addAll(isbnLabel, titleLabel, authorLabel, yearLabel, publisherLabel, quantityLabel);
+        Label usernameLabel = new Label("Username: " + account.getUsername());
+        Label passwordLabel = new Label("Password: " + account.getPassword());
+        Label isAdminLabel = new Label("Role: " + (account.isAdmin() ? "Admin" : "User"));
+        Label fullnameLabel = new Label("Full Name: " + account.getInfo().getFullName());
+        Label ageLabel = new Label("Age: " + account.getInfo().getAge());
+        Label genderLabel = new Label("Gender: " + (account.getInfo().getGender() ? "Male" : "Female"));
+
+        vbox.getChildren().addAll(usernameLabel, passwordLabel, isAdminLabel, fullnameLabel, ageLabel, genderLabel);
+
+        Scene scene = new Scene(vbox, 300, 200);
+        stage.setScene(scene);
+        stage.show();
     }
 }

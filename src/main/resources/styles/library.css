@@ -1,5 +1,5 @@
 .table-view{
-    -fx-pref-width: 840px;
+    -fx-pref-width: 860px;
     -fx-pref-height: 576px;
     -fx-border-style: solid;
     -fx-border-color: #CCCCCC;
@@ -14,7 +14,7 @@
 }
 
 .title-column {
-    -fx-pref-width: 345px;
+    -fx-pref-width: 320px;
 }
 
 .author-column {
@@ -30,7 +30,7 @@
 }
 
 .quantity-column {
-    -fx-pref-width: 111px;
+    -fx-pref-width: 90px;
 }
 
 .top-pane {
