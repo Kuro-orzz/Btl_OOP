@@ -2,11 +2,12 @@ package Controller;
 
 import UI.Sidebar.UserManagement.AccountData.Account;
 import UI.AccessApp.Login;
+import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class AppController extends javafx.application.Application {
+public class AppController extends Application {
     private Stage primaryStage;
     private Login login = new Login();
 

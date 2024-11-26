@@ -5,6 +5,7 @@ module org.example.demo {
     requires org.kordamp.bootstrapfx.core;
     requires opencsv;
     requires java.desktop;
+    requires org.json;
 
     opens Controller to javafx.fxml;
     exports Controller;
@@ -24,4 +25,6 @@ module org.example.demo {
     opens UI.Sidebar.BorrowBook.BorrowedData to javafx.fxml;
     exports UI.Sidebar.Library.BookData to javafx.fxml;
     opens  UI.Sidebar.Library.BookData to javafx.fxml;
+    opens Testing to javafx.graphics;
+    exports Testing;
 }
