@@ -1,6 +1,9 @@
 package UI.Sidebar.BorrowRequest;
 
 import Controller.AppController;
+import CsvFile.AppendDataToFile;
+import CsvFile.UpdateDataFromListToFile;
+import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequestList;
 import javafx.collections.FXCollections;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class showBorrowRequest {
+    private List<BorrowRequest> list = new BorrowRequestList("borrowRequest.csv").getBorrowRequestList();
     private TableView<BorrowRequest> tableView;
     private ObservableList<BorrowRequest> data;
     private FilteredList<BorrowRequest> filteredData;
@@ -87,8 +91,8 @@ public class showBorrowRequest {
         tableView.getItems().addListener((ListChangeListener<BorrowRequest>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
-                    for (BorrowRequest newItem : change.getAddedSubList()) {
-                        addListenersToBorrowRequest(newItem);
+                    for (BorrowRequest request : change.getAddedSubList()) {
+                        addListenersToBorrowRequest(request);
                     }
                 }
             }
@@ -99,8 +103,33 @@ public class showBorrowRequest {
      * Get borrowed info from file to data.
      */
     public void addBookFromData() {
-        List<BorrowRequest> list = new BorrowRequestList("borrowRequest.csv").getBorrowRequestList();
         data.addAll(list);
+    }
+
+    public Button applyButton() {
+        Button applyButton = new Button("Apply");
+        applyButton.getStyleClass().add("apply-button");
+        applyButton.setLayoutX(800.0);
+        applyButton.setLayoutY(34.0);
+        applyButton.setOnAction(event -> {
+            for (int i = 0; i < data.size(); i++) {
+                if (!data.get(i).getAccept() && !data.get(i).getDecline()) {
+                    continue;
+                }
+                BorrowRequest request = data.get(i);
+                Borrowed borrowed = new Borrowed(request.getId(), request.getFullName(),
+                        request.getIsbn(), request.getRequestDate(), "Borrowing");
+                list.remove(request);
+                UpdateDataFromListToFile newData = new UpdateDataFromListToFile();
+                newData.updateBorrowRequest("borrowRequest.csv", list);
+                if (data.get(i).getAccept()) {
+                    AppendDataToFile newRequest = new AppendDataToFile();
+                    newRequest.appendBorrowed("borrowed.csv", borrowed);
+                }
+                data.remove(request);
+            }
+        });
+        return applyButton;
     }
 
     /**
@@ -153,7 +182,7 @@ public class showBorrowRequest {
         searchField.setStyle("-fx-background-color: #ffffff;");
         searchField.setPadding(new Insets(10, 10, 10, 10));
 
-        topPane.getChildren().addAll(searchModeComboBox, searchField, searchLabel);
+        topPane.getChildren().addAll(searchModeComboBox, searchField, searchLabel, applyButton());
 
         // Set up filtering for search bar
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {

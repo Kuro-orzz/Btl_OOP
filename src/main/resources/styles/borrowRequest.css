@@ -86,7 +86,7 @@
     -fx-padding: 10px 10px 10px 10px;
 }
 
-.button {
+.apply-button {
     -fx-font-size: 12px;
     -fx-background-color: #243A73;
     -fx-text-fill: white;
