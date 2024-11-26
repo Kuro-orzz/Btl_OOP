@@ -1,97 +1,88 @@
 package UI.Sidebar.Library;
 
-import CsvFile.AppendDataToFile;
-import CsvFile.UpdateDataFromListToFile;
+import UI.Method;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.Library.BookData.BookList;
 import Controller.AppController;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class Library {
-    private TableView<Book> tableView;
-    private ObservableList<Book> data;
-    private FilteredList<Book> filteredData;
+public class Library extends Method<Book> {
+    private final TableView<Book> tableView;
+    private final ObservableList<Book> data = FXCollections.observableArrayList();
 
     /**
      * Library constructor.
      * @param controller the main controller.
      */
     public Library(AppController controller) {
-        data = FXCollections.observableArrayList();
-        filteredData = new FilteredList<>(data);
-        tableView = new TableView<>(filteredData);
-        tableView.getStylesheets().add(getClass().getResource("/styles/library.css").toExternalForm());
-        tableView.setPrefSize(840, 576);
-        tableView.setStyle("-fx-border-style: solid; -fx-border-color: #CCCCCC;");
-        tableView.setLayoutX(100);
-        tableView.setLayoutY(20);
+        // table view
+        tableView = new TableView<>(data);
+        setTableView(tableView);
+        initBookTable();
 
-        //init table columns containing data
-        initializeBookTableColumns();
+        // add data
+        List<Book> bookList = new BookList("books.csv").getBookList();
+        data.addAll(bookList);
 
-        //get Books' data
-        addBookFromData();
-
-        //add context menu
+        // context menu
         addTableContextMenu();
     }
 
     /**
-     * Method init Book Table Column with Cell data.
-     *
+     * Initialize new column for table view.
+     * @param columnName name of column
+     * @param urlCss path that lead to css of that column
+     * @return column of table view
      */
-    private void initializeBookTableColumns() {
-        TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
-        isbnColumn.getStyleClass().add("isbn-column");
-        isbnColumn.setCellValueFactory(cellData -> cellData.getValue().isbnProperty());
-
-        TableColumn<Book, String> titleColumn = new TableColumn<>("Book Title");
-        titleColumn.getStyleClass().add("title-column");
-        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-
-        TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
-        authorColumn.getStyleClass().add("author-column");
-        authorColumn.setCellValueFactory(cellData -> cellData.getValue().authorProperty());
-
-        TableColumn<Book, String> yearColumn = new TableColumn<>("Year of publication");
-        yearColumn.getStyleClass().add("year-column");
-        yearColumn.setCellValueFactory(cellData -> cellData.getValue().yearOfPublicationProperty());
-
-        TableColumn<Book, String> publisherColumn = new TableColumn<>("Publisher");
-        publisherColumn.getStyleClass().add("publisher-column");
-        publisherColumn.setCellValueFactory(cellData -> cellData.getValue().publisherProperty());
-
-        TableColumn<Book, String> quantity = new TableColumn<>("Quantity");
-        quantity.getStyleClass().add("quantity-column");
-        quantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
-
-        tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn,
-                yearColumn, publisherColumn, quantity);
+    private TableColumn<Book, String> initColumn(String columnName, String urlCss) {
+        TableColumn<Book, String> newColumn = new TableColumn<>(columnName);
+        newColumn.getStyleClass().add(urlCss);
+        switch (columnName) {
+            case "Isbn" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().isbnProperty()
+            );
+            case "Title" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().titleProperty()
+            );
+            case "Author" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().authorProperty()
+            );
+            case "Year" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().yearOfPublicationProperty()
+            );
+            case "Publisher" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().publisherProperty()
+            );
+            case "Quantity" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().quantityProperty()
+            );
+            default -> {
+                System.out.println("Error when init column: " + columnName);
+                return null;
+            }
+        }
+        return newColumn;
     }
 
     /**
-     * Method to add a book to the TableView.
-     *
+     * Initialize table view to show book in screen.
      */
-    public void addBookFromData() {
-        List<Book> list = new BookList("books.csv").getBookList();
-        data.addAll(list);
+    private void initBookTable() {
+        tableView.getColumns().addAll(
+                initColumn("Isbn", "isbn-column"),
+                initColumn("Title", "title-column"),
+                initColumn("Author", "author-column"),
+                initColumn("Year", "year-column"),
+                initColumn("Publisher", "publisher"),
+                initColumn("Quantity", "quantity-column")
+        );
     }
 
     /**
@@ -100,139 +91,51 @@ public class Library {
      * @return Library StackPane
      */
     public StackPane getLibraryStackPane(Account account) {
-        // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
         topPane.getStyleClass().add("top-pane");
 
-        // Create search mode ComboBox and search Label
-        ComboBox<String> searchModeComboBox = new ComboBox<>();
-        searchModeComboBox.getItems().addAll("Title", "ISBN", "Author",
-                "Year of publication", "Publisher");
-        searchModeComboBox.setValue("Title");
-        searchModeComboBox.getStylesheets()
-                .add(getClass().getResource("/styles/library.css").toExternalForm());
-        searchModeComboBox.getStyleClass().add("combo-box");
-        searchModeComboBox.setLayoutX(160.0);
-        searchModeComboBox.setLayoutY(60.0);
+        // Search bar
+        String[] searchType = {"Title", "Isbn", "Author", "Year", "Publisher"};
+        ComboBox<String> searchBar = initSearchBox(searchType);
+        Label searchLabel = initsearchLabel();
+        TextField searchField = initSearchField();
 
-        Label searchLabel = new Label("SEARCH BY:");
-        searchLabel.setLayoutX(180.0);
-        searchLabel.setLayoutY(32.0);
+        // Button add book
+        Button addButton = initButton("Add book");
+        addButton.setOnAction(e -> new AddBook().displayAddBook(data));
 
-        TextField searchField = new TextField();
-        searchField.getStylesheets().add(getClass()
-                .getResource("/styles/library.css").toExternalForm());
-        searchField.getStyleClass().add("search-field");
-        searchField.setLayoutX(272.0);
-        searchField.setLayoutY(34.0);
-        searchField.setPrefSize(500, 50);
-        searchField.setStyle("-fx-background-color: #ffffff;");
-        searchField.setPadding(new Insets(10, 10, 10, 10));
+        // Search filter
+        addSearchFilter(searchField, searchBar);
 
-        Button addButton = new Button("Add Book");
-        addButton.getStylesheets().add(getClass()
-                .getResource("/styles/library.css").toExternalForm());
-        addButton.getStyleClass().add("button");
-        addButton.setLayoutX(800.0);
-        addButton.setLayoutY(34.0);
-        addButton.setOnAction(e -> openAddBookStage());
+        topPane.getChildren().addAll(searchBar, searchField, searchLabel, addButton);
+        return initStackPane(topPane, tableView);
+    }
 
-        topPane.getChildren().addAll(searchModeComboBox, searchField, searchLabel, addButton);
-
-        // Set up filtering
+    /**
+     * Search filter for search bar.
+     * @param searchField text field where we type to find book
+     * @param searchBar choose type of search
+     */
+    private void addSearchFilter(TextField searchField, ComboBox<String> searchBar) {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             ObservableList<Book> filteredData = FXCollections.observableArrayList();
-            String searchMode = searchModeComboBox.getValue();
+            String searchMode = searchBar.getValue();
             BookList list = new BookList();
             list.setBookList(FXCollections.observableArrayList(data));
             if (newValue == null || newValue.isEmpty()) {
                 filteredData.setAll(list.getBookList());
             } else {
-                List<Book> searchResults = new ArrayList<>();
-                switch (searchMode) {
-                    case "ISBN":
-                        searchResults = list.search("isbn", newValue);
-                        break;
-                    case "Author":
-                        searchResults = list.search("author", newValue);
-                        break;
-                    case "Year of publication":
-                        searchResults = list.search("yearOfPublication", newValue);
-                        break;
-                    case "Publisher":
-                        searchResults = list.search("publisher", newValue);
-                        break;
-                    default:
-                        searchResults = list.search("title", newValue);
-                }
+                List<Book> searchResults = switch (searchMode) {
+                    case "Isbn" -> list.search("isbn", newValue);
+                    case "Author" -> list.search("author", newValue);
+                    case "Year" -> list.search("yearOfPublication", newValue);
+                    case "Publisher" -> list.search("publisher", newValue);
+                    default -> list.search("title", newValue);
+                };
                 filteredData.setAll(searchResults);
             }
             tableView.setItems(filteredData);
         });
-
-        AnchorPane centerPane = new AnchorPane(tableView);
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(centerPane);
-        borderPane.setTop(topPane);
-
-        StackPane pane = new StackPane(borderPane);
-        StackPane.setAlignment(borderPane, Pos.CENTER);
-
-        return pane;
-    }
-
-    /**
-     * Pop up Stage to add Book.
-     *
-     */
-    private void openAddBookStage() {
-        Stage stage = new Stage();
-        stage.setTitle("Add New Account");
-        VBox vbox = new VBox(10);
-        vbox.getStyleClass().add("vbox");
-        TextField isbnField = new TextField();
-        isbnField.setPromptText("ISBN");
-        TextField titledField = new TextField();
-        titledField.setPromptText("Title");
-        TextField authorField = new TextField();
-        authorField.setPromptText("Author");
-        TextField yOpField = new TextField();
-        yOpField.setPromptText("Year of Publication");
-        TextField publisherField = new TextField();
-        publisherField.setPromptText("Publisher");
-        TextField quantityField = new TextField();
-        quantityField.setPromptText("Quantity");
-        Button doneButton = new Button("Done");
-        doneButton.getStylesheets().add(getClass()
-                .getResource("/styles/library.css").toExternalForm());
-        doneButton.getStyleClass().add("button");
-        doneButton.setOnAction(e -> {
-            String isbn = isbnField.getText();
-            String title = titledField.getText();
-            String author = authorField.getText();
-            String yOp = yOpField.getText();
-            String publisher = publisherField.getText();
-            String quantity = quantityField.getText();
-            Book newBook = new Book(isbn, title, author, yOp, publisher, quantity);
-            appendBookToCSV(newBook);
-            data.add(newBook); // Refresh the TableView
-            stage.close();
-        });
-        vbox.getChildren().addAll(isbnField, titledField, authorField, yOpField,
-                publisherField, quantityField, doneButton);
-        Scene scene = new Scene(vbox, 300, 400);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    /**
-     * Method to append new Book to books's storage file.
-     * @param newBook book to be appended
-     */
-    private void appendBookToCSV(Book newBook) {
-        AppendDataToFile csvReader = new AppendDataToFile();
-        csvReader.appendBook("books.csv", newBook);
     }
 
     /**
@@ -247,7 +150,7 @@ public class Library {
             viewDetails.setOnAction(event -> {
                 Book selectedBook = row.getItem();
                 if (selectedBook != null) {
-                    showBookDetails(selectedBook);
+                    new BookDetails().showBookDetails(selectedBook);
                 }
             });
 
@@ -255,7 +158,7 @@ public class Library {
             editItem.setOnAction(event -> {
                 Book selectedBook = row.getItem();
                 if (selectedBook != null) {
-                    openEditBookStage(selectedBook);
+                    new EditBook().displayEditBook(data, selectedBook);
                 }
             });
 
@@ -263,7 +166,7 @@ public class Library {
             deleteItem.setOnAction(event -> {
                 Book selectedBook = row.getItem();
                 if (selectedBook != null) {
-                    deleteBook(selectedBook);
+                    new DeleteBook().deleteBook(data, selectedBook);
                 }
             });
 
@@ -277,102 +180,5 @@ public class Library {
 
             return row;
         });
-    }
-
-    private void openEditBookStage(Book book) {
-        Stage stage = new Stage();
-        stage.setTitle("Edit Book");
-
-        VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20, 20, 20, 20));
-
-        TextField isbnField = new TextField(book.getIsbn());
-        isbnField.setPromptText("ISBN");
-        TextField titleField = new TextField(book.getTitle());
-        titleField.setPromptText("Title");
-        TextField authorField = new TextField(book.getAuthor());
-        authorField.setPromptText("Author");
-        TextField yOpField = new TextField(book.getYearOfPublication());
-        yOpField.setPromptText("Year of Publication");
-        TextField publisherField = new TextField(book.getPublisher());
-        publisherField.setPromptText("Publisher");
-        TextField quantityField = new TextField(book.getQuantity());
-        quantityField.setPromptText("Quantity");
-
-        Button doneButton = new Button("Done");
-        doneButton.getStylesheets().add(getClass().getResource("/styles/library.css").toExternalForm());
-        doneButton.getStyleClass().add("button");
-        doneButton.setOnAction(e -> {
-            book.setIsbn(isbnField.getText());
-            book.setTitle(titleField.getText());
-            book.setAuthor(authorField.getText());
-            book.setYearOfPublication(yOpField.getText());
-            book.setPublisher(publisherField.getText());
-            book.setQuantity(quantityField.getText());
-
-            updateBookInCSV(book);
-            tableView.refresh();
-            stage.close();
-        });
-        vbox.getChildren().addAll(isbnField, titleField, authorField, yOpField, publisherField, quantityField, doneButton);
-        Scene scene = new Scene(vbox, 400, 500);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private void updateBookInCSV(Book book) {
-        // Implement method to update the book information in the CSV file
-        UpdateDataFromListToFile csvWriter = new UpdateDataFromListToFile();
-        List<Book> books = new BookList("books.csv").getBookList();
-        books.removeIf(b -> b.getIsbn().equals(book.getIsbn())); // Remove old book entry
-        books.add(book); // Add updated book entry
-        csvWriter.updateBooks("books.csv", books);
-    }
-
-    private void deleteBook(Book book) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Book");
-        alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete this book?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            data.remove(book);
-            removeBookFromCSV(book);
-        }
-    }
-
-    private void removeBookFromCSV(Book book) {
-        UpdateDataFromListToFile csvWriter = new UpdateDataFromListToFile();
-        List<Book> books = new BookList("books.csv").getBookList();
-        books.removeIf(b -> b.getIsbn().equals(book.getIsbn())); // Remove the book
-        csvWriter.updateBooks( "books.csv", books);
-    }
-
-
-
-    /**
-     * Method to show book details in a new stage.
-     * @param book the selected book to display details for.
-     */
-    private void showBookDetails(Book book) {
-        Stage stage = new Stage();
-        stage.setTitle("Book Details");
-
-        VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20, 20, 20, 20));
-
-        Label isbnLabel = new Label("ISBN: " + book.getIsbn());
-        Label titleLabel = new Label("Title: " + book.getTitle());
-        Label authorLabel = new Label("Author: " + book.getAuthor());
-        Label yearLabel = new Label("Year of Publication: " + book.getYearOfPublication());
-        Label publisherLabel = new Label("Publisher: " + book.getPublisher());
-        Label quantityLabel = new Label("Quantity: " + book.getQuantity());
-
-        vbox.getChildren().addAll(isbnLabel, titleLabel, authorLabel, yearLabel, publisherLabel, quantityLabel);
-
-        Scene scene = new Scene(vbox, 300, 200);
-        stage.setScene(scene);
-        stage.show();
     }
 }
