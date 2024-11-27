@@ -44,6 +44,19 @@ public class Borrowed extends HashingMultipleBase {
         hashStatus = hashInit(status);
     }
 
+    public Borrowed(String id, String isbn) {
+        this.id = id;
+        this.isbn = isbn;
+        this.fullName = "";
+        this.borrowedDate = "";
+        this.dueDate = "";
+        this.status = "";
+        hashId = hashInit(id);
+        hashFullName = hashInit(fullName);
+        hashIsbn = hashInit(isbn);
+        hashStatus = hashInit(status);
+    }
+
     public String getId() {
         return id;
     }

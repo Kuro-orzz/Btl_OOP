@@ -89,4 +89,8 @@ public class BorrowedList {
         }
         return searchResult;
     }
+
+    public int getTotalBorrow() {
+        return borrowedList.size();
+    }
 }

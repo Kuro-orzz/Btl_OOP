@@ -92,4 +92,12 @@ public class BookList {
         }
         return searchResult;
     }
+
+    public long getTotalBooks() {
+        int count = 0;
+        for (Book book : bookList) {
+            count++;
+        }
+        return count;
+    }
 }

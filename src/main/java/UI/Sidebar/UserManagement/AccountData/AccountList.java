@@ -78,4 +78,8 @@ public class AccountList {
         }
         return null; // Return null if no account with the given username is found
     }
+
+    public int getTotalUsers() {
+        return accountList.size();
+    }
 }
