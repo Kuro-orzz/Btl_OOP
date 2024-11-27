@@ -6,6 +6,7 @@ module org.example.demo {
     requires opencsv;
     requires java.desktop;
     requires org.json;
+    requires com.google.zxing;
 
     opens Controller to javafx.fxml;
     exports Controller;

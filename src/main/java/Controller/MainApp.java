@@ -49,16 +49,27 @@ public class MainApp {
         title.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
         title.getStyleClass().add("title");
 
-        sidebar.getChildren().addAll(
-                title,
-                createSidebarButton("Home"),
-                createSidebarButton("Library"),
-                createSidebarButton("User Management"),
-                createSidebarButton("Borrow Request"),
-                createSidebarButton("Borrowed"),
-                createSidebarButton("Log Out"),
-                new Clock().renderClock()
-        );
+        if (curAcc.isAdmin()) {
+            sidebar.getChildren().addAll(
+                    title,
+                    createSidebarButton("Home"),
+                    createSidebarButton("Library"),
+                    createSidebarButton("User Management"),
+                    createSidebarButton("Borrow Request"),
+                    createSidebarButton("Borrowed"),
+                    createSidebarButton("Log Out"),
+                    new Clock().renderClock()
+            );
+        } else {
+            sidebar.getChildren().addAll(
+                    title,
+                    createSidebarButton("Home"),
+                    createSidebarButton("Library"),
+                    createSidebarButton("My Borrowed Book"),
+                    createSidebarButton("Log Out"),
+                    new Clock().renderClock()
+            );
+        }
 
         layout.setLeft(sidebar);
         StackPane welcome = new StackPane();
@@ -96,7 +107,7 @@ public class MainApp {
                 StackPane homeView = home.getHomeStackPane(curAcc);
                 layout.setCenter(homeView);
             } else if (text.equals("Library")) {
-                Library lib = new Library(controller);
+                Library lib = new Library(controller, curAcc);
                 StackPane libView = lib.getLibraryStackPane(curAcc);
                 layout.setCenter(libView);
             } else if (text.equals("User Management")) {
@@ -108,8 +119,12 @@ public class MainApp {
                 StackPane borrowRequestView = borrow.getBorrowRequestStackPane();
                 layout.setCenter(borrowRequestView);
             } else if (text.equals("Borrowed")) {
-                showBorrowed borrowed = new showBorrowed(controller);
-                StackPane borrowedView = borrowed.getBorrowedStackPane();
+                showBorrowed borrowed = new showBorrowed(controller, curAcc);
+                StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
+                layout.setCenter(borrowedView);
+            } else if (text.equals("My Borrowed Book")) {
+                showBorrowed borrowed = new showBorrowed(controller, curAcc);
+                StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
                 layout.setCenter(borrowedView);
             } else if (text.equals("Log Out")) {
                 Alert logoutConfirmatio = new Alert(Alert.AlertType.CONFIRMATION);

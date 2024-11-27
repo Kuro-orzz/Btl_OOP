@@ -21,7 +21,7 @@ public class Library extends Method<Book> {
      * Library constructor.
      * @param controller the main controller.
      */
-    public Library(AppController controller) {
+    public Library(AppController controller, Account account) {
         // table view
         tableView = new TableView<>(data);
         setTableView(tableView);
@@ -32,7 +32,7 @@ public class Library extends Method<Book> {
         data.addAll(bookList);
 
         // context menu
-        addTableContextMenu();
+        addTableContextMenu(account);
     }
 
     /**
@@ -75,6 +75,7 @@ public class Library extends Method<Book> {
      * Initialize table view to show book in screen.
      */
     private void initBookTable() {
+        tableView.getStylesheets().add(getClass().getResource("/styles/library.css").toExternalForm());
         tableView.getColumns().addAll(
                 initColumn("Isbn", "isbn-column"),
                 initColumn("Title", "title-column"),
@@ -102,12 +103,13 @@ public class Library extends Method<Book> {
 
         // Button add book
         Button addButton = initButton("Add book");
-        addButton.setOnAction(e -> new AddBook().displayAddBook(data));
+        addButton.setOnAction(e -> new AddBook().displayAddBook(data, account));
 
         // Search filter
         addSearchFilter(searchField, searchBar);
 
         topPane.getChildren().addAll(searchBar, searchField, searchLabel, addButton);
+
         return initStackPane(topPane, tableView);
     }
 
@@ -141,7 +143,7 @@ public class Library extends Method<Book> {
     /**
      * Method to add context menu to table rows.
      */
-    private void addTableContextMenu() {
+    private void addTableContextMenu(Account account) {
         tableView.setRowFactory(tv -> {
             TableRow<Book> row = new TableRow<>();
             ContextMenu contextMenu = new ContextMenu();
@@ -158,7 +160,7 @@ public class Library extends Method<Book> {
             editItem.setOnAction(event -> {
                 Book selectedBook = row.getItem();
                 if (selectedBook != null) {
-                    new EditBook().displayEditBook(data, selectedBook);
+                    new EditBook().displayEditBook(data, selectedBook, account);
                 }
             });
 
@@ -166,11 +168,20 @@ public class Library extends Method<Book> {
             deleteItem.setOnAction(event -> {
                 Book selectedBook = row.getItem();
                 if (selectedBook != null) {
-                    new DeleteBook().deleteBook(data, selectedBook);
+                    new DeleteBook().deleteBook(data, selectedBook, account);
                 }
             });
 
-            contextMenu.getItems().addAll(viewDetails, editItem, deleteItem);
+            MenuItem showQrItem = new MenuItem("Show QR Code");
+            showQrItem.setOnAction(event -> {
+                Book selectedBook = row.getItem();
+                if (selectedBook != null) {
+                    QrCodeGenerator qr = new QrCodeGenerator();
+                    qr.showQrCode(selectedBook);
+                }
+            });
+
+            contextMenu.getItems().addAll(viewDetails, editItem, deleteItem, showQrItem);
 
             row.contextMenuProperty().bind(
                     javafx.beans.binding.Bindings.when(row.emptyProperty())
@@ -181,4 +192,5 @@ public class Library extends Method<Book> {
             return row;
         });
     }
+
 }

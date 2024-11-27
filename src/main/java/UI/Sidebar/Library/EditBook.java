@@ -4,9 +4,11 @@ import CsvFile.UpdateDataFromListToFile;
 import UI.Method;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.Library.BookData.BookList;
+import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -49,17 +51,25 @@ public class EditBook extends Method<Book> {
         });
     }
 
-    public void displayEditBook(ObservableList<Book> data, Book book) {
-        VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(20, 20, 20, 20));
-        vbox.getChildren().addAll(isbnField, titleField, authorField,
-                yearField, publisherField, quantityField, doneButton);
-        Stage stage = new Stage();
-        stage.setTitle("Edit Book");
-        setButtonAction(stage, data, book);
-        Scene scene = new Scene(vbox, 400, 500);
-        stage.setScene(scene);
-        stage.show();
+    public void displayEditBook(ObservableList<Book> data, Book book, Account account) {
+        if (account.isAdmin()) {
+            VBox vbox = new VBox(10);
+            vbox.setPadding(new Insets(20, 20, 20, 20));
+            vbox.getChildren().addAll(isbnField, titleField, authorField,
+                    yearField, publisherField, quantityField, doneButton);
+            Stage stage = new Stage();
+            stage.setTitle("Edit Book");
+            setButtonAction(stage, data, book);
+            Scene scene = new Scene(vbox, 400, 500);
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Access Denied!");
+            alert.setHeaderText(null);
+            alert.setContentText("You must be admin to edit this book!");
+            alert.show();
+        }
     }
 
     public void updateBookInCSV(ObservableList<Book> data, Book book, String isbn) {

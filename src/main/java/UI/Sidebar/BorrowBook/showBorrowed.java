@@ -3,6 +3,7 @@ package UI.Sidebar.BorrowBook;
 import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
 import UI.Sidebar.BorrowBook.BorrowedData.BorrowedList;
 import Controller.AppController;
+import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,7 +26,7 @@ public class showBorrowed {
      * Show borrowed constructor.
      * @param controller the main controller.
      */
-    public showBorrowed(AppController controller) {
+    public showBorrowed(AppController controller, Account account) {
         data = FXCollections.observableArrayList();
         filteredData = new FilteredList<>(data);
         tableView = new TableView<>(filteredData);
@@ -39,7 +40,7 @@ public class showBorrowed {
         initializeBorrowedTableColumns();
 
         //get Books' data
-        addBookFromData();
+        addBookFromData(account);
     }
 
     /**
@@ -76,25 +77,43 @@ public class showBorrowed {
 
     /**
      * Get borrowed info from file to data.
+     * @param account acount to store fullname
      */
-    public void addBookFromData() {
+    public void addBookFromData(Account account) {
         List<Borrowed> list = new BorrowedList("borrowed.csv").getBorrowedList();
-        data.addAll(list);
+        if (!account.isAdmin()) {
+            List<Borrowed> userBorrowedList = new ArrayList<>();
+            for (Borrowed borrowed : list) {
+                if (borrowed.getFullName().equals(account.getInfo().getFullName())) {
+                    userBorrowedList.add(borrowed);
+                }
+            }
+            data.addAll(userBorrowedList);
+        } else {
+            data.addAll(list);
+        }
     }
+
 
     /**
      * Method create Library GUI.
      * @return Library StackPane
      */
-    public StackPane getBorrowedStackPane() {
+    public StackPane getBorrowedStackPane(Account account) {
         // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
         topPane.getStyleClass().add("top-pane");
 
         // Create search mode ComboBox and search Label
         ComboBox<String> searchModeComboBox = new ComboBox<>();
-        searchModeComboBox.getItems().addAll("Id", "Full name", "Isbn", "Status");
-        searchModeComboBox.setValue("Full name");
+        if (account.isAdmin()) {
+            searchModeComboBox.getItems().addAll("Id", "Full name", "Isbn", "Status");
+            searchModeComboBox.setValue("Full name");
+        } else {
+            searchModeComboBox.getItems().addAll("Id", "Isbn", "Status");
+            searchModeComboBox.setValue("Status");
+        }
+
         searchModeComboBox.getStylesheets()
                 .add(getClass().getResource("/styles/borrowed.css").toExternalForm());
         searchModeComboBox.getStyleClass().add("combo-box");
@@ -118,32 +137,59 @@ public class showBorrowed {
         topPane.getChildren().addAll(searchModeComboBox, searchField, searchLabel);
 
         // Set up filtering for search bar
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            ObservableList<Borrowed> filteredData = FXCollections.observableArrayList();
-            String searchMode = searchModeComboBox.getValue();
-            BorrowedList borrowedList = new BorrowedList();
-            borrowedList.setBorrowedList(FXCollections.observableArrayList(data));
-            if (newValue == null || newValue.isEmpty()) {
-                filteredData.setAll(borrowedList.getBorrowedList());
-            } else {
-                List<Borrowed> searchResults = new ArrayList<>();
-                switch (searchMode) {
-                    case "Id":
-                        searchResults = borrowedList.search("Id", newValue);
-                        break;
-                    case "Isbn":
-                        searchResults = borrowedList.search("Isbn", newValue);
-                        break;
-                    case "Status":
-                        searchResults = borrowedList.search("Status", newValue);
-                        break;
-                    default:
-                        searchResults = borrowedList.search("Full name", newValue);
+        if (account.isAdmin()) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                ObservableList<Borrowed> filteredData = FXCollections.observableArrayList();
+                String searchMode = searchModeComboBox.getValue();
+                BorrowedList borrowedList = new BorrowedList();
+                borrowedList.setBorrowedList(FXCollections.observableArrayList(data));
+                if (newValue == null || newValue.isEmpty()) {
+                    filteredData.setAll(borrowedList.getBorrowedList());
+                } else {
+                    List<Borrowed> searchResults = new ArrayList<>();
+                    switch (searchMode) {
+                        case "Id":
+                            searchResults = borrowedList.search("Id", newValue);
+                            break;
+                        case "Isbn":
+                            searchResults = borrowedList.search("Isbn", newValue);
+                            break;
+                        case "Status":
+                            searchResults = borrowedList.search("Status", newValue);
+                            break;
+                        default:
+                            searchResults = borrowedList.search("Full name", newValue);
+                    }
+                    filteredData.setAll(searchResults);
                 }
-                filteredData.setAll(searchResults);
-            }
-            tableView.setItems(filteredData);
-        });
+                tableView.setItems(filteredData);
+            });
+        } else {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                ObservableList<Borrowed> filteredData = FXCollections.observableArrayList();
+                String searchMode = searchModeComboBox.getValue();
+                BorrowedList borrowedList = new BorrowedList();
+                borrowedList.setBorrowedList(FXCollections.observableArrayList(data));
+                if (newValue == null || newValue.isEmpty()) {
+                    filteredData.setAll(borrowedList.getBorrowedList());
+                } else {
+                    List<Borrowed> searchResults = new ArrayList<>();
+                    switch (searchMode) {
+                        case "Id":
+                            searchResults = borrowedList.search("Id", newValue);
+                            break;
+                        case "Isbn":
+                            searchResults = borrowedList.search("Isbn", newValue);
+                            break;
+                        case "Status":
+                            searchResults = borrowedList.search("Status", newValue);
+                            break;
+                    }
+                    filteredData.setAll(searchResults);
+                }
+                tableView.setItems(filteredData);
+            });
+        }
 
         AnchorPane centerPane = new AnchorPane(tableView);
 

@@ -3,6 +3,7 @@ package UI.Sidebar.Library;
 import CsvFile.UpdateDataFromListToFile;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.Library.BookData.BookList;
+import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -16,16 +17,24 @@ public class DeleteBook {
      * @param data where book will be deleted
      * @param book object that will be deleted
      */
-    public void deleteBook(ObservableList<Book> data, Book book) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Book");
-        alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete this book?");
+    public void deleteBook(ObservableList<Book> data, Book book, Account acount) {
+        if (acount.isAdmin()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Book");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you want to delete this book?");
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            data.remove(book);
-            removeBookFromCSV(book);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                data.remove(book);
+                removeBookFromCSV(book);
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Access Denied!");
+            alert.setHeaderText(null);
+            alert.setContentText("You must be admin to delete this book!");
+            alert.show();
         }
     }
 
