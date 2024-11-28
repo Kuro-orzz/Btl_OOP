@@ -1,8 +1,11 @@
 package Testing;
 
-import CsvFile.AppendDataToFile;
+import CsvFile.GetDataFromFile;
 import CsvFile.InitCsvFile;
-import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
+import CsvFile.UpdateDataFromListToFile;
+import UI.Sidebar.UserManagement.AccountData.Account;
+
+import java.util.List;
 
 public class Testing {
     public static void main(String[] args) {
@@ -34,9 +37,11 @@ public class Testing {
 //        s = s.replaceAll("\\[|\\]", "\"");
 //        s = s.replaceAll(", ", "\";\"");
 //        System.out.println(s);
+        List<Account> accounts = new GetDataFromFile().getAccountsFromFile("accounts.csv");
         InitCsvFile initCsvFile = new InitCsvFile();
-        initCsvFile.createBorrowRequestDataFile("borrowRequest.csv");
-        AppendDataToFile appendDataToFile = new AppendDataToFile();
-        appendDataToFile.appendBorrowRequest("borrowRequest.csv", new BorrowRequest("12", "DTH", "0123", "24/11/2024", "Pending"));
+        initCsvFile.createAccountDataFile("accounts.csv");
+        UpdateDataFromListToFile updateDataFromListToFile = new UpdateDataFromListToFile();
+        updateDataFromListToFile.updateAccounts("accounts.csv", accounts);
+
     }
 }

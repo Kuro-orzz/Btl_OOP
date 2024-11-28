@@ -16,7 +16,12 @@ public class DataHeader {
             "Isadmin",
             "Fullname",
             "age",
-            "gender"
+            "gender",
+            "phone",
+            "email",
+            "address",
+            "numberOfBorrowed",
+            "numberOfReturned"
     };
     public final String[] BorrowRequestInfo = {
             "Id",

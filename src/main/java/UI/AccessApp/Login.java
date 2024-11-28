@@ -16,7 +16,7 @@ import UI.Sidebar.UserManagement.AccountData.AccountList;
 import java.util.List;
 
 public class Login {
-    protected AccountList accountList = new AccountList("accounts.csv");
+    private Account curAcc;
 
     public Login() {}
 
@@ -137,7 +137,7 @@ public class Login {
         Button loginButton = new Button("Login");
         loginButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         loginButton.getStyleClass().add("login-button");
-        loginButton.setOnAction(event -> handleLogin(appController, usernameField, passwordField));
+        loginButton.setOnMouseClicked(event -> handleLogin(appController, usernameField, passwordField));
         return loginButton;
     }
 
@@ -149,10 +149,11 @@ public class Login {
      */
     private void handleLogin(AppController appController, TextInputControl usernameField, TextInputControl passwordField) {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
+            AccountList accountList = new AccountList("accounts.csv");
             Account account = accountList.getAccountByUsername(usernameField.getText());
             boolean isAdmin = account.isAdmin();
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
-            appController.showMainAppScene(account);
+            appController.showMainAppScene(curAcc);
         } else {
              showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
         }
@@ -165,8 +166,15 @@ public class Login {
      * @return true if account is available and false if unavailable
      */
     private boolean authenticate(String username, String password) {
-        Account accountToCheck = new Account(username, password);
-        return accountList.isAccountsExist(accountToCheck);
+        List<Account> list = new AccountList("accounts.csv").getAccountList();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUsername().equals(username)
+                    && list.get(i).getPassword().equals(password)) {
+                curAcc = list.get(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

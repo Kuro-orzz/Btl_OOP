@@ -103,7 +103,7 @@ public class MainApp {
 
             // Check if the button is "Home"
             if (text.equals("Home")) {
-                Home home = new Home(controller);
+                Home home = new Home(controller, layout);
                 StackPane homeView = home.getHomeStackPane(curAcc);
                 layout.setCenter(homeView);
             } else if (text.equals("Library")) {
@@ -138,5 +138,9 @@ public class MainApp {
             }
         });
         return button;
+    }
+
+    public BorderPane getLayout() {
+        return layout;
     }
 }

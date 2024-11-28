@@ -1,3 +1,38 @@
+.profile {
+    -fx-background-color: transparent;
+}
+
+.text-pane {
+    /*-fx-alignment: top-center;*/
+    -fx-translate-x: 100px;
+    -fx-translate-y: 55px;
+    -fx-fill: WHITE;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.save-button {
+    -fx-font-size: 16px;
+    -fx-background-color: #243A73;
+    -fx-text-fill: white;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 40px;
+    -fx-translate-x: 0px;
+    -fx-translate-y: 120px;
+    -fx-alignment: bottom-center;
+}
+
+.return-button {
+    -fx-font-size: 16px;
+    -fx-background-color: #243A73;
+    -fx-text-fill: white;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 40px;
+    -fx-translate-x: 0px;
+    -fx-translate-y: 120px;
+    -fx-alignment: bottom-center;
+}
+
 .home-label {
     -fx-font-size: 20px;
     -fx-font-family: "Futura", sans-serif;

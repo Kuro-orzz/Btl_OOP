@@ -94,10 +94,6 @@ public class BookList {
     }
 
     public long getTotalBooks() {
-        int count = 0;
-        for (Book book : bookList) {
-            count++;
-        }
-        return count;
+        return bookList.size();
     }
 }

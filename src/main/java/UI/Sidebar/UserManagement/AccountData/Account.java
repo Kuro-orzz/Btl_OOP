@@ -36,6 +36,11 @@ public class Account {
         this.password = data[2];
         this.isAdmin = Boolean.parseBoolean(data[3]);
         info = new UserInfo(data[4], Integer.parseInt(data[5]), Boolean.parseBoolean(data[6]));
+        info.setPhoneNumber(data[7]);
+        info.setEmail(data[8]);
+        info.setAddress(data[9]);
+        info.setNumberOfBorrowed(data[10]);
+        info.setNumberOfReturned(data[11]);
     }
     public int getCounter() {
         return counter;

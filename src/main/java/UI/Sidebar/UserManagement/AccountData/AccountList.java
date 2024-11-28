@@ -45,17 +45,6 @@ public class AccountList {
         return false;
     }
 
-    public boolean isAccountsExist(Account account) {
-        for (Account a : accountList) {
-            if (account.getUsername().equals(a.getUsername()) &&
-                    account.getPassword().equals(a.getPassword())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     public Account findAccount(Account account) {
         for (Account a : accountList) {
             if (account.equals(a)) {

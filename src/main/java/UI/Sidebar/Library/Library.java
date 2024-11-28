@@ -75,7 +75,6 @@ public class Library extends Method<Book> {
      * Initialize table view to show book in screen.
      */
     private void initBookTable() {
-        tableView.getStylesheets().add(getClass().getResource("/styles/library.css").toExternalForm());
         tableView.getColumns().addAll(
                 initColumn("Isbn", "isbn-column"),
                 initColumn("Title", "title-column"),
