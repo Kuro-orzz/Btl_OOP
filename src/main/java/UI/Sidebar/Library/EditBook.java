@@ -38,16 +38,38 @@ public class EditBook extends Method<Book> {
 
     public void setButtonAction(Stage stage, ObservableList<Book> data, Book book) {
         doneButton.setOnAction(e -> {
-            String isbn = book.getIsbn();
-            book.setIsbn(isbnField.getText());
-            book.setTitle(titleField.getText());
-            book.setAuthor(authorField.getText());
-            book.setYearOfPublication(yearField.getText());
-            book.setPublisher(publisherField.getText());
-            book.setQuantity(quantityField.getText());
-            updateBookInCSV(data, book, isbn);
-//            tableView.refresh();
-            stage.close();
+            try {
+                String newIsbn = isbnField.getText();
+                String newTitle = titleField.getText();
+                String newAuthor = authorField.getText();
+                String newYearOfPublication = yearField.getText();
+                String newPublisher = publisherField.getText();
+                String newQuantity = quantityField.getText();
+                if (!newIsbn.matches("\\d{10}")) {
+                    throw new IllegalArgumentException("ISBN must be exactly 10 digits.");
+                }
+                int currentYear = java.time.Year.now().getValue();
+                int year = Integer.parseInt(newYearOfPublication);
+                if (year > currentYear) {
+                    throw new IllegalArgumentException("Year of publication must not exceed the current year.");
+                }
+                int qty = Integer.parseInt(newQuantity);
+                if (qty < 0) {
+                    throw new IllegalArgumentException("Quantity must be greater than or equal to 0.");
+                }
+                book.setIsbn(newIsbn);
+                book.setTitle(newTitle);
+                book.setAuthor(newAuthor);
+                book.setYearOfPublication(newYearOfPublication);
+                book.setPublisher(newPublisher);
+                book.setQuantity(newQuantity);
+                updateBookInCSV(data, book, book.getIsbn());
+                stage.close();
+            } catch (NumberFormatException ex) {
+                showAlert("Invalid Input", "Year and Quantity must be numeric.");
+            } catch (IllegalArgumentException ex) {
+                showAlert("Invalid Input", ex.getMessage());
+            }
         });
     }
 
@@ -83,5 +105,13 @@ public class EditBook extends Method<Book> {
         }
         csvWriter.updateBooks("books.csv", bookList);
         data.addAll(bookList);
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

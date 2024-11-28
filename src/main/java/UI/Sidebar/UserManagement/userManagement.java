@@ -225,19 +225,43 @@ public class userManagement {
                 .getResource("/styles/userManagement.css").toExternalForm());
         doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            String fullName = fullNameField.getText();
-            int age = Integer.parseInt(ageField.getText());
-            boolean gender = Boolean.parseBoolean(genderField.getText());
-            boolean isAdmin = Boolean.parseBoolean(isAdminField.getText());
+            try {
+                String username = usernameField.getText();
+                String password = passwordField.getText();
+                String fullName = fullNameField.getText();
+                int age = Integer.parseInt(ageField.getText());
+                boolean gender = Boolean.parseBoolean(genderField.getText());
+                boolean isAdmin = Boolean.parseBoolean(isAdminField.getText());
 
-            UserInfo userInfo = new UserInfo(fullName, age, gender);
-            Account newAccount = new Account(username, password, isAdmin, userInfo);
+                if (!username.matches("^[a-zA-Z0-9]{6,20}$")) {
+                    showAlert("Invalid Input", "Username must be 6-20 characters and contain no special characters.");
+                    return;
+                }
 
-            appendAccountToCSV(newAccount);
-            data.add(newAccount);
-            stage.close();
+                if (!password.matches("^[a-zA-Z0-9]{6,20}$")) {
+                    showAlert("Invalid Input", "Password must be 6-20 characters and contain no special characters.");
+                    return;
+                }
+
+                if (!fullName.matches("^[a-zA-Z\\s]+$")) {
+                    showAlert("Invalid Input", "Full Name should not contain special characters or numbers.");
+                    return;
+                }
+
+                if (age <= 0 || age >= 100) {
+                    showAlert("Invalid Input", "Age must be between 1 and 99.");
+                    return;
+                }
+
+                UserInfo userInfo = new UserInfo(fullName, age, gender);
+                Account newAccount = new Account(username, password, isAdmin, userInfo);
+
+                appendAccountToCSV(newAccount);
+                data.add(newAccount);
+                stage.close();
+            } catch (NumberFormatException ex) {
+                showAlert("Invalid Input", "Age must be a valid number.");
+            }
         });
 
         vbox.getChildren().addAll(usernameField, passwordField,
@@ -324,15 +348,45 @@ public class userManagement {
         doneButton.getStylesheets().add(getClass().getResource("/styles/userManagement.css").toExternalForm());
         doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
-            account.setUsername(usernameField.getText());
-            account.setPassword(passwordField.getText());
-            account.setAdmin(Boolean.parseBoolean(isAdminField.getText()));
-            UserInfo info = new UserInfo(fullnameField.getText(), Integer.parseInt(ageField.getText()), Boolean.parseBoolean(genderField.getText()));
-            account.setInfo(info);
+            try {
+                String newUsername = usernameField.getText();
+                String newPassword = passwordField.getText();
+                String newFullName = fullnameField.getText();
+                int newAge = Integer.parseInt(ageField.getText());
+                boolean newGender = Boolean.parseBoolean(genderField.getText());
+                boolean newIsAdmin = Boolean.parseBoolean(isAdminField.getText());
 
-            updateAccountInCsv(account);
-            tableView.refresh();
-            stage.close();
+                if (!newUsername.matches("^[a-zA-Z0-9]{6,20}$")) {
+                    showAlert("Invalid Input", "Username must be 6-20 characters and contain no special characters.");
+                    return;
+                }
+
+                if (!newPassword.matches("^[a-zA-Z0-9]{6,20}$")) {
+                    showAlert("Invalid Input", "Password must be 6-20 characters and contain no special characters.");
+                    return;
+                }
+
+                if (!newFullName.matches("^[a-zA-Z\\s]+$")) {
+                    showAlert("Invalid Input", "Full Name should not contain special characters or numbers.");
+                    return;
+                }
+
+                if (newAge <= 0 || newAge >= 100) {
+                    showAlert("Invalid Input", "Age must be between 1 and 99.");
+                    return;
+                }
+
+                account.setUsername(usernameField.getText());
+                account.setPassword(passwordField.getText());
+                account.setAdmin(newIsAdmin);
+                account.setInfo(new UserInfo(newFullName, newAge, newGender));
+
+                updateAccountInCsv(account);
+                tableView.refresh();
+                stage.close();
+            } catch (NumberFormatException ex) {
+                showAlert("Invalid Input", "Age must be a valid number.");
+            }
         });
         vbox.getChildren().addAll(usernameField, passwordField, isAdminField, fullnameField, ageField, genderField, doneButton);
         Scene scene = new Scene(vbox, 400, 500);
@@ -400,5 +454,13 @@ public class userManagement {
         Scene scene = new Scene(vbox, 300, 200);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
