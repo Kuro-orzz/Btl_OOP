@@ -12,8 +12,9 @@ public class Profile {
 
     public Profile() {}
 
-    public StackPane displayProfile(Account curAcc) {
+    public StackPane display(Account curAcc) {
         UserInfo info = curAcc.getInfo();
+        Label idLabel = initLabel("Id: " + curAcc.getId());
         Label usernameLabel = initLabel("Username: " + curAcc.getUsername());
         Label fullnameLabel = initLabel("Full Name: " + info.getFullName());
         Label ageLabel = initLabel("Age: " + info.getAge());
@@ -22,7 +23,7 @@ public class Profile {
         Label emailLabel = initLabel("Email: " + (info.getEmail() == null ? "" : info.getEmail()));
         Label addressLabel = initLabel("Address: " + (info.getAddress() == null ? "" : info.getAddress()));
 
-        VBox detailBox = new VBox(10, usernameLabel, fullnameLabel, ageLabel,
+        VBox detailBox = new VBox(10, idLabel, usernameLabel, fullnameLabel, ageLabel,
                 genderLabel, phoneLabel, emailLabel, addressLabel);
         detailBox.setPadding(new Insets(10, 10, 10, 70));
         detailBox.setStyle("-fx-font-size: 20px");

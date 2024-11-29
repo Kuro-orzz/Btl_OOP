@@ -1,15 +1,13 @@
 package UI.Sidebar.Home;
 
-import Controller.MainApp;
 import UI.Sidebar.Home.ContextMenu.BackToHomeArrow;
+import UI.Sidebar.Home.ContextMenu.ChangePassword;
 import UI.Sidebar.Home.ContextMenu.EditProfile;
 import UI.Sidebar.Home.ContextMenu.Profile;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -94,10 +92,11 @@ public class AvatarImage {
         MenuItem profileItem = new MenuItem("Profile");
         profileItem.setStyle("-fx-font-size: 20px");
         profileItem.setOnAction(event -> {
+            AvatarImage avatarImage = new AvatarImage(curAcc, layout);
             Profile profile = new Profile();
             BackToHomeArrow arrow = new BackToHomeArrow(curAcc, layout);
             VBox vBox = new VBox(30);
-            vBox.getChildren().addAll(new AvatarImage(curAcc, layout).profileButton(), profile.displayProfile(curAcc), arrow.displayArrow());
+            vBox.getChildren().addAll(avatarImage.profileButton(), profile.display(curAcc), arrow.displayArrow());
             StackPane stackPane = new StackPane(vBox);
             stackPane.setLayoutX(30);
             layout.setCenter(stackPane);
@@ -106,10 +105,11 @@ public class AvatarImage {
         MenuItem editProfileItem = new MenuItem("Edit profile");
         editProfileItem.setStyle("-fx-font-size: 20px");
         editProfileItem.setOnAction(event -> {
+            AvatarImage avatarImage = new AvatarImage(curAcc, layout);
             EditProfile edit = new EditProfile(curAcc, layout);
             BackToHomeArrow arrow = new BackToHomeArrow(curAcc, layout);
             VBox vBox = new VBox(15);
-            vBox.getChildren().addAll(new AvatarImage(curAcc, layout).profileButton(), edit.displayEdit(), arrow.displayArrow());
+            vBox.getChildren().addAll(avatarImage.profileButton(), edit.display(), arrow.displayArrow());
             StackPane stackPane = new StackPane(vBox, edit.saveButton());
             layout.setCenter(stackPane);
         });
@@ -117,7 +117,13 @@ public class AvatarImage {
         MenuItem changePasswordItem = new MenuItem("Change password");
         changePasswordItem.setStyle("-fx-font-size: 20px");
         changePasswordItem.setOnAction(event -> {
-            System.out.println("Change password selected");
+            AvatarImage avatarImage = new AvatarImage(curAcc, layout);
+            ChangePassword changePassword = new ChangePassword(curAcc, layout);
+            BackToHomeArrow arrow = new BackToHomeArrow(curAcc, layout);
+            VBox vBox = new VBox(15);
+            vBox.getChildren().addAll(avatarImage.profileButton(), changePassword.display(), arrow.displayArrow());
+            StackPane stackPane = new StackPane(vBox, changePassword.saveButton());
+            layout.setCenter(stackPane);
         });
 
         // Add items to the context menu

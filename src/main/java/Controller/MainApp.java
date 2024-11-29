@@ -63,7 +63,6 @@ public class MainApp {
                     createSidebarButton("Borrow Request"),
                     createSidebarButton("Borrowed"),
                     createSidebarButton("Log Out"),
-                    spacer,
                     new Clock().renderClock()
             );
         } else {

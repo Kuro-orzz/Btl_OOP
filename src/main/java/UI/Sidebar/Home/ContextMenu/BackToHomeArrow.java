@@ -32,14 +32,14 @@ public class BackToHomeArrow {
         arrowButton.setOnMouseClicked(e -> {
             System.out.println("Arrow button clicked!");
             Profile profile = new Profile();
-            TranslateTransition transition = new TranslateTransition(Duration.seconds(0.1), profile.displayProfile(curAcc));
+            TranslateTransition transition = new TranslateTransition(Duration.seconds(0.1), profile.display(curAcc));
             transition.setToX(-600);  // Move the profile view off-screen
             transition.setOnFinished(event -> {
                 // Once the animation is finished, switch to the home scene
                 StackPane homeStPane = new Home(layout).getHomeStackPane(curAcc);
                 layout.setCenter(homeStPane);
                 // Reset the profilePane position to its original place for next transition
-                profile.displayProfile(curAcc).setTranslateX(0);
+                profile.display(curAcc).setTranslateX(0);
             });
             transition.play();
         });

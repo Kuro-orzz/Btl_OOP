@@ -29,7 +29,7 @@ public class EditProfile {
         this.email = new TextField();
     }
 
-    public StackPane displayEdit() {
+    public StackPane display() {
         UserInfo info = curAcc.getInfo();
         Pane text1 = createTextPane(fullName, info.getFullName(), "Full name:");
         Pane text2 = createTextPane(age, Integer.toString(info.getAge()), "Age:");
