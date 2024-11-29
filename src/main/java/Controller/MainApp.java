@@ -15,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 
 import java.util.Optional;
 
@@ -49,6 +51,9 @@ public class MainApp {
         title.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
         title.getStyleClass().add("title");
 
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
         if (curAcc.isAdmin()) {
             sidebar.getChildren().addAll(
                     title,
@@ -58,6 +63,7 @@ public class MainApp {
                     createSidebarButton("Borrow Request"),
                     createSidebarButton("Borrowed"),
                     createSidebarButton("Log Out"),
+                    spacer,
                     new Clock().renderClock()
             );
         } else {
@@ -67,6 +73,7 @@ public class MainApp {
                     createSidebarButton("Library"),
                     createSidebarButton("My Borrowed Book"),
                     createSidebarButton("Log Out"),
+                    spacer,
                     new Clock().renderClock()
             );
         }

@@ -51,7 +51,12 @@ public class AppendDataToFile extends InitCsvFile {
                     Boolean.toString(account.isAdmin()),
                     userInfo.getFullName(),
                     Integer.toString(userInfo.getAge()),
-                    Boolean.toString(userInfo.getGender())
+                    Boolean.toString(userInfo.getGender()),
+                    userInfo.getPhoneNumber(),
+                    userInfo.getEmail(),
+                    userInfo.getAddress(),
+                    userInfo.getNumberOfBorrowed(),
+                    userInfo.getNumberOfReturned()
             };
             writer.writeNext(info);
             writer.close();

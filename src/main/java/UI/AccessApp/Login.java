@@ -1,6 +1,7 @@
 package UI.AccessApp;
 
 import Controller.AppController;
+import CsvFile.GetDataFromFile;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -74,6 +75,10 @@ public class Login {
         registerButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
         registerButton.getStyleClass().add("register-button");
         registerButton.setOnAction(event -> {
+            GetDataFromFile csvReader = new GetDataFromFile();
+            List<Account> accounts = csvReader.getAccountsFromFile("accounts.csv");
+            Account newSetting = new Account();
+            newSetting.setCounter(accounts.get(accounts.size() - 1).getId() + 1);
             RegisterStage registerStage = new RegisterStage();
         });
 
