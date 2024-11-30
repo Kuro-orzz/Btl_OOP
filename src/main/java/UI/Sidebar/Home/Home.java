@@ -22,9 +22,11 @@ public class Home {
      * Get Home Stack Pane display the Home interface when click on Home button
      *
      */
-    public StackPane getHomeStackPane(Account currentAcc) {
+    public StackPane getHomeStackPane(Account curAcc) {
+        AvatarImage avatarImage = new AvatarImage(curAcc, layout);
+
         VBox vBox = new VBox(60);
-        vBox.getChildren().addAll(new AvatarImage(currentAcc, layout).profileButton(), statistics());
+        vBox.getChildren().addAll(avatarImage.profileButton(), statistics());
 
         StackPane stackPane = new StackPane(vBox);
         stackPane.setLayoutX(30);

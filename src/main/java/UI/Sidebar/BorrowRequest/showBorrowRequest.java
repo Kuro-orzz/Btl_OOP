@@ -17,7 +17,7 @@ import javafx.scene.layout.StackPane;
 import java.util.List;
 
 public class showBorrowRequest extends Method<BorrowRequest> {
-    private final List<BorrowRequest> list = new BorrowRequestList("borrowRequest.csv").getBorrowRequestList();
+    private final List<BorrowRequest> list = new BorrowRequestList("borrowRequests.csv").getBorrowRequestList();
     private final TableView<BorrowRequest> tableView;
     private final ObservableList<BorrowRequest> data = FXCollections.observableArrayList();
 
@@ -115,7 +115,7 @@ public class showBorrowRequest extends Method<BorrowRequest> {
                         request.getIsbn(), request.getRequestDate(), "Borrowing");
                 list.remove(request);
                 UpdateDataFromListToFile newData = new UpdateDataFromListToFile();
-                newData.updateBorrowRequest("borrowRequest.csv", list);
+                newData.updateBorrowRequest("borrowRequests.csv", list);
                 if (data.get(i).getAccept()) {
                     AppendDataToFile newRequest = new AppendDataToFile();
                     newRequest.appendBorrowed("borrowed.csv", borrowed);

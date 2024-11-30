@@ -14,39 +14,47 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChangePassword {
+    private final Account curAcc;
     private final TextField oldPass;
     private final TextField newPass;
     private final TextField confirmPass;
 
-    public ChangePassword() {
-        oldPass = new TextField();
-        newPass = new TextField();
-        confirmPass = new TextField();
+    public ChangePassword(Account account) {
+        this.curAcc = account;
+        this.oldPass = initTextField("");
+        this.newPass = initTextField("");
+        this.confirmPass = initTextField("");
     }
 
     public StackPane display() {
-        Pane text1 = createTextPane(oldPass, "", "Old password: ");
-        Pane text2 = createTextPane(newPass, "", "New password: ");
-        Pane text3 = createTextPane(confirmPass, "", "Confirm password: ");
+        Pane text1 = createTextPane(oldPass,"Old password: ");
+        Pane text2 = createTextPane(newPass, "New password: ");
+        Pane text3 = createTextPane(confirmPass, "Confirm password: ");
 
         VBox vBox = new VBox(10, text1, text2, text3);
         vBox.setTranslateX(300);
+
         return new StackPane(vBox);
     }
 
-    public Pane createTextPane(TextField textField, String text, String type) {
+    public TextField initTextField(String text) {
+        TextField textField = new TextField();
         textField.setText(text);
         textField.setPrefSize(300, 40);
         textField.setStyle("-fx-font-size: 20px");
+        return textField;
+    }
+
+    public Pane createTextPane(TextField textField, String type) {
         Label label = new Label(type);
-        label.setMinWidth(200);
+        label.setMinWidth(100);
         label.setStyle("-fx-font-size: 20px");
         HBox hbox = new HBox(10, label, textField);
         hbox.setAlignment(Pos.CENTER_LEFT);
         return new Pane(hbox);
     }
 
-    public Button saveButton(Account curAcc) {
+    public Button saveButton() {
         Button saveButton = new Button("Save");
         saveButton.getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource("/styles/home.css")).toExternalForm()

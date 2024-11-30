@@ -28,13 +28,13 @@ public class BorrowRequestList {
     public void addBorrowRequest(BorrowRequest borrowRequest) {
         borrowRequestList.add(borrowRequest);
         AppendDataToFile append = new AppendDataToFile();
-        append.appendBorrowRequest("borrowRequest.csv", borrowRequest);
+        append.appendBorrowRequest("borrowRequests.csv", borrowRequest);
     }
 
     public void removeBorrowRequest(BorrowRequest borrowRequest) {
         borrowRequestList.remove(borrowRequest);
         UpdateDataFromListToFile update = new UpdateDataFromListToFile();
-        update.updateBorrowRequest("borrowRequest.csv", borrowRequestList);
+        update.updateBorrowRequest("borrowRequests.csv", borrowRequestList);
     }
 
     /**

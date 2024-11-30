@@ -5,10 +5,10 @@ import UI.Sidebar.UserManagement.AccountData.UserInfo;
 
 public class DataHeader {
     public final String[] BookInfo = {
-            "ISBN",
-            "Book-Title",
-            "Book-Author",
-            "Year-of-Publication",
+            "Isbn",
+            "Title",
+            "Author",
+            "Year Of Publication",
             "Publisher",
             "Quantity"
     };
@@ -16,27 +16,27 @@ public class DataHeader {
             "Id",
             "Username",
             "Password",
-            "IsAdmin",
-            "FullName",
+            "Is Admin",
+            "Full Name",
             "Age",
             "Gender",
             "Phone",
             "Email",
             "Address",
-            "NumberOfBorrowed",
-            "NumberOfReturned"
+            "Number Of Borrowed",
+            "Number Of Returned"
     };
     public final String[] BorrowRequestInfo = {
             "Id",
-            "Full name",
-            "ISBN",
+            "Full Name",
+            "Isbn",
             "Request date",
             "Status"
     };
     public final String[] BorrowedInfo = {
             "Id",
             "Full name",
-            "ISBN",
+            "Isbn",
             "Borrowed date",
             "Due date",
             "Status"

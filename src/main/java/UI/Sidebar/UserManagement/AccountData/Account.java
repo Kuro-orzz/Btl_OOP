@@ -32,11 +32,6 @@ public class Account extends HashingMultipleBase {
         this.info = info;
     }
 
-    public Account(String username, String password, int t) {
-        this.username = username;
-        this.password = password;
-    }
-
     public Account(String[] data) {
         this.id = Integer.parseInt(data[0]);
         this.username = data[1];

@@ -31,10 +31,10 @@ public class AvatarImage {
     }
 
     public StackPane profileButton() {
+        // profile image
         Image profileImage = new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/GUI/profileImage.png"))
         );
-
         ImageView profile = new ImageView(profileImage);
         profile.setFitWidth(50);
         profile.setPreserveRatio(true);
@@ -95,9 +95,9 @@ public class AvatarImage {
         BackToHomeArrow arrow = new BackToHomeArrow(curAcc, layout);
 
         profileItem.setOnAction(event -> {
-            Profile profile = new Profile();
+            Profile profile = new Profile(curAcc);
             VBox vBox = new VBox(30);
-            vBox.getChildren().addAll(avatarImage.profileButton(), profile.display(curAcc), arrow.display());
+            vBox.getChildren().addAll(avatarImage.profileButton(), profile.display(), arrow.display());
             StackPane stackPane = new StackPane(vBox);
             stackPane.setLayoutX(30);
             layout.setCenter(stackPane);
@@ -106,20 +106,20 @@ public class AvatarImage {
         MenuItem editProfileItem = new MenuItem("Edit profile");
         editProfileItem.setStyle("-fx-font-size: 20px");
         editProfileItem.setOnAction(event -> {
-            EditProfile edit = new EditProfile();
+            EditProfile edit = new EditProfile(curAcc);
             VBox vBox = new VBox(15);
-            vBox.getChildren().addAll(avatarImage.profileButton(), edit.display(curAcc), arrow.display());
-            StackPane stackPane = new StackPane(vBox, edit.saveButton(curAcc));
+            vBox.getChildren().addAll(avatarImage.profileButton(), edit.display(), arrow.display());
+            StackPane stackPane = new StackPane(vBox, edit.saveButton());
             layout.setCenter(stackPane);
         });
 
         MenuItem changePasswordItem = new MenuItem("Change password");
         changePasswordItem.setStyle("-fx-font-size: 20px");
         changePasswordItem.setOnAction(event -> {
-            ChangePassword changePassword = new ChangePassword();
+            ChangePassword changePassword = new ChangePassword(curAcc);
             VBox vBox = new VBox(15);
             vBox.getChildren().addAll(avatarImage.profileButton(), changePassword.display(), arrow.display());
-            StackPane stackPane = new StackPane(vBox, changePassword.saveButton(curAcc));
+            StackPane stackPane = new StackPane(vBox, changePassword.saveButton());
             layout.setCenter(stackPane);
         });
 

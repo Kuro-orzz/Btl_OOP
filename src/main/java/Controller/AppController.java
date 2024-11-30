@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class AppController extends Application {
     private Stage primaryStage;
-    private final Login login = new Login();
+    private final Login login = new Login(this);
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -28,7 +28,7 @@ public class AppController extends Application {
         );
         stage.getIcons().add(icon);
         stage.setTitle("My Library");
-        Scene loginScene = login.getLoginScene(this);
+        Scene loginScene = login.getLoginScene();
         stage.setScene(loginScene);
         stage.resizableProperty().setValue(Boolean.FALSE);
         stage.show();
@@ -39,7 +39,7 @@ public class AppController extends Application {
      * Present log in scene on the screen.
      */
     protected void showLoginScene() {
-        this.primaryStage.setScene(login.getLoginScene(this));
+        this.primaryStage.setScene(login.getLoginScene());
     }
 
     public void showMainAppScene(Account acc) {

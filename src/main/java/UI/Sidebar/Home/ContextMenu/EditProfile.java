@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import java.util.Objects;
 
 public class EditProfile {
+    private final Account curAcc;
     private final TextField fullName;
     private final TextField age;
     private final TextField gender;
@@ -21,23 +22,24 @@ public class EditProfile {
     private final TextField address;
     private final TextField email;
 
-    public EditProfile() {
-        this.fullName = new TextField();
-        this.age = new TextField();
-        this.gender = new TextField();
-        this.phone = new TextField();
-        this.address = new TextField();
-        this.email = new TextField();
+    public EditProfile(Account account) {
+        this.curAcc = account;
+        UserInfo info = curAcc.getInfo();
+        this.fullName = initTextField(info.getFullName());
+        this.age = initTextField(String.valueOf(info.getAge()));
+        this.gender = initTextField(info.getGender() ? "Male" : "Female");
+        this.phone = initTextField(info.getPhoneNumber());
+        this.address = initTextField(info.getAddress());
+        this.email = initTextField(info.getEmail());
     }
 
-    public StackPane display(Account curAcc) {
-        UserInfo info = curAcc.getInfo();
-        Pane text1 = createTextPane(fullName, info.getFullName(), "Full name:");
-        Pane text2 = createTextPane(age, Integer.toString(info.getAge()), "Age:");
-        Pane text3 = createTextPane(gender, info.getGender() ? "Male" : "Female", "Gender:");
-        Pane text4 = createTextPane(phone, info.getPhoneNumber(), "Phone:");
-        Pane text5 = createTextPane(address, info.getAddress(), "Address:");
-        Pane text6 = createTextPane(email, info.getEmail(), "Email:");
+    public StackPane display() {
+        Pane text1 = createTextPane(fullName, "Full name:");
+        Pane text2 = createTextPane(age, "Age:");
+        Pane text3 = createTextPane(gender, "Gender:");
+        Pane text4 = createTextPane(phone,  "Phone:");
+        Pane text5 = createTextPane(address, "Address:");
+        Pane text6 = createTextPane(email, "Email:");
 
         VBox vbox = new VBox(10);
         vbox.getChildren().addAll(text1, text2, text3, text4, text5, text6);
@@ -46,10 +48,15 @@ public class EditProfile {
         return new StackPane(vbox);
     }
 
-    public Pane createTextPane(TextField textField, String text, String type) {
+    public TextField initTextField(String text) {
+        TextField textField = new TextField();
         textField.setText(text);
         textField.setPrefSize(300, 40);
         textField.setStyle("-fx-font-size: 20px");
+        return textField;
+    }
+
+    public Pane createTextPane(TextField textField, String type) {
         Label label = new Label(type);
         label.setMinWidth(100);
         label.setStyle("-fx-font-size: 20px");
@@ -58,7 +65,7 @@ public class EditProfile {
         return new Pane(hbox);
     }
 
-    public Button saveButton(Account curAcc) {
+    public Button saveButton() {
         Button saveButton = new Button("Save");
         saveButton.getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource("/styles/home.css")).toExternalForm()

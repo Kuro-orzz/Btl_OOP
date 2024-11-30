@@ -26,6 +26,6 @@ public class BorrowBook {
 
     private void appendRequestToFile(BorrowRequest borrowRequest) {
         AppendDataToFile appendDataToFile = new AppendDataToFile();
-        appendDataToFile.appendBorrowRequest("borrowRequest.csv", borrowRequest);
+        appendDataToFile.appendBorrowRequest("borrowRequests.csv", borrowRequest);
     }
 }

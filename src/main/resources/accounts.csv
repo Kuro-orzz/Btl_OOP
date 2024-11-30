@@ -1,4 +1,4 @@
-"Id","Username","Password","Isadmin","Fullname","age","gender","phone","email","address","numberOfBorrowed","numberOfReturned"
+"Id","Username","Password","Is Admin","Full Name","Age","Gender","Phone","Email","Address","Number Of Borrowed","Number Of Returned"
 "1","abc","bcd","true","abc","12","true","","","","0","0"
 "2","12","312","false","123","11","false","","","","0","0"
 "3","admin","password","true","Nguyen Duc Luu","19","true","","","","0","0"
