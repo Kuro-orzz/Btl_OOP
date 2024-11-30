@@ -170,6 +170,15 @@ public class Library extends Method<Book> {
                 }
             });
 
+            MenuItem borrowItem = new MenuItem("Borrow Book");
+            borrowItem.setOnAction(event -> {
+                Book selectedBook = row.getItem();
+                if (selectedBook != null) {
+                    BorrowBook borrowBook = new BorrowBook();
+                    borrowBook.sendRequest(selectedBook, account);
+                }
+            });
+
             MenuItem showQrItem = new MenuItem("Show QR Code");
             showQrItem.setOnAction(event -> {
                 Book selectedBook = row.getItem();
@@ -179,7 +188,7 @@ public class Library extends Method<Book> {
                 }
             });
 
-            contextMenu.getItems().addAll(viewDetails, editItem, deleteItem, showQrItem);
+            contextMenu.getItems().addAll(viewDetails, editItem, deleteItem, borrowItem, showQrItem);
 
             row.contextMenuProperty().bind(
                     javafx.beans.binding.Bindings.when(row.emptyProperty())
