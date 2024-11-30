@@ -124,7 +124,7 @@ public class MainApp {
                     layout.setCenter(homeView);
                 }
                 case "Library" -> {
-                    Library lib = new Library(controller, curAcc);
+                    Library lib = new Library(curAcc);
                     StackPane libView = lib.getLibraryStackPane(curAcc);
                     layout.setCenter(libView);
                 }
@@ -139,12 +139,12 @@ public class MainApp {
                     layout.setCenter(borrowRequestView);
                 }
                 case "Borrowed" -> {
-                    showBorrowed borrowed = new showBorrowed(controller, curAcc);
+                    showBorrowed borrowed = new showBorrowed(curAcc);
                     StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
                     layout.setCenter(borrowedView);
                 }
                 case "My Borrowed Book" -> {
-                    showBorrowed borrowed = new showBorrowed(controller, curAcc);
+                    showBorrowed borrowed = new showBorrowed(curAcc);
                     StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
                     layout.setCenter(borrowedView);
                 }

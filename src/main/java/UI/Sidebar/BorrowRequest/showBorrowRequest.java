@@ -3,88 +3,94 @@ package UI.Sidebar.BorrowRequest;
 import Controller.AppController;
 import CsvFile.AppendDataToFile;
 import CsvFile.UpdateDataFromListToFile;
+import UI.Method;
 import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequestList;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class showBorrowRequest {
-    private List<BorrowRequest> list = new BorrowRequestList("borrowRequest.csv").getBorrowRequestList();
-    private TableView<BorrowRequest> tableView;
-    private ObservableList<BorrowRequest> data;
-    private FilteredList<BorrowRequest> filteredData;
+public class showBorrowRequest extends Method<BorrowRequest> {
+    private final List<BorrowRequest> list = new BorrowRequestList("borrowRequest.csv").getBorrowRequestList();
+    private final TableView<BorrowRequest> tableView;
+    private final ObservableList<BorrowRequest> data = FXCollections.observableArrayList();
 
     /**
      * Show borrow request constructor.
      * @param controller the main controller.
      */
     public showBorrowRequest(AppController controller) {
-        data = FXCollections.observableArrayList();
-        filteredData = new FilteredList<>(data);
-        tableView = new TableView<>(filteredData);
-        tableView.getStylesheets().add(getClass()
-                .getResource("/styles/borrowRequest.css").toExternalForm());
-        tableView.getStyleClass().add("table-view");
-        tableView.setLayoutX(100);
-        tableView.setLayoutY(20);
+        // table view
+        tableView = new TableView<>(data);
+        setTableView(tableView);
+        initBorrowRequestTable();
 
-        initializeBorrowRequestTableColumns();
-
-        addBookFromData();
+        // add data
+        data.addAll(list);
     }
 
-    /**
-     * Init column of borrow request table.
-     */
-    private void initializeBorrowRequestTableColumns() {
-        TableColumn<BorrowRequest, String> idColumn = new TableColumn<>("Id");
-        idColumn.getStyleClass().add("id-column");
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+    private TableColumn<BorrowRequest, String> initColumn(String columnName, String urlCss) {
+        TableColumn<BorrowRequest, String> newColumn = new TableColumn<>(columnName);
+        newColumn.getStyleClass().add(urlCss);
+        switch (columnName) {
+            case "Id" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().idProperty()
+            );
+            case "Full name" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().fullNameProperty()
+            );
+            case "Isbn" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().isbnProperty()
+            );
+            case "Request date" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().requestDateProperty()
+            );
+            case "Status" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().statusProperty()
+            );
+            default -> {
+                System.out.println("Error when init column: " + columnName);
+                return null;
+            }
+        }
+        return newColumn;
+    }
 
-        TableColumn<BorrowRequest, String> fullNameColumn = new TableColumn<>("Full name");
-        fullNameColumn.getStyleClass().add("fullName-column");
-        fullNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullNameProperty());
+    private TableColumn<BorrowRequest, Boolean> initCheckBoxColumn(String columnName, String urlCss) {
+        TableColumn<BorrowRequest, Boolean> newColumn = new TableColumn<>(columnName);
+        newColumn.getStyleClass().add(urlCss);
+        if (columnName.equals("Accept")){
+            newColumn.setCellValueFactory(cellData -> cellData.getValue().acceptProperty());
+            newColumn.setCellFactory(CheckBoxTableCell.forTableColumn(newColumn));
+            newColumn.setEditable(true);
+        } else if (columnName.equals("Decline")){
+            newColumn.setCellValueFactory(cellData -> cellData.getValue().declineProperty());
+            newColumn.setCellFactory(CheckBoxTableCell.forTableColumn(newColumn));
+            newColumn.setEditable(true);
+        } else {
+            System.out.println("Error when init column: " + columnName);
+            return null;
+        }
+        return newColumn;
+    }
 
-        TableColumn<BorrowRequest, String> isbnColumn = new TableColumn<>("Isbn");
-        isbnColumn.getStyleClass().add("isbn-column");
-        isbnColumn.setCellValueFactory(cellData -> cellData.getValue().isbnProperty());
-
-        TableColumn<BorrowRequest, String> requestDateColumn = new TableColumn<>("Request date");
-        requestDateColumn.getStyleClass().add("requestDate-column");
-        requestDateColumn.setCellValueFactory(cellData -> cellData.getValue().requestDateProperty());
-
-        TableColumn<BorrowRequest, String> statusColumn = new TableColumn<>("Status");
-        statusColumn.getStyleClass().add("status-column");
-        statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
-
-        TableColumn<BorrowRequest, Boolean> acceptColumn = new TableColumn<>("Accept");
-        acceptColumn.getStyleClass().add("accept-column");
-        acceptColumn.setCellValueFactory(cellData -> cellData.getValue().acceptProperty());
-        acceptColumn.setCellFactory(CheckBoxTableCell.forTableColumn(acceptColumn));
-        acceptColumn.setEditable(true);
-
-        TableColumn<BorrowRequest, Boolean> declineColumn = new TableColumn<>("Decline");
-        declineColumn.getStyleClass().add("decline-column");
-        declineColumn.setCellValueFactory(cellData -> cellData.getValue().declineProperty());
-        declineColumn.setCellFactory(CheckBoxTableCell.forTableColumn(declineColumn));
-        declineColumn.setEditable(true);
-
-        tableView.getColumns().addAll(idColumn, fullNameColumn, isbnColumn,
-                requestDateColumn, statusColumn, acceptColumn, declineColumn);
-
+    private void initBorrowRequestTable() {
+        tableView.getColumns().addAll(
+                initColumn("Id", "id-column"),
+                initColumn("Full name", "fullName-column"),
+                initColumn("Isbn", "isbn-column"),
+                initColumn("Request date", "requestDate-column"),
+                initColumn("Status", "status-column"),
+                initCheckBoxColumn("Accept", "accept-column"),
+                initCheckBoxColumn("Decline", "decline-column")
+        );
         tableView.setEditable(true);
 
         // add listener(allow only one check at the moment) to all new borrow request added to table
@@ -99,18 +105,8 @@ public class showBorrowRequest {
         });
     }
 
-    /**
-     * Get borrowed info from file to data.
-     */
-    public void addBookFromData() {
-        data.addAll(list);
-    }
-
     public Button applyButton() {
-        Button applyButton = new Button("Apply");
-        applyButton.getStyleClass().add("apply-button");
-        applyButton.setLayoutX(800.0);
-        applyButton.setLayoutY(34.0);
+        Button applyButton = initButton("Apply", "/styles/borrowRequest.css", "apply-button");
         applyButton.setOnAction(event -> {
             for (int i = 0; i < data.size(); i++) {
                 if (!data.get(i).getAccept() && !data.get(i).getDecline()) {
@@ -158,33 +154,21 @@ public class showBorrowRequest {
         AnchorPane topPane = new AnchorPane();
         topPane.getStyleClass().add("top-pane");
 
-        // Create search mode ComboBox and search Label
-        ComboBox<String> searchModeComboBox = new ComboBox<>();
-        searchModeComboBox.getItems().addAll("Id", "Full name", "Isbn", "Request date", "Status");
-        searchModeComboBox.setValue("Full name");
-        searchModeComboBox.getStylesheets()
-                .add(getClass().getResource("/styles/borrowRequest.css").toExternalForm());
-        searchModeComboBox.getStyleClass().add("combo-box");
-        searchModeComboBox.setLayoutX(160.0);
-        searchModeComboBox.setLayoutY(60.0);
+        String[] searchType = {"Id", "Full name", "Isbn", "Request date", "Status"};
+        ComboBox<String> searchModeComboBox = initSearchBox(searchType,
+                "/styles/borrowRequest.css", "combo-box");
+        Label searchLabel =initsearchLabel();
+        TextField searchField = initSearchField("/styles/borrowRequest.css", "search-field");
 
-        Label searchLabel = new Label("SEARCH BY:");
-        searchLabel.setLayoutX(180.0);
-        searchLabel.setLayoutY(32.0);
-
-        TextField searchField = new TextField();
-        searchField.getStylesheets().add(getClass()
-                .getResource("/styles/borrowRequest.css").toExternalForm());
-        searchField.getStyleClass().add("search-field");
-        searchField.setLayoutX(272.0);
-        searchField.setLayoutY(34.0);
-        searchField.setPrefSize(500, 50);
-        searchField.setStyle("-fx-background-color: #ffffff;");
-        searchField.setPadding(new Insets(10, 10, 10, 10));
+        // add search filter
+        addSearchFilter(searchField, searchModeComboBox);
 
         topPane.getChildren().addAll(searchModeComboBox, searchField, searchLabel, applyButton());
 
-        // Set up filtering for search bar
+        return initStackPane(topPane, tableView);
+    }
+
+    private void addSearchFilter(TextField searchField, ComboBox<String> searchModeComboBox) {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             ObservableList<BorrowRequest> filteredData = FXCollections.observableArrayList();
             String searchMode = searchModeComboBox.getValue();
@@ -193,37 +177,16 @@ public class showBorrowRequest {
             if (newValue == null || newValue.isEmpty()) {
                 filteredData.setAll(borrowRequestList.getBorrowRequestList());
             } else {
-                List<BorrowRequest> searchResults = new ArrayList<>();
-                switch (searchMode) {
-                    case "Id":
-                        searchResults = borrowRequestList.search("Id", newValue);
-                        break;
-                    case "Isbn":
-                        searchResults = borrowRequestList.search("Isbn", newValue);
-                        break;
-                    case "Request date":
-                        searchResults = borrowRequestList.search("Request date", newValue);
-                        break;
-                    case "Status":
-                        searchResults = borrowRequestList.search("Status", newValue);
-                        break;
-                    default:
-                        searchResults = borrowRequestList.search("Full name", newValue);
-                }
+                List<BorrowRequest> searchResults = switch (searchMode) {
+                    case "Id" -> borrowRequestList.search("Id", newValue);
+                    case "Isbn" -> borrowRequestList.search("Isbn", newValue);
+                    case "Request date" -> borrowRequestList.search("Request date", newValue);
+                    case "Status" -> borrowRequestList.search("Status", newValue);
+                    default -> borrowRequestList.search("Full name", newValue);
+                };
                 filteredData.setAll(searchResults);
             }
             tableView.setItems(filteredData);
         });
-
-        AnchorPane centerPane = new AnchorPane(tableView);
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(centerPane);
-        borderPane.setTop(topPane);
-
-        StackPane pane = new StackPane(borderPane);
-        StackPane.setAlignment(borderPane, Pos.CENTER);
-
-        return pane;
     }
 }

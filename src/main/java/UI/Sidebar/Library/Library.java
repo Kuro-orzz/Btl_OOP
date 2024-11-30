@@ -3,7 +3,6 @@ package UI.Sidebar.Library;
 import UI.Method;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.Library.BookData.BookList;
-import Controller.AppController;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,9 +18,8 @@ public class Library extends Method<Book> {
 
     /**
      * Library constructor.
-     * @param controller the main controller.
      */
-    public Library(AppController controller, Account account) {
+    public Library(Account account) {
         // table view
         tableView = new TableView<>(data);
         setTableView(tableView);
@@ -96,18 +94,19 @@ public class Library extends Method<Book> {
 
         // Search bar
         String[] searchType = {"Title", "Isbn", "Author", "Year", "Publisher"};
-        ComboBox<String> searchBar = initSearchBox(searchType);
+        ComboBox<String> searchModeComboBox = initSearchBox(searchType,
+                "/styles/library.css", "combo-box");
         Label searchLabel = initsearchLabel();
-        TextField searchField = initSearchField();
+        TextField searchField = initSearchField("/styles/library.css", "search-field");
 
         // Button add book
-        Button addButton = initButton("Add book");
+        Button addButton = initButton("Add book", "/styles/library.css", "button");
         addButton.setOnAction(e -> new AddBook().displayAddBook(data, account));
 
         // Search filter
-        addSearchFilter(searchField, searchBar);
+        addSearchFilter(searchField, searchModeComboBox);
 
-        topPane.getChildren().addAll(searchBar, searchField, searchLabel, addButton);
+        topPane.getChildren().addAll(searchModeComboBox, searchField, searchLabel, addButton);
 
         return initStackPane(topPane, tableView);
     }
@@ -115,12 +114,12 @@ public class Library extends Method<Book> {
     /**
      * Search filter for search bar.
      * @param searchField text field where we type to find book
-     * @param searchBar choose type of search
+     * @param searchModeComboBox choose type of search
      */
-    private void addSearchFilter(TextField searchField, ComboBox<String> searchBar) {
+    private void addSearchFilter(TextField searchField, ComboBox<String> searchModeComboBox) {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             ObservableList<Book> filteredData = FXCollections.observableArrayList();
-            String searchMode = searchBar.getValue();
+            String searchMode = searchModeComboBox.getValue();
             BookList list = new BookList();
             list.setBookList(FXCollections.observableArrayList(data));
             if (newValue == null || newValue.isEmpty()) {

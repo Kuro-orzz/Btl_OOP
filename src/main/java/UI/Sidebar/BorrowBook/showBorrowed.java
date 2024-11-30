@@ -1,90 +1,87 @@
 package UI.Sidebar.BorrowBook;
 
+import UI.Method;
 import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
 import UI.Sidebar.BorrowBook.BorrowedData.BorrowedList;
-import Controller.AppController;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class showBorrowed {
-    private TableView<Borrowed> tableView;
-    private ObservableList<Borrowed> data;
-    private FilteredList<Borrowed> filteredData;
+public class showBorrowed extends Method<Borrowed> {
+    private final TableView<Borrowed> tableView;
+    private final ObservableList<Borrowed> data = FXCollections.observableArrayList();
+    private final Account curAcc;
 
     /**
      * Show borrowed constructor.
-     * @param controller the main controller.
      */
-    public showBorrowed(AppController controller, Account account) {
-        data = FXCollections.observableArrayList();
-        filteredData = new FilteredList<>(data);
-        tableView = new TableView<>(filteredData);
-        tableView.getStylesheets().add(getClass()
-                .getResource("/styles/borrowed.css").toExternalForm());
-        tableView.getStyleClass().add("table-view");
-        tableView.setLayoutX(100);
-        tableView.setLayoutY(20);
+    public showBorrowed(Account account) {
+        this.curAcc = account;
+        // table view
+        tableView = new TableView<>(data);
+        setTableView(tableView);
+        initBorrowedTable();
 
-        //init table columns containing data
-        initializeBorrowedTableColumns();
-
-        //get Books' data
-        addBookFromData(account);
+        // add data
+        addBorrowedFromData();
     }
 
-    /**
-     * Init column of borrowed table.
-     */
-    private void initializeBorrowedTableColumns() {
-        TableColumn<Borrowed, String> idColumn = new TableColumn<>("Id");
-        idColumn.getStyleClass().add("id-column");
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+    private TableColumn<Borrowed, String> initColumn(String columnName, String urlCss) {
+        TableColumn<Borrowed, String> newColumn = new TableColumn<>(columnName);
+        newColumn.getStyleClass().add(urlCss);
+        switch (columnName) {
+            case "Id" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().idProperty()
+            );
+            case "Full name" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().fullNameProperty()
+            );
+            case "Isbn" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().isbnProperty()
+            );
+            case "Borrowed date" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().borrowedDateProperty()
+            );
+            case "Due date" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().dueDateProperty()
+            );
+            case "Status" -> newColumn.setCellValueFactory(
+                    cellData -> cellData.getValue().statusProperty()
+            );
+            default -> {
+                System.out.println("Error when init column: " + columnName);
+                return null;
+            }
+        }
+        return newColumn;
+    }
 
-        TableColumn<Borrowed, String> fullNameColumn = new TableColumn<>("Full name");
-        fullNameColumn.getStyleClass().add("fullName-column");
-        fullNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullNameProperty());
-
-        TableColumn<Borrowed, String> isbnColumn = new TableColumn<>("Isbn");
-        isbnColumn.getStyleClass().add("isbn-column");
-        isbnColumn.setCellValueFactory(cellData -> cellData.getValue().isbnProperty());
-
-        TableColumn<Borrowed, String> borrowedDateColumn = new TableColumn<>("Borrowed date");
-        borrowedDateColumn.getStyleClass().add("borrowedDate-column");
-        borrowedDateColumn.setCellValueFactory(cellData -> cellData.getValue().borrowedDateProperty());
-
-        TableColumn<Borrowed, String> dueDateColumn = new TableColumn<>("Due date");
-        dueDateColumn.getStyleClass().add("dueDate-column");
-        dueDateColumn.setCellValueFactory(cellData -> cellData.getValue().dueDateProperty());
-
-        TableColumn<Borrowed, String> statusColumn = new TableColumn<>("Status");
-        statusColumn.getStyleClass().add("status-column");
-        statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
-
-        tableView.getColumns().addAll(idColumn, fullNameColumn, isbnColumn,
-                borrowedDateColumn, dueDateColumn, statusColumn);
+    private void initBorrowedTable() {
+        tableView.getColumns().addAll(
+                initColumn("Id", "id-column"),
+                initColumn("Full name", "fullName-column"),
+                initColumn("Isbn", "isbn-column"),
+                initColumn("Borrowed date", "borrowedDate-column"),
+                initColumn("Due date", "dueDate-column"),
+                initColumn("Status", "status-column")
+        );
     }
 
     /**
      * Get borrowed info from file to data.
-     * @param account acount to store fullname
      */
-    public void addBookFromData(Account account) {
+    public void addBorrowedFromData() {
         List<Borrowed> list = new BorrowedList("borrowed.csv").getBorrowedList();
-        if (!account.isAdmin()) {
+        if (!curAcc.isAdmin()) {
             List<Borrowed> userBorrowedList = new ArrayList<>();
             for (Borrowed borrowed : list) {
-                if (borrowed.getFullName().equals(account.getInfo().getFullName())) {
+                if (borrowed.getFullName().equals(curAcc.getInfo().getFullName())) {
                     userBorrowedList.add(borrowed);
                 }
             }
@@ -100,44 +97,32 @@ public class showBorrowed {
      * @return Library StackPane
      */
     public StackPane getBorrowedStackPane(Account account) {
-        // Top AnchorPane for search
         AnchorPane topPane = new AnchorPane();
         topPane.getStyleClass().add("top-pane");
 
-        // Create search mode ComboBox and search Label
-        ComboBox<String> searchModeComboBox = new ComboBox<>();
+        String[] adminSearchType = {"Id", "Full name", "Isbn", "Status"};
+        String[] userSearchType = {"Id", "Full name", "Isbn"};
+        ComboBox<String> searchModeComboBox;
         if (account.isAdmin()) {
-            searchModeComboBox.getItems().addAll("Id", "Full name", "Isbn", "Status");
-            searchModeComboBox.setValue("Full name");
+            searchModeComboBox = initSearchBox(adminSearchType,
+                    "/styles/borrowed.css", "combo-box");
         } else {
-            searchModeComboBox.getItems().addAll("Id", "Isbn", "Status");
-            searchModeComboBox.setValue("Status");
+            searchModeComboBox = initSearchBox(userSearchType,
+                    "/styles/borrowed.css", "combo-box");
         }
+        Label searchLabel = initsearchLabel();
+        TextField searchField = initSearchField("/styles/borrowed.css", "search-field");
 
-        searchModeComboBox.getStylesheets()
-                .add(getClass().getResource("/styles/borrowed.css").toExternalForm());
-        searchModeComboBox.getStyleClass().add("combo-box");
-        searchModeComboBox.setLayoutX(160.0);
-        searchModeComboBox.setLayoutY(60.0);
-
-        Label searchLabel = new Label("SEARCH BY:");
-        searchLabel.setLayoutX(180.0);
-        searchLabel.setLayoutY(32.0);
-
-        TextField searchField = new TextField();
-        searchField.getStylesheets().add(getClass()
-                .getResource("/styles/borrowed.css").toExternalForm());
-        searchField.getStyleClass().add("search-field");
-        searchField.setLayoutX(272.0);
-        searchField.setLayoutY(34.0);
-        searchField.setPrefSize(500, 50);
-        searchField.setStyle("-fx-background-color: #ffffff;");
-        searchField.setPadding(new Insets(10, 10, 10, 10));
+        // add search filter
+        addSearchFilter(searchField, searchModeComboBox);
 
         topPane.getChildren().addAll(searchModeComboBox, searchField, searchLabel);
 
-        // Set up filtering for search bar
-        if (account.isAdmin()) {
+        return initStackPane(topPane, tableView);
+    }
+
+    private void addSearchFilter(TextField searchField, ComboBox<String> searchModeComboBox) {
+        if (curAcc.isAdmin()) {
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
                 ObservableList<Borrowed> filteredData = FXCollections.observableArrayList();
                 String searchMode = searchModeComboBox.getValue();
@@ -146,20 +131,12 @@ public class showBorrowed {
                 if (newValue == null || newValue.isEmpty()) {
                     filteredData.setAll(borrowedList.getBorrowedList());
                 } else {
-                    List<Borrowed> searchResults = new ArrayList<>();
-                    switch (searchMode) {
-                        case "Id":
-                            searchResults = borrowedList.search("Id", newValue);
-                            break;
-                        case "Isbn":
-                            searchResults = borrowedList.search("Isbn", newValue);
-                            break;
-                        case "Status":
-                            searchResults = borrowedList.search("Status", newValue);
-                            break;
-                        default:
-                            searchResults = borrowedList.search("Full name", newValue);
-                    }
+                    List<Borrowed> searchResults = switch (searchMode) {
+                        case "Id" -> borrowedList.search("Id", newValue);
+                        case "Isbn" -> borrowedList.search("Isbn", newValue);
+                        case "Status" -> borrowedList.search("Status", newValue);
+                        default -> borrowedList.search("Full name", newValue);
+                    };
                     filteredData.setAll(searchResults);
                 }
                 tableView.setItems(filteredData);
@@ -173,33 +150,15 @@ public class showBorrowed {
                 if (newValue == null || newValue.isEmpty()) {
                     filteredData.setAll(borrowedList.getBorrowedList());
                 } else {
-                    List<Borrowed> searchResults = new ArrayList<>();
-                    switch (searchMode) {
-                        case "Id":
-                            searchResults = borrowedList.search("Id", newValue);
-                            break;
-                        case "Isbn":
-                            searchResults = borrowedList.search("Isbn", newValue);
-                            break;
-                        case "Status":
-                            searchResults = borrowedList.search("Status", newValue);
-                            break;
-                    }
+                    List<Borrowed> searchResults = switch (searchMode) {
+                        case "Id" -> borrowedList.search("Id", newValue);
+                        case "Status" -> borrowedList.search("Status", newValue);
+                        default -> borrowedList.search("Isbn", newValue);
+                    };
                     filteredData.setAll(searchResults);
                 }
                 tableView.setItems(filteredData);
             });
         }
-
-        AnchorPane centerPane = new AnchorPane(tableView);
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(centerPane);
-        borderPane.setTop(topPane);
-
-        StackPane pane = new StackPane(borderPane);
-        StackPane.setAlignment(borderPane, Pos.CENTER);
-
-        return pane;
     }
 }

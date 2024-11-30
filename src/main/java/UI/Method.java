@@ -26,13 +26,13 @@ public class Method<T> {
         tableView.setLayoutY(20);
     }
 
-    public ComboBox<String> initSearchBox(String[] searchType) {
+    public ComboBox<String> initSearchBox(String[] searchType, String styleSheetPath, String styleClass) {
         ComboBox<String> searchBox = new ComboBox<>();
         searchBox.getItems().addAll(searchType);
         searchBox.setValue("Title");
         searchBox.setLayoutX(160.0);
         searchBox.setLayoutY(60.0);
-        applyStylesAndClasses(searchBox, "/styles/library.css", "combo-box");
+        applyStylesAndClasses(searchBox, styleSheetPath, styleClass);
         return searchBox;
     }
 
@@ -43,9 +43,9 @@ public class Method<T> {
         return searchLabel;
     }
 
-    public TextField initSearchField() {
+    public TextField initSearchField(String styleSheetPath, String styleClass) {
         TextField searchField = new TextField();
-        applyStylesAndClasses(searchField, "/styles/library.css", "search-field");
+        applyStylesAndClasses(searchField, styleSheetPath, styleClass);
         searchField.setLayoutX(272.0);
         searchField.setLayoutY(34.0);
         searchField.setPrefSize(500, 50);
@@ -54,9 +54,9 @@ public class Method<T> {
         return searchField;
     }
 
-    public Button initButton(String text) {
+    public Button initButton(String text, String styleSheetPath, String styleClass) {
         Button button = new Button(text);
-        applyStylesAndClasses(button, "/styles/library.css", "button");
+        applyStylesAndClasses(button, styleSheetPath, styleClass);
         button.setLayoutX(800.0);
         button.setLayoutY(34.0);
         return button;
