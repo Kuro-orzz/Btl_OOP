@@ -15,10 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -207,58 +204,101 @@ public class userManagement {
         TextField ageField = new TextField();
         ageField.setPromptText("Age");
 
-        TextField genderField = new TextField();
-        genderField.setPromptText("Gender (true for male, false for female)");
+        ToggleGroup genderGroup = new ToggleGroup();
+        RadioButton maleButton = new RadioButton("Male");
+        maleButton.setToggleGroup(genderGroup);
+        maleButton.setUserData(true);
 
-        TextField isAdminField = new TextField();
-        isAdminField.setPromptText("Is Admin (true/false)");
+        RadioButton femaleButton = new RadioButton("Female");
+        femaleButton.setToggleGroup(genderGroup);
+        femaleButton.setUserData(false);
+
+        HBox genderBox = new HBox(10, maleButton, femaleButton);
+
+        ToggleGroup adminGroup = new ToggleGroup();
+        RadioButton adminYesButton = new RadioButton("Yes");
+        adminYesButton.setToggleGroup(adminGroup);
+        adminYesButton.setUserData(true);
+
+        RadioButton adminNoButton = new RadioButton("No");
+        adminNoButton.setToggleGroup(adminGroup);
+        adminNoButton.setUserData(false);
+
+        HBox adminBox = new HBox(10, adminYesButton, adminNoButton);
 
         Button doneButton = new Button("Done");
-        doneButton.getStylesheets().add(getClass()
-                .getResource("/styles/userManagement.css").toExternalForm());
+        doneButton.getStylesheets().add(getClass().getResource("/styles/userManagement.css").toExternalForm());
         doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
             try {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
                 String fullName = fullNameField.getText();
-                int age = Integer.parseInt(ageField.getText());
-                boolean gender = Boolean.parseBoolean(genderField.getText());
-                boolean isAdmin = Boolean.parseBoolean(isAdminField.getText());
+                String ageText = ageField.getText();
 
                 if (!username.matches("^[a-zA-Z0-9]{6,20}$")) {
-                    showAlert("Invalid Input", "Username must be 6-20 characters and contain no special characters.");
+                    showAlert(Alert.AlertType.ERROR, "Invalid Username", "Username must be 6-20 alphanumeric characters without special characters.");
                     return;
                 }
 
-                if (!password.matches("^[a-zA-Z0-9]{6,20}$")) {
-                    showAlert("Invalid Input", "Password must be 6-20 characters and contain no special characters.");
+                if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,20}$")) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Password", "Password must be 6-20 characters and can include special characters.");
                     return;
                 }
 
-                if (!fullName.matches("^[a-zA-Z\\s]+$")) {
-                    showAlert("Invalid Input", "Full Name should not contain special characters or numbers.");
+                if (!fullName.matches("^[A-Z][a-z]+( [A-Z][a-z]+)+$")) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must contain at least two words, each starting with an uppercase letter.");
+                    return;
+                }
+
+                if (fullName.length() < 6 || fullName.length() > 20) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must be between 6 and 20 characters long.");
+                    return;
+                }
+
+                int age;
+                try {
+                    age = Integer.parseInt(ageText);
+                } catch (NumberFormatException ex) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Age", "Age must be a valid number.");
                     return;
                 }
 
                 if (age <= 0 || age >= 100) {
-                    showAlert("Invalid Input", "Age must be between 1 and 99.");
+                    showAlert(Alert.AlertType.ERROR, "Invalid Age", "Age must be between 1 and 99.");
                     return;
                 }
+
+                Toggle selectedGender = genderGroup.getSelectedToggle();
+                if (selectedGender == null) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Gender", "Please select Male or Female.");
+                    return;
+                }
+                boolean gender = (boolean) selectedGender.getUserData();
+
+                Toggle selectedAdmin = adminGroup.getSelectedToggle();
+                if (selectedAdmin == null) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Admin Status", "Please select Yes or No for Admin.");
+                    return;
+                }
+                boolean isAdmin = (boolean) selectedAdmin.getUserData();
 
                 UserInfo userInfo = new UserInfo(fullName, age, gender);
                 Account newAccount = new Account(username, password, isAdmin, userInfo);
 
                 appendAccountToCSV(newAccount);
                 data.add(newAccount);
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Account added successfully!");
                 stage.close();
-            } catch (NumberFormatException ex) {
-                showAlert("Invalid Input", "Age must be a valid number.");
+            } catch (Exception ex) {
+                showAlert(Alert.AlertType.ERROR, "Error", "An unexpected error occurred: " + ex.getMessage());
             }
         });
 
-        vbox.getChildren().addAll(usernameField, passwordField,
-                fullNameField, ageField, genderField, isAdminField, doneButton);
+        vbox.getChildren().addAll(usernameField, passwordField, fullNameField, ageField,
+                new Label("Gender:"), genderBox, new Label("Admin Status:"),
+                adminBox, doneButton);
 
         Scene scene = new Scene(vbox, 300, 400);
         stage.setScene(scene);
@@ -319,7 +359,7 @@ public class userManagement {
 
     private void openEditAccountStage(Account account) {
         Stage stage = new Stage();
-        stage.setTitle("Edit Book");
+        stage.setTitle("Edit Account");
 
         VBox vbox = new VBox(10);
         vbox.setPadding(new Insets(20, 20, 20, 20));
@@ -328,14 +368,46 @@ public class userManagement {
         usernameField.setPromptText("Username");
         TextField passwordField = new TextField(account.getPassword());
         passwordField.setPromptText("Password");
-        TextField isAdminField = new TextField(Boolean.toString(account.isAdmin()));
-        isAdminField.setPromptText("Is Admin");
+
         TextField fullnameField = new TextField(account.getInfo().getFullName());
         fullnameField.setPromptText("Full Name");
+
         TextField ageField = new TextField(String.valueOf(account.getInfo().getAge()));
         ageField.setPromptText("Age");
-        TextField genderField = new TextField(String.valueOf(account.getInfo().getGender()));
-        genderField.setPromptText("Gender (true for male, false for female)");
+
+        ToggleGroup genderGroup = new ToggleGroup();
+        RadioButton maleButton = new RadioButton("Male");
+        maleButton.setToggleGroup(genderGroup);
+        maleButton.setUserData(true);
+
+        RadioButton femaleButton = new RadioButton("Female");
+        femaleButton.setToggleGroup(genderGroup);
+        femaleButton.setUserData(false);
+
+        if (account.getInfo().getGender()) {
+            maleButton.setSelected(true);
+        } else {
+            femaleButton.setSelected(true);
+        }
+
+        HBox genderBox = new HBox(10, maleButton, femaleButton);
+
+        ToggleGroup adminGroup = new ToggleGroup();
+        RadioButton adminYesButton = new RadioButton("Yes");
+        adminYesButton.setToggleGroup(adminGroup);
+        adminYesButton.setUserData(true);
+
+        RadioButton adminNoButton = new RadioButton("No");
+        adminNoButton.setToggleGroup(adminGroup);
+        adminNoButton.setUserData(false);
+
+        if (account.isAdmin()) {
+            adminYesButton.setSelected(true);
+        } else {
+            adminNoButton.setSelected(true);
+        }
+
+        HBox adminBox = new HBox(10, adminYesButton, adminNoButton);
 
         Button doneButton = new Button("Done");
         doneButton.getStylesheets().add(getClass().getResource("/styles/userManagement.css").toExternalForm());
@@ -345,43 +417,70 @@ public class userManagement {
                 String newUsername = usernameField.getText();
                 String newPassword = passwordField.getText();
                 String newFullName = fullnameField.getText();
-                int newAge = Integer.parseInt(ageField.getText());
-                boolean newGender = Boolean.parseBoolean(genderField.getText());
-                boolean newIsAdmin = Boolean.parseBoolean(isAdminField.getText());
+                String newAgeText = ageField.getText();
 
                 if (!newUsername.matches("^[a-zA-Z0-9]{6,20}$")) {
-                    showAlert("Invalid Input", "Username must be 6-20 characters and contain no special characters.");
+                    showAlert(Alert.AlertType.ERROR, "Invalid Username", "Username must be 6-20 alphanumeric characters without special characters.");
                     return;
                 }
 
-                if (!newPassword.matches("^[a-zA-Z0-9]{6,20}$")) {
-                    showAlert("Invalid Input", "Password must be 6-20 characters and contain no special characters.");
+                if (!newPassword.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,20}$")) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Password", "Password must be 6-20 characters and can include special characters.");
                     return;
                 }
 
-                if (!newFullName.matches("^[a-zA-Z\\s]+$")) {
-                    showAlert("Invalid Input", "Full Name should not contain special characters or numbers.");
+                if (!newFullName.matches("^[A-Z][a-z]+( [A-Z][a-z]+)+$")) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must contain at least two words, each starting with an uppercase letter.");
                     return;
                 }
 
+                if (newFullName.length() < 6 || newFullName.length() > 20) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must be between 6 and 20 characters long.");
+                    return;
+                }
+
+                int newAge;
+                try {
+                    newAge = Integer.parseInt(newAgeText);
+                } catch (NumberFormatException ex) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Age", "Age must be a number.");
+                    return;
+                }
                 if (newAge <= 0 || newAge >= 100) {
-                    showAlert("Invalid Input", "Age must be between 1 and 99.");
+                    showAlert(Alert.AlertType.ERROR, "Invalid Age", "Age must be between 1 and 99.");
                     return;
                 }
 
-                account.setUsername(usernameField.getText());
-                account.setPassword(passwordField.getText());
+                Toggle selectedGender = genderGroup.getSelectedToggle();
+                if (selectedGender == null) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Gender", "Please select Male or Female.");
+                    return;
+                }
+                boolean newGender = (boolean) selectedGender.getUserData();
+
+                Toggle selectedAdmin = adminGroup.getSelectedToggle();
+                if (selectedAdmin == null) {
+                    showAlert(Alert.AlertType.ERROR, "Invalid Admin Status", "Please select Yes or No for Admin.");
+                    return;
+                }
+                boolean newIsAdmin = (boolean) selectedAdmin.getUserData();
+
+                account.setUsername(newUsername);
+                account.setPassword(newPassword);
                 account.setAdmin(newIsAdmin);
                 account.setInfo(new UserInfo(newFullName, newAge, newGender));
 
                 updateAccountInCsv(account);
                 tableView.refresh();
                 stage.close();
-            } catch (NumberFormatException ex) {
-                showAlert("Invalid Input", "Age must be a valid number.");
+            } catch (Exception ex) {
+                showAlert(Alert.AlertType.ERROR, "Error", "An unexpected error occurred: " + ex.getMessage());
             }
         });
-        vbox.getChildren().addAll(usernameField, passwordField, isAdminField, fullnameField, ageField, genderField, doneButton);
+
+        vbox.getChildren().addAll(usernameField, passwordField, fullnameField, ageField,
+                new Label("Gender:"), genderBox, new Label("Is Admin:"), adminBox, doneButton);
+
         Scene scene = new Scene(vbox, 400, 500);
         stage.setScene(scene);
         stage.show();
@@ -449,8 +548,8 @@ public class userManagement {
         stage.show();
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

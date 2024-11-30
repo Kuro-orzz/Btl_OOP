@@ -89,6 +89,7 @@ public class Login {
             } else {
                 Account.setCounter(1);
             }
+            RegisterStage registerStage = new RegisterStage();
         });
 
         StackPane stPane = new StackPane();
