@@ -5,11 +5,14 @@ import javafx.scene.control.Label;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Clock {
     public Label renderClock() {
         Label timeLabel = new Label();
-        timeLabel.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        timeLabel.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/mainApp.css")).toExternalForm()
+        );
         timeLabel.getStyleClass().add("clock");
 
         // Create clock using thread
@@ -22,7 +25,7 @@ public class Clock {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
         });

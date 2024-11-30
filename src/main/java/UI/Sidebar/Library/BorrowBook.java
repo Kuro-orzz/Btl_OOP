@@ -14,6 +14,7 @@ public class BorrowBook {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = date.format(formatter);
         BorrowRequest borrowRequest = new BorrowRequest(
+                String.valueOf(account.getId()),
                 account.getInfo().getFullName(), // Use account.getUsername() if needed
                 selectedBook.getIsbn(),
                 formattedDate,

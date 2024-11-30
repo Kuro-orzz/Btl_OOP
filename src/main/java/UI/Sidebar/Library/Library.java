@@ -3,6 +3,7 @@ package UI.Sidebar.Library;
 import UI.Method;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.Library.BookData.BookList;
+import UI.Sidebar.Library.ContextMenu.*;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

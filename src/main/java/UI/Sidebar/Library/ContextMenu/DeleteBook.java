@@ -1,4 +1,4 @@
-package UI.Sidebar.Library;
+package UI.Sidebar.Library.ContextMenu;
 
 import CsvFile.UpdateDataFromListToFile;
 import UI.Sidebar.Library.BookData.Book;
@@ -17,8 +17,8 @@ public class DeleteBook {
      * @param data where book will be deleted
      * @param book object that will be deleted
      */
-    public void deleteBook(ObservableList<Book> data, Book book, Account acount) {
-        if (acount.isAdmin()) {
+    public void deleteBook(ObservableList<Book> data, Book book, Account account) {
+        if (account.isAdmin()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Book");
             alert.setHeaderText(null);

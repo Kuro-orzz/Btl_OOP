@@ -270,8 +270,8 @@ public class userManagement {
      * @param account new account to be appended
      */
     private void appendAccountToCSV(Account account) {
-            AppendDataToFile csvReader = new AppendDataToFile();
-            csvReader.appendAccount("accounts.csv", account);
+        AppendDataToFile csvReader = new AppendDataToFile();
+        csvReader.appendAccount("accounts.csv", account);
     }
 
     /**

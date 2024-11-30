@@ -1,4 +1,4 @@
-package UI.Sidebar.Library;
+package UI.Sidebar.Library.ContextMenu;
 
 import CsvFile.UpdateDataFromListToFile;
 import UI.Method;
@@ -66,9 +66,9 @@ public class EditBook extends Method<Book> {
                 updateBookInCSV(data, book, book.getIsbn());
                 stage.close();
             } catch (NumberFormatException ex) {
-                showAlert("Invalid Input", "Year and Quantity must be numeric.");
+                showAlert("Year and Quantity must be numeric.");
             } catch (IllegalArgumentException ex) {
-                showAlert("Invalid Input", ex.getMessage());
+                showAlert(ex.getMessage());
             }
         });
     }
@@ -107,9 +107,9 @@ public class EditBook extends Method<Book> {
         data.addAll(bookList);
     }
 
-    private void showAlert(String title, String message) {
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("Invalid Input");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

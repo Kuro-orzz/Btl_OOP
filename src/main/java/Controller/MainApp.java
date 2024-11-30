@@ -134,7 +134,7 @@ public class MainApp {
                     layout.setCenter(userView);
                 }
                 case "Borrow Request" -> {
-                    showBorrowRequest borrow = new showBorrowRequest(controller);
+                    showBorrowRequest borrow = new showBorrowRequest();
                     StackPane borrowRequestView = borrow.getBorrowRequestStackPane();
                     layout.setCenter(borrowRequestView);
                 }

@@ -10,8 +10,8 @@ public class UserInfo {
     private String numberOfBorrowed;
     private String numberOfReturned;
 
-    public UserInfo(String name, int age, boolean gender) {
-        this.fullName = name;
+    public UserInfo(String fullName, int age, boolean gender) {
+        this.fullName = fullName;
         this.age = age;
         this.gender = gender;
         this.phoneNumber = "";

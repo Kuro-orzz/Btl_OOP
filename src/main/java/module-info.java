@@ -30,4 +30,8 @@ module org.example.demo {
     exports Testing;
     opens UI.Sidebar.UserManagement.AccountData to javafx.fxml;
     exports UI.Sidebar.UserManagement.AccountData to javafx.fxml;
+    exports Optimize to javafx.fxml;
+    opens Optimize to javafx.fxml;
+    exports UI.Sidebar.Library.ContextMenu;
+    opens UI.Sidebar.Library.ContextMenu to javafx.fxml;
 }

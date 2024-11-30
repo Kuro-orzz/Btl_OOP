@@ -39,9 +39,8 @@ public class AddBook extends Method<Book> {
      * Set action for button add book.
      * @param stage show to screen
      * @param data list of books
-     * @param account current account
      */
-    public void setButtonAction(Stage stage, ObservableList<Book> data, Account account) {
+    public void setButtonAction(Stage stage, ObservableList<Book> data) {
         doneButton.setOnAction(e -> {
             try {
                 String isbn = isbnField.getText();
@@ -71,14 +70,15 @@ public class AddBook extends Method<Book> {
                 if (qty < 0) {
                     throw new IllegalArgumentException("Quantity must be greater than or equal to 0.");
                 }
+
                 Book newBook = new Book(isbn, title, author, yOp, publisher, String.valueOf(qty));
                 appendBookToCSV(newBook);
                 data.add(newBook);
                 stage.close();
         } catch (NumberFormatException ex) {
-            showAlert("Invalid Input", "Year and Quantity must be numeric.");
+            showAlert("Year and Quantity must be numeric.");
         } catch (IllegalArgumentException ex){
-            showAlert("Invalid Input", ex.getMessage());
+            showAlert(ex.getMessage());
         }
         });
     }
@@ -97,7 +97,7 @@ public class AddBook extends Method<Book> {
             Scene scene = new Scene(vbox, 300, 400);
             Stage stage = new Stage();
             stage.setTitle("Add new book");
-            setButtonAction(stage, data, account);
+            setButtonAction(stage, data);
             stage.setScene(scene);
             stage.show();
         } else {
@@ -118,9 +118,9 @@ public class AddBook extends Method<Book> {
         csvReader.appendBook("books.csv", newBook);
     }
 
-    private void showAlert(String title, String message) {
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("Invalid Input");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

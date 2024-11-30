@@ -2,7 +2,6 @@ package CsvFile;
 
 import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
-import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import com.opencsv.CSVWriter;
@@ -31,7 +30,7 @@ public class AppendDataToFile extends InitCsvFile {
             writer.writeNext(info);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -42,26 +41,12 @@ public class AppendDataToFile extends InitCsvFile {
      */
     public void appendAccount(String fileName, Account account) {
         try {
-            CSVWriter writer = initCsvWriter(fileName, true);
-            UserInfo userInfo = account.getInfo();
-            String[] info = {
-                    String.valueOf(account.getId()),
-                    account.getUsername(),
-                    account.getPassword(),
-                    Boolean.toString(account.isAdmin()),
-                    userInfo.getFullName(),
-                    Integer.toString(userInfo.getAge()),
-                    Boolean.toString(userInfo.getGender()),
-                    userInfo.getPhoneNumber(),
-                    userInfo.getEmail(),
-                    userInfo.getAddress(),
-                    userInfo.getNumberOfBorrowed(),
-                    userInfo.getNumberOfReturned()
-            };
-            writer.writeNext(info);
-            writer.close();
+            try (CSVWriter writer = initCsvWriter(fileName, true)) {
+                String[] info = getAccountInfo(account);
+                writer.writeNext(info);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -84,7 +69,7 @@ public class AppendDataToFile extends InitCsvFile {
             writer.writeNext(info);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -106,7 +91,7 @@ public class AppendDataToFile extends InitCsvFile {
             writer.writeNext(info);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

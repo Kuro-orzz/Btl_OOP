@@ -1,4 +1,4 @@
-package UI.Sidebar.Library;
+package UI.Sidebar.Library.ContextMenu;
 
 import UI.Sidebar.Library.API.OpenLibraryAPI;
 import UI.Sidebar.Library.BookData.Book;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookList {
-    private List<Book> bookList = new ArrayList<Book>();
+    private List<Book> bookList = new ArrayList<>();
 
     public BookList() {}
 
@@ -50,34 +50,24 @@ public class BookList {
         List<Book> searchResult = new ArrayList<>();
         for (Book book : bookList) {
             int length = 0;
-            if (type.equals("isbn")) {
-                length = book.getIsbn().length();
-            } else if (type.equals("title")) {
-                length = book.getTitle().length();
-            } else if (type.equals("author")) {
-                length = book.getAuthor().length();
-            } else if (type.equals("yearOfPublication")) {
-                length = book.getYearOfPublication().length();
-            } else if (type.equals("publisher")) {
-                length = book.getPublisher().length();
-            } else {
-                System.out.println("Not match any search type");
+            switch (type) {
+                case "isbn" -> length = book.getIsbn().length();
+                case "title" -> length = book.getTitle().length();
+                case "author" -> length = book.getAuthor().length();
+                case "yearOfPublication" -> length = book.getYearOfPublication().length();
+                case "publisher" -> length = book.getPublisher().length();
+                default -> System.out.println("Not match any search type");
             }
             try {
                 for (int j = 1; j <= length - keyword.length() + 1; j++) {
                     HashingMultipleBase hash = new HashingMultipleBase();
-                    if (type.equals("isbn")) {
-                        hash = book.hashIsbn;
-                    } else if (type.equals("title")) {
-                        hash = book.hashTitle;
-                    } else if (type.equals("author")) {
-                        hash = book.hashAuthor;
-                    } else if (type.equals("yearOfPublication")) {
-                        hash = book.hashYearOfPublication;
-                    } else if (type.equals("publisher")) {
-                        hash = book.hashPublisher;
-                    } else {
-                        System.out.println("Not match any search type");
+                    switch (type) {
+                        case "isbn" -> hash = book.hashIsbn;
+                        case "title" -> hash = book.hashTitle;
+                        case "author" -> hash = book.hashAuthor;
+                        case "yearOfPublication" -> hash = book.hashYearOfPublication;
+                        case "publisher" -> hash = book.hashPublisher;
+                        default -> System.out.println("Not match any search type");
                     }
                     boolean checkHash1 = (hash.getHash(j, keyword.length() + j - 1, 1) == hash1);
                     boolean checkHash2 = (hash.getHash(j, keyword.length() + j - 1, 2) == hash2);

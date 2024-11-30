@@ -54,7 +54,7 @@ public class RegisterStage {
 
             AccountList accountList = new AccountList("accounts.csv");
             if (accountList.isUserNameExists(username)) {
-                showAlert(Alert.AlertType.INFORMATION,"Unavailable Username", "Username already exists. Please choose a different username.");
+                showAlert();
                 return;
             } else {
                 UserInfo userInfo = new UserInfo(fullName, age, gender);
@@ -71,7 +71,7 @@ public class RegisterStage {
     }
 
     /**
-     * Append new Account to accounts's storage file.
+     * Append new Account to data.
      * @param account account to be appended
      */
     private void appendAccountToCSV(Account account) {
@@ -81,15 +81,12 @@ public class RegisterStage {
 
     /**
      * Show alert pop-up.
-     * @param alertType type of alert
-     * @param title title of alert
-     * @param message message
      */
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
+    private void showAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Unavailable Username");
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText("Username already exists. Please choose a different username.");
         alert.showAndWait();
     }
 }

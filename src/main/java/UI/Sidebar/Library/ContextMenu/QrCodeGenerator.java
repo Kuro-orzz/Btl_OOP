@@ -1,4 +1,4 @@
-package UI.Sidebar.Library;
+package UI.Sidebar.Library.ContextMenu;
 
 import UI.Sidebar.Library.BookData.Book;
 import com.google.zxing.BarcodeFormat;
@@ -46,7 +46,7 @@ public class QrCodeGenerator {
      * Show qr of book.
      * @param book book
      */
-    protected void showQrCode(Book book) {
+    public void showQrCode(Book book) {
         try {
             // URL that link to the book
             String bookUrl = "https://books.google.com/books?vid=ISBN" + book.getIsbn();
@@ -69,7 +69,7 @@ public class QrCodeGenerator {
             qrStage.setScene(scene);
             qrStage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 

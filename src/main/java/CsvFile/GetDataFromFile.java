@@ -45,7 +45,6 @@ public class GetDataFromFile {
             return data;
         } catch (IOException | CsvValidationException e) {
             System.out.println("Error reading csv file: " + e.getMessage());
-            e.printStackTrace();
         }
         return null;
     }

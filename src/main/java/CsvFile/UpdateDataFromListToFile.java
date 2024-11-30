@@ -2,7 +2,6 @@ package CsvFile;
 
 import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
 import UI.Sidebar.BorrowRequest.BorrowRequestData.BorrowRequest;
-import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import com.opencsv.CSVWriter;
@@ -35,7 +34,7 @@ public class UpdateDataFromListToFile extends InitCsvFile {
             }
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -49,26 +48,12 @@ public class UpdateDataFromListToFile extends InitCsvFile {
             CSVWriter writer = initCsvWriter(fileName, false);
             writer.writeNext(AccountInfo);
             for (Account account : accountsList) {
-                UserInfo userInfo = account.getInfo();
-                String[] info = {
-                        String.valueOf(account.getId()),
-                        account.getUsername(),
-                        account.getPassword(),
-                        Boolean.toString(account.isAdmin()),
-                        userInfo.getFullName(),
-                        Integer.toString(userInfo.getAge()),
-                        Boolean.toString(userInfo.getGender()),
-                        userInfo.getPhoneNumber(),
-                        userInfo.getEmail(),
-                        userInfo.getAddress(),
-                        userInfo.getNumberOfBorrowed(),
-                        userInfo.getNumberOfReturned()
-                };
+                String[] info = getAccountInfo(account);
                 writer.writeNext(info);
             }
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -94,7 +79,7 @@ public class UpdateDataFromListToFile extends InitCsvFile {
             }
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -119,7 +104,7 @@ public class UpdateDataFromListToFile extends InitCsvFile {
             }
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

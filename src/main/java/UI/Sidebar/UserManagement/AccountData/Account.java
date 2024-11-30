@@ -1,11 +1,18 @@
 package UI.Sidebar.UserManagement.AccountData;
 
-public class Account {
+import Optimize.HashingMultipleBase;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+
+public class Account extends HashingMultipleBase {
     private static int counter = 1;
     private int id;
     private String username;
     private String password;
     private boolean isAdmin = false;
+    public HashingMultipleBase hashId, hashUsername, hashPassword,
+            hashIsAdmin, hashFullName, hashAge, hashGender,
+            hashPhone, hashEmail, hashAddress;
 
     private UserInfo info;
 
@@ -42,11 +49,9 @@ public class Account {
         info.setNumberOfBorrowed(data[10]);
         info.setNumberOfReturned(data[11]);
     }
-    public int getCounter() {
-        return counter;
-    }
-    public void setCounter(int counter) {
-        this.counter = counter;
+
+    public static void setCounter(int counter) {
+        Account.counter = counter;
     }
 
     public int getId() {
@@ -89,10 +94,26 @@ public class Account {
         this.info = info;
     }
 
+    public ObservableValue<String> idProperty() {
+        return new SimpleStringProperty(String.valueOf(id));
+    }
+
+    public ObservableValue<String> usernameProperty() {
+        return new SimpleStringProperty(username);
+    }
+
+    public ObservableValue<String> passwordProperty() {
+        return new SimpleStringProperty(password);
+    }
+
+    public ObservableValue<String> isAdminProperty() {
+        return new SimpleStringProperty(isAdmin ? "Admin" : "User");
+    }
+
     public boolean equals(Object obj) {
-        if (obj instanceof Account) {
-            Account account = (Account) obj;
-            return account.username.equals(this.username) && account.password.equals(this.password);
+        if (obj instanceof Account account) {
+            return account.username.equals(this.username)
+                    && account.password.equals(this.password);
         }
         return false;
     }

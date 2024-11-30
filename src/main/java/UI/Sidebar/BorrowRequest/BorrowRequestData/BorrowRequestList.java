@@ -50,34 +50,24 @@ public class BorrowRequestList {
         List<BorrowRequest> searchResult = new ArrayList<>();
         for (BorrowRequest borrowRequest : borrowRequestList) {
             int length = 0;
-            if (type.equals("Id")) {
-                length = borrowRequest.getId().length();
-            } else if (type.equals("Full name")) {
-                length = borrowRequest.getFullName().length();
-            } else if (type.equals("Isbn")) {
-                length = borrowRequest.getIsbn().length();
-            } else if (type.equals("Request date")) {
-                length = borrowRequest.getRequestDate().length();
-            } else if (type.equals("Status")) {
-                length = borrowRequest.getStatus().length();
-            } else {
-                System.out.println("Not match any search type");
+            switch (type) {
+                case "Id" -> length = borrowRequest.getId().length();
+                case "Full name" -> length = borrowRequest.getFullName().length();
+                case "Isbn" -> length = borrowRequest.getIsbn().length();
+                case "Request date" -> length = borrowRequest.getRequestDate().length();
+                case "Status" -> length = borrowRequest.getStatus().length();
+                default -> System.out.println("Not match any search type");
             }
             try {
                 for (int j = 1; j <= length - keyword.length() + 1; j++) {
                     HashingMultipleBase hash = new HashingMultipleBase();
-                    if (type.equals("Id")) {
-                        hash = borrowRequest.hashId;
-                    } else if (type.equals("Full name")) {
-                        hash = borrowRequest.hashFullName;
-                    } else if (type.equals("Isbn")) {
-                        hash = borrowRequest.hashIsbn;
-                    } else if (type.equals("Request date")) {
-                        hash = borrowRequest.hashRequestDate;
-                    } else if (type.equals("Status")) {
-                        hash = borrowRequest.hashStatus;
-                    } else {
-                        System.out.println("Not match any search type");
+                    switch (type) {
+                        case "Id" -> hash = borrowRequest.hashId;
+                        case "Full name" -> hash = borrowRequest.hashFullName;
+                        case "Isbn" -> hash = borrowRequest.hashIsbn;
+                        case "Request date" -> hash = borrowRequest.hashRequestDate;
+                        case "Status" -> hash = borrowRequest.hashStatus;
+                        default -> System.out.println("Not match any search type");
                     }
                     boolean checkHash1 = (hash.getHash(j, keyword.length() + j - 1, 1) == hash1);
                     boolean checkHash2 = (hash.getHash(j, keyword.length() + j - 1, 2) == hash2);

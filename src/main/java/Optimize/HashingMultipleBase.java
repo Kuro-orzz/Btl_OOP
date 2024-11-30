@@ -33,22 +33,19 @@ public class HashingMultipleBase {
         return hash;
     }
 
-    public List<Long> hash(String info, int option) {
+    public void hash(String info, int option) {
         String hashInfo = info.toLowerCase();
         if (option == 1) {
             hash1.add(0L);
             for (int i = 0; i < hashInfo.length(); i++) {
                 hash1.add((hash1.get(i) * base1 + (int) hashInfo.charAt(i)) % mod1);
             }
-            return hash1;
         } else if (option == 2) {
             hash2.add(0L);
             for (int i = 0; i < hashInfo.length(); i++) {
                 hash2.add((hash2.get(i) * base2 + (int) hashInfo.charAt(i)) % mod2);
             }
-            return hash2;
         }
-        return null;
     }
 
     public long hashInfo(String info, int option) {

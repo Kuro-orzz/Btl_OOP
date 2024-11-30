@@ -7,18 +7,17 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
 public class BorrowRequest extends HashingMultipleBase {
-    private static String id = "1";
+    private final String id;
     private final String fullName;
     private final String isbn;
     private final String requestDate;
     private String status;
-    private BooleanProperty accept, decline;
+    private final BooleanProperty accept;
+    private final BooleanProperty decline;
     HashingMultipleBase hashId, hashFullName, hashIsbn, hashRequestDate, hashStatus;
 
-    public BorrowRequest(String fullName, String isbn, String requestDate, String status) {
-        int count = Integer.parseInt(id);
-        count ++;
-        id = Integer.toString(count);
+    public BorrowRequest(String id, String fullName, String isbn, String requestDate, String status) {
+        this.id = id;
         this.fullName = fullName;
         this.isbn = isbn;
         this.requestDate = requestDate;

@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -31,16 +32,32 @@ public class OpenLibraryAPI {
             imageView.setPreserveRatio(true); // Maintain aspect ratio
 
             // Add the ImageView to a layout pane
-            StackPane root = new StackPane(imageView);
-            return root;
+            return new StackPane(imageView);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
 
     private String fetchBookImageUrl(String apiUrl, String isbn) throws Exception {
-        // Send a GET request to the Open Library API
+        // Send a GET request to web
+        final var jsonResponse = getJsonResponse(apiUrl);
+
+        // Check if the response contains the expected data
+        String isbnKey = "ISBN:" + isbn; // Replace with the actual ISBN
+        if (jsonResponse.has(isbnKey)) {
+            JSONObject bookData = jsonResponse.getJSONObject(isbnKey);
+            if (bookData.has("cover")) {
+                JSONObject cover = bookData.getJSONObject("cover");
+                // Directly get the URL from the "large" field
+                return cover.getString("large"); // Return the URL as a string
+            }
+        }
+
+        return null;  // Return null if no cover is found
+    }
+
+    private static JSONObject getJsonResponse(String apiUrl) throws IOException {
         URL url = new URL(apiUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -58,19 +75,6 @@ public class OpenLibraryAPI {
         }
 
         // Convert response to JSON
-        JSONObject jsonResponse = new JSONObject(response.toString());
-
-        // Check if the response contains the expected data
-        String isbnKey = "ISBN:" + isbn; // Replace with the actual ISBN
-        if (jsonResponse.has(isbnKey)) {
-            JSONObject bookData = jsonResponse.getJSONObject(isbnKey);
-            if (bookData.has("cover")) {
-                JSONObject cover = bookData.getJSONObject("cover");
-                // Directly get the URL from the "large" field
-                return cover.getString("large"); // Return the URL as a string
-            }
-        }
-
-        return null;  // Return null if no cover is found
+        return new JSONObject(response.toString());
     }
 }

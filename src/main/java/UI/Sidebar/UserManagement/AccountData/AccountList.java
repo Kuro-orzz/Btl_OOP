@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountList {
-    private List<Account> accountList = new ArrayList<Account>();
+    private List<Account> accountList = new ArrayList<>();
 
     public AccountList() {}
 
@@ -43,15 +43,6 @@ public class AccountList {
             }
         }
         return false;
-    }
-
-    public Account findAccount(Account account) {
-        for (Account a : accountList) {
-            if (account.equals(a)) {
-                return a;
-            }
-        }
-        return null;
     }
 
     /**

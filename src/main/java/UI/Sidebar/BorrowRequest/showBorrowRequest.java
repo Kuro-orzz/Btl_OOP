@@ -1,6 +1,5 @@
 package UI.Sidebar.BorrowRequest;
 
-import Controller.AppController;
 import CsvFile.AppendDataToFile;
 import CsvFile.UpdateDataFromListToFile;
 import UI.Method;
@@ -24,9 +23,8 @@ public class showBorrowRequest extends Method<BorrowRequest> {
 
     /**
      * Show borrow request constructor.
-     * @param controller the main controller.
      */
-    public showBorrowRequest(AppController controller) {
+    public showBorrowRequest() {
         // table view
         tableView = new TableView<>(data);
         setTableView(tableView);

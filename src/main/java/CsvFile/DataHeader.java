@@ -1,5 +1,8 @@
 package CsvFile;
 
+import UI.Sidebar.UserManagement.AccountData.Account;
+import UI.Sidebar.UserManagement.AccountData.UserInfo;
+
 public class DataHeader {
     public final String[] BookInfo = {
             "ISBN",
@@ -13,15 +16,15 @@ public class DataHeader {
             "Id",
             "Username",
             "Password",
-            "Isadmin",
-            "Fullname",
-            "age",
-            "gender",
-            "phone",
-            "email",
-            "address",
-            "numberOfBorrowed",
-            "numberOfReturned"
+            "IsAdmin",
+            "FullName",
+            "Age",
+            "Gender",
+            "Phone",
+            "Email",
+            "Address",
+            "NumberOfBorrowed",
+            "NumberOfReturned"
     };
     public final String[] BorrowRequestInfo = {
             "Id",
@@ -38,4 +41,22 @@ public class DataHeader {
             "Due date",
             "Status"
     };
+
+    public String[] getAccountInfo(Account account) {
+        UserInfo userInfo = account.getInfo();
+        return new String[]{
+                String.valueOf(account.getId()),
+                account.getUsername(),
+                account.getPassword(),
+                Boolean.toString(account.isAdmin()),
+                userInfo.getFullName(),
+                Integer.toString(userInfo.getAge()),
+                Boolean.toString(userInfo.getGender()),
+                userInfo.getPhoneNumber(),
+                userInfo.getEmail(),
+                userInfo.getAddress(),
+                userInfo.getNumberOfBorrowed(),
+                userInfo.getNumberOfReturned()
+        };
+    }
 }

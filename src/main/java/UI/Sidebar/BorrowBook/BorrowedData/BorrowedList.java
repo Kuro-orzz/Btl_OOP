@@ -51,30 +51,22 @@ public class BorrowedList {
         List<Borrowed> searchResult = new ArrayList<>();
         for (Borrowed borrowed : borrowedList) {
             int length = 0;
-            if (type.equals("Id")) {
-                length = borrowed.getId().length();
-            } else if (type.equals("Full name")) {
-                length = borrowed.getFullName().length();
-            } else if (type.equals("Isbn")) {
-                length = borrowed.getIsbn().length();
-            } else if (type.equals("Status")) {
-                length = borrowed.getStatus().length();
-            } else {
-                System.out.println("Not match any search type");
+            switch (type) {
+                case "Id" -> length = borrowed.getId().length();
+                case "Full name" -> length = borrowed.getFullName().length();
+                case "Isbn" -> length = borrowed.getIsbn().length();
+                case "Status" -> length = borrowed.getStatus().length();
+                default -> System.out.println("Not match any search type");
             }
             try {
                 for (int j = 1; j <= length - keyword.length() + 1; j++) {
                     HashingMultipleBase hash = new HashingMultipleBase();
-                    if (type.equals("Id")) {
-                        hash = borrowed.hashId;
-                    } else if (type.equals("Full name")) {
-                        hash = borrowed.hashFullName;
-                    } else if (type.equals("Isbn")) {
-                        hash = borrowed.hashIsbn;
-                    } else if (type.equals("Status")) {
-                        hash = borrowed.hashStatus;
-                    } else {
-                        System.out.println("Not match any search type");
+                    switch (type) {
+                        case "Id" -> hash = borrowed.hashId;
+                        case "Full name" -> hash = borrowed.hashFullName;
+                        case "Isbn" -> hash = borrowed.hashIsbn;
+                        case "Status" -> hash = borrowed.hashStatus;
+                        default -> System.out.println("Not match any search type");
                     }
                     boolean checkHash1 = (hash.getHash(j, keyword.length() + j - 1, 1) == hash1);
                     boolean checkHash2 = (hash.getHash(j, keyword.length() + j - 1, 2) == hash2);

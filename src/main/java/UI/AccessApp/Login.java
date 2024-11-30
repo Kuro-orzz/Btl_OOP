@@ -15,6 +15,7 @@ import UI.Sidebar.UserManagement.AccountData.Account;
 import UI.Sidebar.UserManagement.AccountData.AccountList;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Login {
     private Account curAcc;
@@ -24,12 +25,14 @@ public class Login {
     /**
      * Create a scene where we log in.
      * @param appController main app controller
-     * @return login scene to be showed
+     * @return login scene
      */
     public Scene getLoginScene(AppController appController) {
         ImageView backgroundImage = new ImageView();
         try {
-            Image loginImage = new Image(getClass().getResourceAsStream("/GUI/loginImage.jpg"));
+            Image loginImage = new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream("/GUI/loginImage.jpg"))
+            );
             backgroundImage.setImage(loginImage);
             backgroundImage.setFitWidth(1280);
             backgroundImage.setFitHeight(720);
@@ -41,7 +44,9 @@ public class Login {
 
         // login label
         Label loginLabel = new Label("     Library\nManagement");
-        loginLabel.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
+        loginLabel.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/login.css")).toExternalForm()
+        );
         loginLabel.getStyleClass().add("login-label");
 
         // Enter Username
@@ -72,14 +77,18 @@ public class Login {
         });
 
         Button registerButton = new Button("New Account");
-        registerButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
+        registerButton.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/login.css")).toExternalForm()
+        );
         registerButton.getStyleClass().add("register-button");
         registerButton.setOnAction(event -> {
             GetDataFromFile csvReader = new GetDataFromFile();
             List<Account> accounts = csvReader.getAccountsFromFile("accounts.csv");
-            Account newSetting = new Account();
-            newSetting.setCounter(accounts.get(accounts.size() - 1).getId() + 1);
-            RegisterStage registerStage = new RegisterStage();
+            if (!accounts.isEmpty()) {
+                Account.setCounter(accounts.get(accounts.size() - 1).getId() + 1);
+            } else {
+                Account.setCounter(1);
+            }
         });
 
         StackPane stPane = new StackPane();
@@ -111,7 +120,9 @@ public class Login {
             }
         });
 
-        textInput.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
+        textInput.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/login.css")).toExternalForm()
+        );
         textInput.getStyleClass().add("text-input");
 
         return textInput;
@@ -140,7 +151,9 @@ public class Login {
      */
     public Button createLoginButton(AppController appController, TextInputControl usernameField, TextInputControl passwordField) {
         Button loginButton = new Button("Login");
-        loginButton.getStylesheets().add(getClass().getResource("/styles/login.css").toExternalForm());
+        loginButton.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/login.css")).toExternalForm()
+        );
         loginButton.getStyleClass().add("login-button");
         loginButton.setOnMouseClicked(event -> handleLogin(appController, usernameField, passwordField));
         return loginButton;
@@ -156,7 +169,6 @@ public class Login {
         if (authenticate(usernameField.getText(), passwordField.getText())) {
             AccountList accountList = new AccountList("accounts.csv");
             Account account = accountList.getAccountByUsername(usernameField.getText());
-            boolean isAdmin = account.isAdmin();
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + account.getInfo().getFullName());
             appController.showMainAppScene(curAcc);
         } else {

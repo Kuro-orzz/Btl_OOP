@@ -22,7 +22,7 @@ public class InitCsvFile extends DataHeader {
             FileWriter outfile = new FileWriter(file, isAppend);
             return new CSVWriter(outfile);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -38,7 +38,7 @@ public class InitCsvFile extends DataHeader {
             writer.close();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ public class InitCsvFile extends DataHeader {
             writer.close();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class InitCsvFile extends DataHeader {
             writer.close();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -83,7 +83,7 @@ public class InitCsvFile extends DataHeader {
             writer.close();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
