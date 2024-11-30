@@ -28,4 +28,6 @@ module org.example.demo {
     opens  UI.Sidebar.Library.BookData to javafx.fxml;
     opens Testing to javafx.graphics;
     exports Testing;
+    opens UI.Sidebar.UserManagement.AccountData to javafx.fxml;
+    exports UI.Sidebar.UserManagement.AccountData to javafx.fxml;
 }

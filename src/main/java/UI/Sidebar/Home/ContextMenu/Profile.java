@@ -34,8 +34,7 @@ public class Profile {
     }
 
     private Label initLabel(String text) {
-        Label label = new Label(text);
-        return label;
+        return new Label(text);
     }
 }
 

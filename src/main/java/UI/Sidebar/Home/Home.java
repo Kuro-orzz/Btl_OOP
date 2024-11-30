@@ -3,7 +3,6 @@ package UI.Sidebar.Home;
 import UI.Sidebar.BorrowBook.BorrowedData.BorrowedList;
 import UI.Sidebar.Library.BookData.BookList;
 import UI.Sidebar.UserManagement.AccountData.Account;
-import Controller.AppController;
 import UI.Sidebar.UserManagement.AccountData.AccountList;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
@@ -11,14 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.util.Objects;
+
 public class Home {
-    private AppController controller;
     private static BorderPane layout;
 
-    public Home(BorderPane layout) {}
-
-    public Home(AppController controller, BorderPane borderPane) {
-        this.controller = controller;
+    public Home(BorderPane borderPane) {
         layout = borderPane;
     }
     /**
@@ -62,11 +59,11 @@ public class Home {
         Text text3 = new Text("Books Borrowed: " + borrowedList.getTotalBorrow());
 
         HBox textPane = new HBox(160, text1, text2, text3);
-        textPane.getStylesheets().add(getClass().getResource("/styles/home.css").toExternalForm());
+        textPane.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/home.css")).toExternalForm()
+        );
         textPane.getStyleClass().add("text-pane");
 
-        StackPane stackPane = new StackPane(hBox, textPane);
-
-        return stackPane;
+        return new StackPane(hBox, textPane);
     }
 }

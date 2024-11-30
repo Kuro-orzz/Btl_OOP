@@ -1,6 +1,6 @@
-package UI.Sidebar.Home.ContextMenu;
+package UI.Sidebar.Home;
 
-import UI.Sidebar.Home.Home;
+import UI.Sidebar.Home.ContextMenu.Profile;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
@@ -9,24 +9,22 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import java.util.Objects;
+
 public class BackToHomeArrow {
-    private Account curAcc;
-    private BorderPane layout;
+    private final Account curAcc;
+    private final BorderPane layout;
 
     public BackToHomeArrow(Account curAcc, BorderPane layout) {
         this.curAcc = curAcc;
         this.layout = layout;
     }
 
-    public StackPane displayArrow() {
-        Button arrow = arrowButton();
-        arrow.setAlignment(Pos.CENTER);
-        return new StackPane(arrow);
-    }
-
-    public Button arrowButton() {
+    public StackPane display() {
         Button arrowButton = new Button("Back to home");
-        arrowButton.getStylesheets().add(getClass().getResource("/styles/home.css").toExternalForm());
+        arrowButton.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/home.css")).toExternalForm()
+        );
         arrowButton.getStyleClass().add("return-button");
         // Set an action for the button when clicked
         arrowButton.setOnMouseClicked(e -> {
@@ -43,7 +41,8 @@ public class BackToHomeArrow {
             });
             transition.play();
         });
+        arrowButton.setAlignment(Pos.CENTER);
 
-        return arrowButton;
+        return new StackPane(arrowButton);
     }
 }

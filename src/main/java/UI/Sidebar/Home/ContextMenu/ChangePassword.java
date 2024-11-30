@@ -11,15 +11,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ChangePassword {
-    private Account curAcc;
-    private BorderPane layout;
-    private TextField oldPass, newPass, confirmPass;
+    private final TextField oldPass;
+    private final TextField newPass;
+    private final TextField confirmPass;
 
-    public ChangePassword(Account curAcc, BorderPane layout) {
-        this.curAcc = curAcc;
-        this.layout = layout;
+    public ChangePassword() {
         oldPass = new TextField();
         newPass = new TextField();
         confirmPass = new TextField();
@@ -47,35 +46,41 @@ public class ChangePassword {
         return new Pane(hbox);
     }
 
-    public Button saveButton() {
+    public Button saveButton(Account curAcc) {
         Button saveButton = new Button("Save");
-        saveButton.getStylesheets().add(getClass().getResource("/styles/home.css").toExternalForm());
+        saveButton.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/home.css")).toExternalForm()
+        );
         saveButton.getStyleClass().add("save-button");
         saveButton.setOnMouseClicked(event -> {
             if (newPass.getText().equals(confirmPass.getText())) {
                 curAcc.setPassword(newPass.getText());
-                List<Account> list = new AccountList("accounts.csv").getAccountList();
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getId() == curAcc.getId()) {
-                        list.set(i, curAcc);
-                        break;
-                    }
-                }
-                UpdateDataFromListToFile update = new UpdateDataFromListToFile();
-                update.updateAccounts("accounts.csv", list);
+                updateAccount(curAcc);
             }
             else {
-                showAlert(Alert.AlertType.ERROR, "Passwords do not match", "Passwords do not match");
+                showPasswordMatchAlert();
             }
         });
         return saveButton;
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
+    static void updateAccount(Account curAcc) {
+        List<Account> list = new AccountList("accounts.csv").getAccountList();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == curAcc.getId()) {
+                list.set(i, curAcc);
+                break;
+            }
+        }
+        UpdateDataFromListToFile update = new UpdateDataFromListToFile();
+        update.updateAccounts("accounts.csv", list);
+    }
+
+    private void showPasswordMatchAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Passwords do not match");
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText("Passwords do not match");
         alert.showAndWait();
     }
 }

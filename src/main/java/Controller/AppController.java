@@ -7,16 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class AppController extends Application {
     private Stage primaryStage;
-    private Login login = new Login();
+    private final Login login = new Login();
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
     }
 
     public static void main(String[] args) {
@@ -25,7 +23,9 @@ public class AppController extends Application {
 
     @Override
     public void start(Stage stage) {
-        Image icon = new Image(getClass().getResourceAsStream("/GUI/appIcon.png"));
+        Image icon = new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/GUI/appIcon.png"))
+        );
         stage.getIcons().add(icon);
         stage.setTitle("My Library");
         Scene loginScene = login.getLoginScene(this);

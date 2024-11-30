@@ -18,13 +18,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class MainApp {
     private Button selectedButton; // To keep track of the currently selected button
     protected BorderPane layout = new BorderPane(); // Layout of application
-    private AppController controller = new AppController();
-    private Account curAcc; // Stores if the logged-in user is an admin
+    private final AppController controller;
+    private final Account curAcc; // Stores if the logged-in user is an admin
 
     /**
      * Constructor .
@@ -43,12 +44,16 @@ public class MainApp {
     public Scene getMainAppScene() {
         // Default sidebar
         VBox sidebar = new VBox();
-        sidebar.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        sidebar.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/mainApp.css")).toExternalForm()
+        );
         sidebar.getStyleClass().add("sidebar");
 
         // Title
         Label title = new Label("Library\nManagement");
-        title.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        title.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/mainApp.css")).toExternalForm()
+        );
         title.getStyleClass().add("title");
 
         Region spacer = new Region();
@@ -79,7 +84,9 @@ public class MainApp {
 
         layout.setLeft(sidebar);
         StackPane welcome = new StackPane();
-        welcome.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        welcome.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/mainApp.css")).toExternalForm()
+        );
         Label welcomeLabel = new Label("Welcome to Library!");
         welcomeLabel.getStyleClass().add("welcome-label");
         welcome.setStyle("-fx-background-color: #F2F4F7;");
@@ -96,7 +103,9 @@ public class MainApp {
      */
     public Button createSidebarButton(String text) {
         Button button = new Button(text);
-        button.getStylesheets().add(getClass().getResource("/styles/mainApp.css").toExternalForm());
+        button.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/mainApp.css")).toExternalForm()
+        );
         button.getStyleClass().add("sidebar-button");
 
         button.setOnAction(event -> {
@@ -108,38 +117,46 @@ public class MainApp {
             selectedButton = button;
 
             // Check if the button is "Home"
-            if (text.equals("Home")) {
-                Home home = new Home(controller, layout);
-                StackPane homeView = home.getHomeStackPane(curAcc);
-                layout.setCenter(homeView);
-            } else if (text.equals("Library")) {
-                Library lib = new Library(controller, curAcc);
-                StackPane libView = lib.getLibraryStackPane(curAcc);
-                layout.setCenter(libView);
-            } else if (text.equals("User Management")) {
-                userManagement userManagement = new userManagement(controller);
-                StackPane userView = userManagement.getUserStackPane(curAcc);
-                layout.setCenter(userView);
-            } else if (text.equals("Borrow Request")) {
-                showBorrowRequest borrow = new showBorrowRequest(controller);
-                StackPane borrowRequestView = borrow.getBorrowRequestStackPane();
-                layout.setCenter(borrowRequestView);
-            } else if (text.equals("Borrowed")) {
-                showBorrowed borrowed = new showBorrowed(controller, curAcc);
-                StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
-                layout.setCenter(borrowedView);
-            } else if (text.equals("My Borrowed Book")) {
-                showBorrowed borrowed = new showBorrowed(controller, curAcc);
-                StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
-                layout.setCenter(borrowedView);
-            } else if (text.equals("Log Out")) {
-                Alert logoutConfirmatio = new Alert(Alert.AlertType.CONFIRMATION);
-                logoutConfirmatio.setTitle("Confirm Logout");
-                logoutConfirmatio.setHeaderText("Are you sure to log out?");
-                logoutConfirmatio.setContentText("Click OK to proceed.");
-                Optional<ButtonType> result = logoutConfirmatio.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    controller.showLoginScene();
+            switch (text) {
+                case "Home" -> {
+                    Home home = new Home(layout);
+                    StackPane homeView = home.getHomeStackPane(curAcc);
+                    layout.setCenter(homeView);
+                }
+                case "Library" -> {
+                    Library lib = new Library(controller, curAcc);
+                    StackPane libView = lib.getLibraryStackPane(curAcc);
+                    layout.setCenter(libView);
+                }
+                case "User Management" -> {
+                    userManagement userManagement = new userManagement(controller);
+                    StackPane userView = userManagement.getUserStackPane(curAcc);
+                    layout.setCenter(userView);
+                }
+                case "Borrow Request" -> {
+                    showBorrowRequest borrow = new showBorrowRequest(controller);
+                    StackPane borrowRequestView = borrow.getBorrowRequestStackPane();
+                    layout.setCenter(borrowRequestView);
+                }
+                case "Borrowed" -> {
+                    showBorrowed borrowed = new showBorrowed(controller, curAcc);
+                    StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
+                    layout.setCenter(borrowedView);
+                }
+                case "My Borrowed Book" -> {
+                    showBorrowed borrowed = new showBorrowed(controller, curAcc);
+                    StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
+                    layout.setCenter(borrowedView);
+                }
+                case "Log Out" -> {
+                    Alert logoutConfirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                    logoutConfirmation.setTitle("Confirm Logout");
+                    logoutConfirmation.setHeaderText("Are you sure to log out?");
+                    logoutConfirmation.setContentText("Click OK to proceed.");
+                    Optional<ButtonType> result = logoutConfirmation.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        controller.showLoginScene();
+                    }
                 }
             }
         });

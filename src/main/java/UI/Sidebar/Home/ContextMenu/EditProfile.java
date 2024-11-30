@@ -1,26 +1,27 @@
 package UI.Sidebar.Home.ContextMenu;
 
-import CsvFile.UpdateDataFromListToFile;
 import UI.Sidebar.UserManagement.AccountData.Account;
-import UI.Sidebar.UserManagement.AccountData.AccountList;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
-import java.util.List;
 import java.util.Objects;
 
 public class EditProfile {
-    private Account curAcc;
-    private BorderPane layout;
-    private TextField fullName, age, gender, phone, address, email;
+    private final TextField fullName;
+    private final TextField age;
+    private final TextField gender;
+    private final TextField phone;
+    private final TextField address;
+    private final TextField email;
 
-    public EditProfile(Account curAcc, BorderPane layout) {
-        this.curAcc = curAcc;
-        this.layout = layout;
+    public EditProfile() {
         this.fullName = new TextField();
         this.age = new TextField();
         this.gender = new TextField();
@@ -29,7 +30,7 @@ public class EditProfile {
         this.email = new TextField();
     }
 
-    public StackPane display() {
+    public StackPane display(Account curAcc) {
         UserInfo info = curAcc.getInfo();
         Pane text1 = createTextPane(fullName, info.getFullName(), "Full name:");
         Pane text2 = createTextPane(age, Integer.toString(info.getAge()), "Age:");
@@ -57,9 +58,11 @@ public class EditProfile {
         return new Pane(hbox);
     }
 
-    public Button saveButton() {
+    public Button saveButton(Account curAcc) {
         Button saveButton = new Button("Save");
-        saveButton.getStylesheets().add(getClass().getResource("/styles/home.css").toExternalForm());
+        saveButton.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/home.css")).toExternalForm()
+        );
         saveButton.getStyleClass().add("save-button");
         saveButton.setOnMouseClicked(event -> {
             UserInfo info = curAcc.getInfo();
@@ -69,15 +72,7 @@ public class EditProfile {
             info.setAddress(address.getText());
             info.setEmail(email.getText());
             curAcc.setInfo(info);
-            List<Account> list = new AccountList("accounts.csv").getAccountList();
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getId() == curAcc.getId()) {
-                    list.set(i, curAcc);
-                    break;
-                }
-            }
-            UpdateDataFromListToFile update = new UpdateDataFromListToFile();
-            update.updateAccounts("accounts.csv", list);
+            ChangePassword.updateAccount(curAcc);
         });
         return saveButton;
     }
