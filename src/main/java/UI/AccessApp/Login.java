@@ -21,6 +21,7 @@ import java.util.Objects;
 public class Login extends LoginException {
     private final AppController controller;
     private Account curAcc;
+    private final ImageView backgroundImage;
     private final Label loginLabel;
     private final TextInputControl usernameField;
     private final TextInputControl passwordField;
@@ -29,6 +30,7 @@ public class Login extends LoginException {
 
     public Login(AppController controller) {
         this.controller = controller;
+        backgroundImage = new ImageView();
         this.loginLabel = new Label("     Library\nManagement");
         this.usernameField = createInputField("username");
         this.passwordField = createInputField("password");
@@ -42,12 +44,10 @@ public class Login extends LoginException {
      */
     public Scene getLoginScene() {
         // background
-        ImageView backgroundImage = new ImageView();
-        backgroundImage.setImage(loadImage());
-        backgroundImage.setPreserveRatio(true);
-        backgroundImage.setFitWidth(1280);
-        backgroundImage.setFitHeight(720);
-        backgroundImage.setStyle("-fx-opacity: 0.6");
+        if (!isImageExist()) {
+            return null;
+        }
+        loadImage();
 
         // login label
         loginLabel.getStyleClass().add("login-label");
@@ -76,13 +76,14 @@ public class Login extends LoginException {
         return scene;
     }
 
-    public Image loadImage() {
-        if (!isImageExist()) {
-            return null;
-        }
-        return new Image(
+    public void loadImage() {
+        backgroundImage.setImage(new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/GUI/loginImage.jpg"))
-        );
+        ));
+        backgroundImage.setPreserveRatio(true);
+        backgroundImage.setFitWidth(1280);
+        backgroundImage.setFitHeight(720);
+        backgroundImage.setStyle("-fx-opacity: 0.6");
     }
 
     /**
@@ -140,7 +141,7 @@ public class Login extends LoginException {
             } else {
                 Account.setCounter(1);
             }
-            new RegisterStage().display();
+            new RegisterStage(controller).display();
         });
     }
 

@@ -11,12 +11,12 @@ import javafx.util.Duration;
 
 import java.util.Objects;
 
-public class BackToHomeArrow {
+public class BackToHome {
     private final Account curAcc;
     private final BorderPane layout;
     private final Button backToHomeButton;
 
-    public BackToHomeArrow(Account curAcc, BorderPane layout) {
+    public BackToHome(Account curAcc, BorderPane layout) {
         this.curAcc = curAcc;
         this.layout = layout;
         this.backToHomeButton = new Button("Back to Home");

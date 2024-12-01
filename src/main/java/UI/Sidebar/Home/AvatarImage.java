@@ -92,7 +92,7 @@ public class AvatarImage {
         profileItem.setStyle("-fx-font-size: 20px");
 
         AvatarImage avatarImage = new AvatarImage(curAcc, layout);
-        BackToHomeArrow arrow = new BackToHomeArrow(curAcc, layout);
+        BackToHome arrow = new BackToHome(curAcc, layout);
 
         profileItem.setOnAction(event -> {
             Profile profile = new Profile(curAcc);

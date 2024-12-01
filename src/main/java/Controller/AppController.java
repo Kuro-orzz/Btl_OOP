@@ -17,6 +17,10 @@ public class AppController extends Application {
         this.primaryStage = primaryStage;
     }
 
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -38,7 +42,7 @@ public class AppController extends Application {
     /**
      * Present log in scene on the screen.
      */
-    protected void showLoginScene() {
+    public void showLoginScene() {
         this.primaryStage.setScene(login.getLoginScene());
     }
 

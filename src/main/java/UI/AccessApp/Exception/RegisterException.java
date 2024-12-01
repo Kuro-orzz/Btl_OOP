@@ -3,10 +3,23 @@ package UI.AccessApp.Exception;
 import UI.Sidebar.UserManagement.AccountData.AccountList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Toggle;
+import javafx.scene.image.Image;
+
+import java.util.Objects;
 
 public class RegisterException {
+    public boolean isImageExist() {
+        try {
+            new Image(Objects.requireNonNull(getClass().getResourceAsStream("/GUI/loginImage.jpg")));
+        } catch (Exception e) {
+            System.out.println("Error loading image: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
     public boolean isValidUsername(String username) {
-        if (!username.matches("^[a-zA-Z0-9]{6,20}$")) {
+        if (!username.matches("^[a-zA-Z0-9]{6,40}$")) {
             showAlert(Alert.AlertType.ERROR,
                     "Invalid Username",
                     "Username must be 6-20 alphanumeric characters without special characters."
@@ -17,7 +30,7 @@ public class RegisterException {
     }
 
     public boolean isValidPassword(String password) {
-        if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,20}$")) {
+        if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,40}$")) {
             showAlert(Alert.AlertType.ERROR,
                     "Invalid Password",
                     "Password must be 6-20 characters and can include special characters."
@@ -35,7 +48,7 @@ public class RegisterException {
             );
             return false;
         }
-        if (fullName.length() < 6 || fullName.length() > 20) {
+        if (fullName.length() < 6 || fullName.length() > 40) {
             showAlert(Alert.AlertType.ERROR,
                     "Invalid Full Name",
                     "Full name must be between 6 and 20 characters long."

@@ -1,17 +1,26 @@
 package UI.AccessApp;
 
+import Controller.AppController;
 import CsvFile.AppendDataToFile;
 import UI.AccessApp.Exception.RegisterException;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import UI.Sidebar.UserManagement.AccountData.UserInfo;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class RegisterStage extends RegisterException {
-    private final Stage register;
+    private final AppController controller;
+    private final Stage stage;
+    private final ImageView backgroundImage;
+    private final ImageView backToLoginScene;
+    private final Label registerLabel;
     private final TextField usernameField;
     private final TextField passwordField;
     private final TextField fullNameField;
@@ -24,53 +33,122 @@ public class RegisterStage extends RegisterException {
     /**
      * Constructor.
      */
-    public RegisterStage() {
-        register = new Stage();
-        this.usernameField = new TextField();
-        this.passwordField = new TextField();
-        this.fullNameField = new TextField();
-        this.ageField = new TextField();
+    public RegisterStage(AppController controller) {
+        this.controller = controller;
+        this.stage = controller.getPrimaryStage();
+        this.backgroundImage = new ImageView();
+        this.backToLoginScene = new ImageView();
+        this.registerLabel = new Label("Register");
+        this.usernameField = createInputField("Enter username", "username");
+        this.passwordField = createInputField("Enter Password", "password");
+        this.fullNameField = createInputField("Enter full name", "full name");
+        this.ageField = createInputField("Enter age", "age");
         this.genderGroup = new ToggleGroup();
         this.maleButton = new RadioButton("Male");
         this.femaleButton = new RadioButton("Female");
         this.registerButton = new Button("Register");
+        defaultSetting();
     }
 
     public void display() {
-        defaultSetting();
-        addButtonAction();
+        // background
+        if (!isImageExist()) {
+            return;
+        }
+        loadImage();
+
+        // label
+        registerLabel.getStyleClass().add("register-label");
+
+        // gender vbox
+        HBox genderBox = new HBox(10, maleButton, femaleButton);
+
+        // text input
+        Pane usernamePane = createPane(usernameField, 530, 180);
+        Pane passwordPane = createPane(passwordField, 530, 200);
+        Pane fullNamePane = createPane(fullNameField, 530, 220);
+        Pane agePane = createPane(ageField, 530, 240);
+        Pane genderPane = createPane(genderBox, 530, 260);
 
         VBox vbox = new VBox(10);
-        vbox.getStyleClass().add("vbox");
+        vbox.getChildren().addAll(usernamePane, passwordPane,
+                fullNamePane, agePane, genderPane);
 
-        HBox genderBox = new HBox(10, maleButton, femaleButton);
-        Label genderLabel = new Label("Gender");
+        // button
+        addButtonAction();
 
-        vbox.getChildren().addAll(usernameField, passwordField, fullNameField, ageField,
-                genderLabel, genderBox, registerButton);
+        StackPane stPane = new StackPane(backgroundImage, registerLabel,
+                vbox, registerButton, backToLoginScene);
 
-        Scene scene = new Scene(vbox, 300, 400);
-        register.setScene(scene);
-        register.show();
+        Scene scene = new Scene(stPane, 1280, 720);
+        scene.getStylesheets().add(
+                Objects.requireNonNull(getClass().getResource("/styles/login.css")).toExternalForm()
+        );
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void defaultSetting() {
-        register.setTitle("Register");
-        register.setResizable(false);
-
-        usernameField.setPromptText("Username");
-        passwordField.setPromptText("Password");
-        fullNameField.setPromptText("Full Name");
-        ageField.setPromptText("Age");
-
         maleButton.setToggleGroup(genderGroup);
         maleButton.setUserData(true);
+        maleButton.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
 
         femaleButton.setToggleGroup(genderGroup);
         femaleButton.setUserData(false);
+        femaleButton.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
+    }
+
+    public void loadImage() {
+        backgroundImage.setImage(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/GUI/loginImage.jpg"))
+        ));
+        backgroundImage.setPreserveRatio(true);
+        backgroundImage.setFitWidth(1280);
+        backgroundImage.setFitHeight(720);
+        backgroundImage.setStyle("-fx-opacity: 0.6");
+
+        backToLoginScene.setImage(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/GUI/return.png"))
+        ));
+        backToLoginScene.setPreserveRatio(true);
+        backToLoginScene.setFitWidth(70);
+    }
+
+    public TextField createInputField(String text, String type) {
+        TextField textInput = type.equals("password") ? new PasswordField() : new TextField();
+        textInput.setPromptText("Enter " + text);
+
+        textInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 40) {
+                textInput.setText(newValue.substring(0, 40));
+            }
+        });
+        textInput.getStyleClass().add("text-input");
+
+        return textInput;
+    }
+
+    public Pane createPane(Node node, int posX, int posY) {
+        Pane pane = new Pane(node);
+        pane.setTranslateX(posX);
+        pane.setTranslateY(posY);
+        return pane;
     }
 
     public void addButtonAction() {
+        backToLoginScene.getStyleClass().add("return");
+        backToLoginScene.setOnMouseClicked(e -> controller.showLoginScene());
+        backToLoginScene.setOnMouseEntered(e -> {
+            backToLoginScene.setScaleX(1.2); // Increase width
+            backToLoginScene.setScaleY(1.2); // Increase height
+        });
+
+        backToLoginScene.setOnMouseExited(e -> {
+            backToLoginScene.setScaleX(1.0); // Reset width
+            backToLoginScene.setScaleY(1.0); // Reset height
+        });
+
+        registerButton.getStyleClass().add("register-button");
         registerButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
@@ -98,7 +176,7 @@ public class RegisterStage extends RegisterException {
             appendAccountToCSV(newAccount);
 
             showAlert();
-            register.close();
+            controller.showMainAppScene(newAccount);
         });
     }
 

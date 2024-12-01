@@ -8,6 +8,16 @@
     -fx-translate-y: -170px;
 }
 
+.register-label {
+    -fx-font-size: 80px;
+    -fx-font-family: "Futura", sans-serif;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 100%, #4A90E2, #243A73);
+    -fx-effect: dropshadow(gaussian, rgba(141, 132, 132, 0.75), 10, 0.5, 2, 2);
+    -fx-font-weight: bold;
+    -fx-translate-x: 0px;
+    -fx-translate-y: -250px;
+}
+
 .text-input {
     -fx-background-color: white;
     -fx-opacity: 0.8;
@@ -43,5 +53,10 @@
 
 .register-button:hover {
     -fx-background-color: #3A4E8D;
+}
+
+.return {
+    -fx-translate-x: -550px;
+    -fx-translate-y: -300px;
 }
 

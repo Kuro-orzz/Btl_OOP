@@ -17,7 +17,7 @@ public class LoginException {
     }
 
     public boolean isValidUsername(String username) {
-        if (!username.matches("^[a-zA-Z0-9]{4,20}$")) {
+        if (!username.matches("^[a-zA-Z0-9]{6,40}$")) {
             showAlert(
                     "Invalid Username",
                     "Username must be 6-20 alphanumeric characters without special characters."
@@ -28,7 +28,7 @@ public class LoginException {
     }
 
     public boolean isValidPassword(String password) {
-        if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{4,20}$")) {
+        if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,40}$")) {
             showAlert(
                     "Invalid Password",
                     "Password must be 6-20 characters and can include special characters."
