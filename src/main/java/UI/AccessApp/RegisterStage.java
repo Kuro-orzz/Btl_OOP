@@ -116,7 +116,7 @@ public class RegisterStage extends RegisterException {
 
     public TextField createInputField(String text, String type) {
         TextField textInput = type.equals("password") ? new PasswordField() : new TextField();
-        textInput.setPromptText("Enter " + text);
+        textInput.setPromptText(text);
 
         textInput.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 40) {
