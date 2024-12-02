@@ -1,18 +1,14 @@
 package UI.Sidebar.UserManagement.AccountData;
 
-import Optimize.HashingMultipleBase;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
-public class Account extends HashingMultipleBase {
+public class Account {
     private static int counter = 1;
     private int id;
     private String username;
     private String password;
     private boolean isAdmin = false;
-    public HashingMultipleBase hashId, hashUsername, hashPassword,
-            hashIsAdmin, hashFullName, hashAge, hashGender,
-            hashPhone, hashEmail, hashAddress;
 
     private UserInfo info;
 
@@ -89,21 +85,21 @@ public class Account extends HashingMultipleBase {
         this.info = info;
     }
 
-    public ObservableValue<String> idProperty() {
-        return new SimpleStringProperty(String.valueOf(id));
-    }
-
-    public ObservableValue<String> usernameProperty() {
-        return new SimpleStringProperty(username);
-    }
-
-    public ObservableValue<String> passwordProperty() {
-        return new SimpleStringProperty(password);
-    }
-
-    public ObservableValue<String> isAdminProperty() {
-        return new SimpleStringProperty(isAdmin ? "Admin" : "User");
-    }
+//    public ObservableValue<String> idProperty() {
+//        return new SimpleStringProperty(String.valueOf(id));
+//    }
+//
+//    public ObservableValue<String> usernameProperty() {
+//        return new SimpleStringProperty(username);
+//    }
+//
+//    public ObservableValue<String> passwordProperty() {
+//        return new SimpleStringProperty(password);
+//    }
+//
+//    public ObservableValue<String> isAdminProperty() {
+//        return new SimpleStringProperty(isAdmin ? "Admin" : "User");
+//    }
 
     public boolean equals(Object obj) {
         if (obj instanceof Account account) {

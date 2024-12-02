@@ -41,17 +41,10 @@ public class RegisterException {
     }
 
     public boolean isValidFullName(String fullName) {
-        if (!fullName.matches("^[A-Z][a-z]+( [A-Z][a-z]+)+$")) {
+        if (!fullName.matches("^[a-z]+$")) {
             showAlert(Alert.AlertType.ERROR,
                     "Invalid Full Name",
                     "Full name must contain at least two words, each starting with an uppercase letter."
-            );
-            return false;
-        }
-        if (fullName.length() < 6 || fullName.length() > 40) {
-            showAlert(Alert.AlertType.ERROR,
-                    "Invalid Full Name",
-                    "Full name must be between 6 and 20 characters long."
             );
             return false;
         }

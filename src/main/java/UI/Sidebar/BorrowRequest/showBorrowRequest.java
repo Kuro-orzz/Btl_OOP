@@ -137,7 +137,6 @@ public class showBorrowRequest extends Method<BorrowRequest> {
         return applyButton;
     }
 
-
     /**
      * Add listener to one borrow request
      * @param borrowRequest borrow request that will be added listener

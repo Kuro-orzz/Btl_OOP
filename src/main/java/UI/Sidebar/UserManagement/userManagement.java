@@ -240,23 +240,18 @@ public class userManagement {
                 String fullName = fullNameField.getText();
                 String ageText = ageField.getText();
 
-                if (!username.matches("^[a-zA-Z0-9]{6,20}$")) {
+                if (!username.matches("^[a-zA-Z0-9]{1,40}$")) {
                     showAlert(Alert.AlertType.ERROR, "Invalid Username", "Username must be 6-20 alphanumeric characters without special characters.");
                     return;
                 }
 
-                if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,20}$")) {
+                if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,40}$")) {
                     showAlert(Alert.AlertType.ERROR, "Invalid Password", "Password must be 6-20 characters and can include special characters.");
                     return;
                 }
 
-                if (!fullName.matches("^[A-Z][a-z]+( [A-Z][a-z]+)+$")) {
+                if (!fullName.matches("^[a-z]+$")) {
                     showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must contain at least two words, each starting with an uppercase letter.");
-                    return;
-                }
-
-                if (fullName.length() < 6 || fullName.length() > 20) {
-                    showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must be between 6 and 20 characters long.");
                     return;
                 }
 
@@ -423,23 +418,18 @@ public class userManagement {
                 String newFullName = fullnameField.getText();
                 String newAgeText = ageField.getText();
 
-                if (!newUsername.matches("^[a-zA-Z0-9]{6,20}$")) {
+                if (!newUsername.matches("^[a-zA-Z0-9]{1,40}$")) {
                     showAlert(Alert.AlertType.ERROR, "Invalid Username", "Username must be 6-20 alphanumeric characters without special characters.");
                     return;
                 }
 
-                if (!newPassword.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,20}$")) {
+                if (!newPassword.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,40}$")) {
                     showAlert(Alert.AlertType.ERROR, "Invalid Password", "Password must be 6-20 characters and can include special characters.");
                     return;
                 }
 
-                if (!newFullName.matches("^[A-Z][a-z]+( [A-Z][a-z]+)+$")) {
+                if (!newFullName.matches("^[a-z]+$")) {
                     showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must contain at least two words, each starting with an uppercase letter.");
-                    return;
-                }
-
-                if (newFullName.length() < 6 || newFullName.length() > 20) {
-                    showAlert(Alert.AlertType.ERROR, "Invalid Full Name", "Full name must be between 6 and 20 characters long.");
                     return;
                 }
 
