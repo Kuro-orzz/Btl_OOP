@@ -25,12 +25,18 @@ public class EditBook extends Method<Book> {
     private final TextField quantityField = new TextField();
     private final Button doneButton;
 
-    public EditBook() {
+    public EditBook(Book book) {
+        isbnField.setText(book.getIsbn());
         isbnField.setPromptText("Isbn");
+        titleField.setText(book.getTitle());
         titleField.setPromptText("Title");
+        authorField.setText(book.getAuthor());
         authorField.setPromptText("Author");
+        yearField.setText(book.getYearOfPublication().toString());
         yearField.setPromptText("Year");
+        publisherField.setText(book.getPublisher());
         publisherField.setPromptText("Publisher");
+        quantityField.setText(book.getQuantity().toString());
         quantityField.setPromptText("Quantity");
         doneButton = new Button("Done");
         applyStylesAndClasses(doneButton, "/styles/library.css", "button");

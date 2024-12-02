@@ -159,7 +159,7 @@ public class Library extends Method<Book> {
             editItem.setOnAction(event -> {
                 Book selectedBook = row.getItem();
                 if (selectedBook != null) {
-                    new EditBook().displayEditBook(data, selectedBook, account);
+                    new EditBook(selectedBook).displayEditBook(data, selectedBook, account);
                 }
             });
 
