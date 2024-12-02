@@ -13,6 +13,30 @@ public class UpdateDataFromListToFile extends InitCsvFile {
     public UpdateDataFromListToFile() {}
 
     /**
+     * Update book quantity.
+     * @param fileName file name
+     * @param isbn isbn
+     * @param data data in file
+     */
+    public void updateBookQuantityWithGetData(String fileName, String isbn, GetDataFromFile data) {
+        List<Book> books = data.getBooksFromFile(fileName);
+        if (books == null) return; // If unable to fetch books, exit.
+
+        for (Book book : books) {
+            if (book.getIsbn().equals(isbn)) {
+                int currentQuantity = Integer.parseInt(book.getQuantity());
+                if (currentQuantity > 0) {
+                    book.setQuantity(String.valueOf(currentQuantity - 1));
+                } else {
+                    System.out.println("Book with ISBN " + isbn + " has no available quantity.");
+                }
+                break;
+            }
+        }
+        updateBooks(fileName, books);
+    }
+
+    /**
      * Use when delete book and need to rewrite all data.
      * @param fileName database of books
      * @param booksList list of books in library

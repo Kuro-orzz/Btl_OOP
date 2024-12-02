@@ -1,6 +1,7 @@
 package UI.Sidebar.BorrowRequest;
 
 import CsvFile.AppendDataToFile;
+import CsvFile.GetDataFromFile;
 import CsvFile.UpdateDataFromListToFile;
 import UI.Method;
 import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
@@ -106,6 +107,10 @@ public class showBorrowRequest extends Method<BorrowRequest> {
     public Button applyButton() {
         Button applyButton = initButton("Apply", "/styles/borrowRequest.css", "apply-button");
         applyButton.setOnAction(event -> {
+            UpdateDataFromListToFile updateData = new UpdateDataFromListToFile();
+            GetDataFromFile dataFetcher = new GetDataFromFile();
+            String booksFileName = "books.csv";
+
             for (int i = 0; i < data.size(); i++) {
                 if (!data.get(i).getAccept() && !data.get(i).getDecline()) {
                     continue;
@@ -113,13 +118,17 @@ public class showBorrowRequest extends Method<BorrowRequest> {
                 BorrowRequest request = data.get(i);
                 Borrowed borrowed = new Borrowed(request.getId(), request.getFullName(),
                         request.getIsbn(), request.getRequestDate(), "Borrowing");
+
                 list.remove(request);
                 i--;
-                UpdateDataFromListToFile newData = new UpdateDataFromListToFile();
-                newData.updateBorrowRequest("borrowRequests.csv", list);
-                if (request.getDecline()) {
+                updateData.updateBorrowRequest("borrowRequests.csv", list);
+
+                if (request.getAccept()) {
+                    updateData.updateBookQuantityWithGetData(booksFileName, request.getIsbn(), dataFetcher);
+                } else if (request.getDecline()) {
                     borrowed.setStatus("Declined");
                 }
+
                 AppendDataToFile newRequest = new AppendDataToFile();
                 newRequest.appendBorrowed("borrowed.csv", borrowed);
                 data.remove(request);
@@ -127,6 +136,7 @@ public class showBorrowRequest extends Method<BorrowRequest> {
         });
         return applyButton;
     }
+
 
     /**
      * Add listener to one borrow request

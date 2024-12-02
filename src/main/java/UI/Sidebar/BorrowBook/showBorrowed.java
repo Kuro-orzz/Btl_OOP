@@ -3,10 +3,14 @@ package UI.Sidebar.BorrowBook;
 import UI.Method;
 import UI.Sidebar.BorrowBook.BorrowedData.Borrowed;
 import UI.Sidebar.BorrowBook.BorrowedData.BorrowedList;
+import CsvFile.GetDataFromFile;
+import CsvFile.UpdateDataFromListToFile;
+import UI.Sidebar.Library.BookData.Book;
 import UI.Sidebar.UserManagement.AccountData.Account;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -30,6 +34,11 @@ public class showBorrowed extends Method<Borrowed> {
 
         // add data
         addBorrowedFromData();
+
+        // Add context menu for admin
+        if (curAcc.isAdmin()) {
+            addContextMenu();
+        }
     }
 
     private TableColumn<Borrowed, String> initColumn(String columnName, String urlCss) {
@@ -91,6 +100,69 @@ public class showBorrowed extends Method<Borrowed> {
         }
     }
 
+    /**
+     * Add context menu for admin with the "Return" function.
+     */
+    private void addContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem returnItem = new MenuItem("Return");
+        returnItem.setOnAction(event -> {
+            Borrowed selectedBorrowed = tableView.getSelectionModel().getSelectedItem();
+            if (selectedBorrowed != null && "Borrowing".equals(selectedBorrowed.getStatus())) {
+                selectedBorrowed.setStatus("Returned");
+
+                // Update the CSV file for borrowed books
+                new UpdateDataFromListToFile().updateBorrowed("borrowed.csv", new ArrayList<>(data));
+
+                // Increment the quantity of the book in books.csv
+                incrementBookQuantity(selectedBorrowed.getIsbn());
+
+                // Refresh the table to show updated status
+                tableView.refresh();
+
+                showAlert("Success", "The book has been returned!");
+            } else {
+                showAlert("Invalid Operation", "Only books with the status 'Borrowing' can be returned!");
+            }
+        });
+
+        contextMenu.getItems().add(returnItem);
+
+        // Set context menu on table rows
+        tableView.setRowFactory(tv -> {
+            TableRow<Borrowed> row = new TableRow<>();
+            row.setOnContextMenuRequested((ContextMenuEvent event) -> {
+                if (!row.isEmpty()) {
+                    contextMenu.show(row, event.getScreenX(), event.getScreenY());
+                }
+            });
+            return row;
+        });
+    }
+
+    /**
+     * Increase the book quantity by 1 when return.
+     * @param isbn returned book isbn
+     */
+    private void incrementBookQuantity(String isbn) {
+        GetDataFromFile dataFetcher = new GetDataFromFile();
+        UpdateDataFromListToFile updater = new UpdateDataFromListToFile();
+        List<Book> books = dataFetcher.getBooksFromFile("books.csv");
+
+        if (books != null) {
+            for (Book book : books) {
+                if (book.getIsbn().equals(isbn)) {
+                    int currentQuantity = Integer.parseInt(book.getQuantity());
+                    book.setQuantity(String.valueOf(currentQuantity + 1));
+                    break;
+                }
+            }
+            updater.updateBooks("books.csv", books);
+        } else {
+            showAlert("Error", "Failed to load books data for updating quantity.");
+        }
+    }
 
     /**
      * Method create Library GUI.
@@ -122,43 +194,35 @@ public class showBorrowed extends Method<Borrowed> {
     }
 
     private void addSearchFilter(TextField searchField, ComboBox<String> searchModeComboBox) {
-        if (curAcc.isAdmin()) {
-            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-                ObservableList<Borrowed> filteredData = FXCollections.observableArrayList();
-                String searchMode = searchModeComboBox.getValue();
-                BorrowedList borrowedList = new BorrowedList();
-                borrowedList.setBorrowedList(FXCollections.observableArrayList(data));
-                if (newValue == null || newValue.isEmpty()) {
-                    filteredData.setAll(borrowedList.getBorrowedList());
-                } else {
-                    List<Borrowed> searchResults = switch (searchMode) {
-                        case "Id" -> borrowedList.search("Id", newValue);
-                        case "Isbn" -> borrowedList.search("Isbn", newValue);
-                        case "Status" -> borrowedList.search("Status", newValue);
-                        default -> borrowedList.search("Full name", newValue);
-                    };
-                    filteredData.setAll(searchResults);
-                }
-                tableView.setItems(filteredData);
-            });
-        } else {
-            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-                ObservableList<Borrowed> filteredData = FXCollections.observableArrayList();
-                String searchMode = searchModeComboBox.getValue();
-                BorrowedList borrowedList = new BorrowedList();
-                borrowedList.setBorrowedList(FXCollections.observableArrayList(data));
-                if (newValue == null || newValue.isEmpty()) {
-                    filteredData.setAll(borrowedList.getBorrowedList());
-                } else {
-                    List<Borrowed> searchResults = switch (searchMode) {
-                        case "Id" -> borrowedList.search("Id", newValue);
-                        case "Status" -> borrowedList.search("Status", newValue);
-                        default -> borrowedList.search("Isbn", newValue);
-                    };
-                    filteredData.setAll(searchResults);
-                }
-                tableView.setItems(filteredData);
-            });
-        }
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            ObservableList<Borrowed> filteredData = FXCollections.observableArrayList();
+            String searchMode = searchModeComboBox.getValue();
+            BorrowedList borrowedList = new BorrowedList();
+            borrowedList.setBorrowedList(FXCollections.observableArrayList(data));
+            if (newValue == null || newValue.isEmpty()) {
+                filteredData.setAll(borrowedList.getBorrowedList());
+            } else {
+                List<Borrowed> searchResults = switch (searchMode) {
+                    case "Id" -> borrowedList.search("Id", newValue);
+                    case "Isbn" -> borrowedList.search("Isbn", newValue);
+                    case "Status" -> borrowedList.search("Status", newValue);
+                    default -> borrowedList.search("Full name", newValue);
+                };
+                filteredData.setAll(searchResults);
+            }
+            tableView.setItems(filteredData);
+        });
+    }
+
+    /**
+     * Helper to show alerts.
+     * @param title Alert title.
+     * @param content Alert content.
+     */
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

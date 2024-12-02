@@ -230,6 +230,7 @@ public class userManagement {
 
         Button doneButton = new Button("Done");
         doneButton.setTranslateX(130);
+
         doneButton.getStylesheets().add(getClass().getResource("/styles/userManagement.css").toExternalForm());
         doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {
