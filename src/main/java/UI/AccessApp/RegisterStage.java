@@ -50,6 +50,9 @@ public class RegisterStage extends RegisterException {
         defaultSetting();
     }
 
+    /**
+     * Present register on screen.
+     */
     public void display() {
         // background
         if (!isImageExist()) {
@@ -88,6 +91,9 @@ public class RegisterStage extends RegisterException {
         stage.show();
     }
 
+    /**
+     * Default setting for gender.
+     */
     public void defaultSetting() {
         maleButton.setToggleGroup(genderGroup);
         maleButton.setUserData(true);
@@ -98,6 +104,9 @@ public class RegisterStage extends RegisterException {
         femaleButton.setStyle("-fx-font-size: 22px; -fx-font-weight: bold;");
     }
 
+    /**
+     * Load image.
+     */
     public void loadImage() {
         backgroundImage.setImage(new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/GUI/loginImage.jpg"))
@@ -114,6 +123,12 @@ public class RegisterStage extends RegisterException {
         backToLoginScene.setFitWidth(70);
     }
 
+    /**
+     * Init text field for input.
+     * @param text text
+     * @param type normal text field or password
+     * @return new text field
+     */
     public TextField createInputField(String text, String type) {
         TextField textInput = type.equals("password") ? new PasswordField() : new TextField();
         textInput.setPromptText(text);
@@ -128,6 +143,13 @@ public class RegisterStage extends RegisterException {
         return textInput;
     }
 
+    /**
+     * Create pane from node.
+     * @param node node.
+     * @param posX position on screen
+     * @param posY position on screen
+     * @return new pane
+     */
     public Pane createPane(Node node, int posX, int posY) {
         Pane pane = new Pane(node);
         pane.setTranslateX(posX);
@@ -135,6 +157,9 @@ public class RegisterStage extends RegisterException {
         return pane;
     }
 
+    /**
+     * Add action for button.
+     */
     public void addButtonAction() {
         backToLoginScene.getStyleClass().add("return");
         backToLoginScene.setOnMouseClicked(e -> controller.showLoginScene());

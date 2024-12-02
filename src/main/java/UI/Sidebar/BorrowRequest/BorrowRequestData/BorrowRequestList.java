@@ -25,12 +25,20 @@ public class BorrowRequestList {
         this.borrowRequestList = borrowRequestsList;
     }
 
+    /**
+     * Add borrow request to list and data.
+     * @param borrowRequest borrow request
+     */
     public void addBorrowRequest(BorrowRequest borrowRequest) {
         borrowRequestList.add(borrowRequest);
         AppendDataToFile append = new AppendDataToFile();
         append.appendBorrowRequest("borrowRequests.csv", borrowRequest);
     }
 
+    /**
+     * Remove borrow request.
+     * @param borrowRequest borrow request
+     */
     public void removeBorrowRequest(BorrowRequest borrowRequest) {
         borrowRequestList.remove(borrowRequest);
         UpdateDataFromListToFile update = new UpdateDataFromListToFile();

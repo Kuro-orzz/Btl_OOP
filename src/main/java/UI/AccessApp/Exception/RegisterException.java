@@ -8,6 +8,10 @@ import javafx.scene.image.Image;
 import java.util.Objects;
 
 public class RegisterException {
+    /**
+     * Check if image exist.
+     * @return true if image exist
+     */
     public boolean isImageExist() {
         try {
             new Image(Objects.requireNonNull(getClass().getResourceAsStream("/GUI/loginImage.jpg")));
@@ -18,6 +22,11 @@ public class RegisterException {
         return true;
     }
 
+    /**
+     * Check if username valid.
+     * @param username username
+     * @return true if valid
+     */
     public boolean isValidUsername(String username) {
         if (!username.matches("^[a-zA-Z0-9]{6,40}$")) {
             showAlert(Alert.AlertType.ERROR,
@@ -29,6 +38,11 @@ public class RegisterException {
         return true;
     }
 
+    /**
+     * Check if password is valid.
+     * @param password password
+     * @return true if valid
+     */
     public boolean isValidPassword(String password) {
         if (!password.matches("^[a-zA-Z0-9!@#$%^&*()_+]{6,40}$")) {
             showAlert(Alert.AlertType.ERROR,
@@ -40,6 +54,11 @@ public class RegisterException {
         return true;
     }
 
+    /**
+     * Check if full name is valid.
+     * @param fullName full name
+     * @return true if valid
+     */
     public boolean isValidFullName(String fullName) {
         if (!fullName.matches("^[a-z]+$")) {
             showAlert(Alert.AlertType.ERROR,
@@ -51,6 +70,11 @@ public class RegisterException {
         return true;
     }
 
+    /**
+     * Check if age is valid.
+     * @param age age
+     * @return true if valid
+     */
     public boolean isValidAge(String age) {
         try {
             Integer.parseInt(age);
@@ -73,6 +97,11 @@ public class RegisterException {
         return true;
     }
 
+    /**
+     * Check if gender is chosen.
+     * @param gender male or female
+     * @return true if chosen
+     */
     public boolean isValidGender(Toggle gender) {
         if (gender == null) {
             showAlert(Alert.AlertType.ERROR,
@@ -84,6 +113,11 @@ public class RegisterException {
         return true;
     }
 
+    /**
+     * Check if username exist or not.
+     * @param username username
+     * @return true if exist
+     */
     public boolean isUsernameExist(String username) {
         AccountList accountList = new AccountList("accounts.csv");
         if (accountList.isUserNameExists(username)) {
@@ -96,6 +130,12 @@ public class RegisterException {
         return false;
     }
 
+    /**
+     * Show alert on screen.
+     * @param alertType type of alert
+     * @param title title of alert
+     * @param message message about error
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

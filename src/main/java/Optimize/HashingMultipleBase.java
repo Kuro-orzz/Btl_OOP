@@ -26,6 +26,11 @@ public class HashingMultipleBase {
         }
     }
 
+    /**
+     * Initialize hash array value.
+     * @param info hash string
+     * @return new hashing
+     */
     public HashingMultipleBase hashInit(String info) {
         HashingMultipleBase hash = new HashingMultipleBase(info.length());
         hash.hash(info, 1);
@@ -33,6 +38,11 @@ public class HashingMultipleBase {
         return hash;
     }
 
+    /**
+     * Hash string into array value.
+     * @param info hash string
+     * @param option choose hash base 1 or 2
+     */
     public void hash(String info, int option) {
         String hashInfo = info.toLowerCase();
         if (option == 1) {
@@ -48,6 +58,12 @@ public class HashingMultipleBase {
         }
     }
 
+    /**
+     * Hash string to one value.
+     * @param info hash string
+     * @param option choose hash base 1 or 2
+     * @return number of hash string
+     */
     public long hashInfo(String info, int option) {
         String hashInfo = info.toLowerCase();
         long h = 0;
@@ -63,6 +79,13 @@ public class HashingMultipleBase {
         return h;
     }
 
+    /**
+     * Get hash value in range.
+     * @param l left
+     * @param r right
+     * @param option choose hash base1 or 2
+     * @return hash value
+     */
     public long getHash(int l, int r, int option) {
         if (option == 1) {
             return (hash1.get(r) - hash1.get(l - 1) * pow1.get(r - l + 1) + mod1 * mod1) % mod1;

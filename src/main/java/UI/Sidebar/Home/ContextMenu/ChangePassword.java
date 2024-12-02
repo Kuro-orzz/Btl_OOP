@@ -26,6 +26,10 @@ public class ChangePassword {
         this.confirmPass = initTextField("");
     }
 
+    /**
+     * Present change password.
+     * @return stack pane of change password
+     */
     public StackPane display() {
         Pane text1 = createTextPane(oldPass,"Old password: ");
         Pane text2 = createTextPane(newPass, "New password: ");
@@ -37,6 +41,11 @@ public class ChangePassword {
         return new StackPane(vBox);
     }
 
+    /**
+     * Init text field.
+     * @param text text present on text field.
+     * @return new text field
+     */
     public TextField initTextField(String text) {
         TextField textField = new TextField();
         textField.setText(text);
@@ -45,6 +54,12 @@ public class ChangePassword {
         return textField;
     }
 
+    /**
+     * Create text pane for text field.
+     * @param textField text field
+     * @param type text
+     * @return new pane
+     */
     public Pane createTextPane(TextField textField, String type) {
         Label label = new Label(type);
         label.setMinWidth(100);
@@ -54,6 +69,10 @@ public class ChangePassword {
         return new Pane(hbox);
     }
 
+    /**
+     * Button save password after changed.
+     * @return new save button
+     */
     public Button saveButton() {
         Button saveButton = new Button("Save");
         saveButton.getStylesheets().add(
@@ -72,6 +91,10 @@ public class ChangePassword {
         return saveButton;
     }
 
+    /**
+     * Update new info for account in data.
+     * @param curAcc current account
+     */
     static void updateAccount(Account curAcc) {
         List<Account> list = new AccountList("accounts.csv").getAccountList();
         for (int i = 0; i < list.size(); i++) {
@@ -84,6 +107,9 @@ public class ChangePassword {
         update.updateAccounts("accounts.csv", list);
     }
 
+    /**
+     * Show alert if password is not valid.
+     */
     private void showPasswordMatchAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Passwords do not match");

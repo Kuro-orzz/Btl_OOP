@@ -35,6 +35,12 @@ public class showBorrowRequest extends Method<BorrowRequest> {
         data.addAll(list);
     }
 
+    /**
+     * Initialize new column for table view.
+     * @param columnName name of column
+     * @param urlCss url to css
+     * @return column of table view
+     */
     private TableColumn<BorrowRequest, String> initColumn(String columnName, String urlCss) {
         TableColumn<BorrowRequest, String> newColumn = new TableColumn<>(columnName);
         newColumn.getStyleClass().add(urlCss);
@@ -62,6 +68,12 @@ public class showBorrowRequest extends Method<BorrowRequest> {
         return newColumn;
     }
 
+    /**
+     * Initialize checkbox column.
+     * @param columnName name of column
+     * @param urlCss url to css
+     * @return checkbox column
+     */
     private TableColumn<BorrowRequest, Boolean> initCheckBoxColumn(String columnName, String urlCss) {
         TableColumn<BorrowRequest, Boolean> newColumn = new TableColumn<>(columnName);
         newColumn.getStyleClass().add(urlCss);
@@ -80,6 +92,9 @@ public class showBorrowRequest extends Method<BorrowRequest> {
         return newColumn;
     }
 
+    /**
+     * Init new table view and set action when press checkbox.
+     */
     private void initBorrowRequestTable() {
         tableView.getColumns().addAll(
                 initColumn("Id", "id-column"),
@@ -104,6 +119,10 @@ public class showBorrowRequest extends Method<BorrowRequest> {
         });
     }
 
+    /**
+     * Button apply status accept or decline for borrow request.
+     * @return new button
+     */
     public Button applyButton() {
         Button applyButton = initButton("Apply", "/styles/borrowRequest.css", "apply-button");
         applyButton.setOnAction(event -> {
@@ -177,6 +196,11 @@ public class showBorrowRequest extends Method<BorrowRequest> {
         return initStackPane(topPane, tableView);
     }
 
+    /**
+     * Add search filter for search field
+     * @param searchField search
+     * @param searchModeComboBox search mode
+     */
     private void addSearchFilter(TextField searchField, ComboBox<String> searchModeComboBox) {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             ObservableList<BorrowRequest> filteredData = FXCollections.observableArrayList();

@@ -46,6 +46,10 @@ public class AppController extends Application {
         this.primaryStage.setScene(login.getLoginScene());
     }
 
+    /**
+     * Present main app scene.
+     * @param acc current account
+     */
     public void showMainAppScene(Account acc) {
         MainApp mainApp = new MainApp(this, acc);
         Scene sidebarScene = mainApp.getMainAppScene();

@@ -26,12 +26,20 @@ public class BorrowedList {
         this.borrowedList = borrowedList;
     }
 
+    /**
+     * Add borrowed book to list and data.
+     * @param borrowed borrowed book
+     */
     public void addBorrowed(Borrowed borrowed) {
         borrowedList.add(borrowed);
         AppendDataToFile append = new AppendDataToFile();
         append.appendBorrowed("borrowed.csv", borrowed);
     }
 
+    /**
+     * Remove borrowed book.
+     * @param borrowed borrowed book
+     */
     public void removeBorrowed(Borrowed borrowed) {
         borrowedList.remove(borrowed);
         UpdateDataFromListToFile update = new UpdateDataFromListToFile();

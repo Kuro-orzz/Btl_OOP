@@ -41,6 +41,12 @@ public class showBorrowed extends Method<Borrowed> {
         }
     }
 
+    /**
+     * Initialize new column for table view.
+     * @param columnName name of column
+     * @param urlCss url to css
+     * @return column of table view
+     */
     private TableColumn<Borrowed, String> initColumn(String columnName, String urlCss) {
         TableColumn<Borrowed, String> newColumn = new TableColumn<>(columnName);
         newColumn.getStyleClass().add(urlCss);
@@ -71,6 +77,9 @@ public class showBorrowed extends Method<Borrowed> {
         return newColumn;
     }
 
+    /**
+     * Init new table view.
+     */
     private void initBorrowedTable() {
         tableView.getColumns().addAll(
                 initColumn("Id", "id-column"),

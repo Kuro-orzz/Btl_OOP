@@ -138,12 +138,7 @@ public class MainApp {
                     StackPane borrowRequestView = borrow.getBorrowRequestStackPane();
                     layout.setCenter(borrowRequestView);
                 }
-                case "Borrowed" -> {
-                    showBorrowed borrowed = new showBorrowed(curAcc);
-                    StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
-                    layout.setCenter(borrowedView);
-                }
-                case "My Borrowed Book" -> {
+                case "Borrowed", "My Borrowed Book" -> {
                     showBorrowed borrowed = new showBorrowed(curAcc);
                     StackPane borrowedView = borrowed.getBorrowedStackPane(curAcc);
                     layout.setCenter(borrowedView);
