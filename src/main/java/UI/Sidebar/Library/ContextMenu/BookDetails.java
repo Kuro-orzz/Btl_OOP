@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BookDetails {
-
+    private static final int MAX_WIDTH = 170;
     /**
      * Show book details to screen.
      * @param book info of this book
@@ -33,11 +33,7 @@ public class BookDetails {
                 img.getChildren().add(imagePane);
             });
         });
-        imageTask.setOnFailed(event -> {
-            Platform.runLater(() -> {
-                loadingLabel.setText("Failed to load cover.");
-            });
-        });
+        imageTask.setOnFailed(event -> Platform.runLater(() -> loadingLabel.setText("Failed to load cover.")));
 
         Thread imageThread = new Thread(imageTask);
         imageThread.setDaemon(true);
@@ -45,27 +41,27 @@ public class BookDetails {
 
         Label isbnLabel = new Label("ISBN: " + book.getIsbn());
         isbnLabel.setWrapText(true);
-        isbnLabel.setMaxWidth(450);
+        isbnLabel.setMaxWidth(MAX_WIDTH);
 
         Label titleLabel = new Label("Title: " + book.getTitle());
         titleLabel.setWrapText(true);
-        titleLabel.setMaxWidth(450);
+        titleLabel.setMaxWidth(MAX_WIDTH);
 
         Label authorLabel = new Label("Author: " + book.getAuthor());
         authorLabel.setWrapText(true);
-        authorLabel.setMaxWidth(450);
+        authorLabel.setMaxWidth(MAX_WIDTH);
 
         Label yearLabel = new Label("Year of Publication: " + book.getYearOfPublication());
         yearLabel.setWrapText(true);
-        yearLabel.setMaxWidth(450);
+        yearLabel.setMaxWidth(MAX_WIDTH);
 
         Label publisherLabel = new Label("Publisher: " + book.getPublisher());
         publisherLabel.setWrapText(true);
-        publisherLabel.setMaxWidth(450);
+        publisherLabel.setMaxWidth(MAX_WIDTH);
 
         Label quantityLabel = new Label("Quantity: " + book.getQuantity());
         quantityLabel.setWrapText(true);
-        quantityLabel.setMaxWidth(450);
+        quantityLabel.setMaxWidth(MAX_WIDTH);
 
         VBox textVBox = new VBox(10);
         textVBox.setPadding(new Insets(30, 30, 30, 30));

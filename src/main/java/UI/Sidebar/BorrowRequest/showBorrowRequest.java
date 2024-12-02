@@ -114,12 +114,14 @@ public class showBorrowRequest extends Method<BorrowRequest> {
                 Borrowed borrowed = new Borrowed(request.getId(), request.getFullName(),
                         request.getIsbn(), request.getRequestDate(), "Borrowing");
                 list.remove(request);
+                i--;
                 UpdateDataFromListToFile newData = new UpdateDataFromListToFile();
                 newData.updateBorrowRequest("borrowRequests.csv", list);
-                if (data.get(i).getAccept()) {
-                    AppendDataToFile newRequest = new AppendDataToFile();
-                    newRequest.appendBorrowed("borrowed.csv", borrowed);
+                if (request.getDecline()) {
+                    borrowed.setStatus("Declined");
                 }
+                AppendDataToFile newRequest = new AppendDataToFile();
+                newRequest.appendBorrowed("borrowed.csv", borrowed);
                 data.remove(request);
             }
         });
