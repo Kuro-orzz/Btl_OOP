@@ -2,6 +2,8 @@ package UI.Sidebar.Library.ContextMenu;
 
 import UI.Sidebar.Library.API.OpenLibraryAPI;
 import UI.Sidebar.Library.BookData.Book;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,13 +14,34 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BookDetails {
+
     /**
      * Show book details to screen.
      * @param book info of this book
      */
     public void showBookDetails(Book book) {
         OpenLibraryAPI api = new OpenLibraryAPI();
-        StackPane img = api.getImage(book.getIsbn());
+
+        Label loadingLabel = new Label("Loading cover...");
+        StackPane img = new StackPane(loadingLabel);
+
+        Task<StackPane> imageTask = api.getImageAsync(book.getIsbn());
+        imageTask.setOnSucceeded(event -> {
+            StackPane imagePane = imageTask.getValue();
+            Platform.runLater(() -> {
+                img.getChildren().clear();
+                img.getChildren().add(imagePane);
+            });
+        });
+        imageTask.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                loadingLabel.setText("Failed to load cover.");
+            });
+        });
+
+        Thread imageThread = new Thread(imageTask);
+        imageThread.setDaemon(true);
+        imageThread.start();
 
         Label isbnLabel = new Label("ISBN: " + book.getIsbn());
         isbnLabel.setWrapText(true);
