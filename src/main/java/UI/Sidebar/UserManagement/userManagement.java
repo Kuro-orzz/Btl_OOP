@@ -214,6 +214,7 @@ public class userManagement {
         femaleButton.setUserData(false);
 
         HBox genderBox = new HBox(10, maleButton, femaleButton);
+        genderBox.setTranslateX(15);
 
         ToggleGroup adminGroup = new ToggleGroup();
         RadioButton adminYesButton = new RadioButton("Yes");
@@ -225,8 +226,10 @@ public class userManagement {
         adminNoButton.setUserData(false);
 
         HBox adminBox = new HBox(10, adminYesButton, adminNoButton);
+        adminBox.setTranslateX(15);
 
         Button doneButton = new Button("Done");
+        doneButton.setTranslateX(130);
         doneButton.getStylesheets().add(getClass().getResource("/styles/userManagement.css").toExternalForm());
         doneButton.getStyleClass().add("button");
         doneButton.setOnAction(e -> {

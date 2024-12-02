@@ -32,6 +32,7 @@ public class AddBook extends Method<Book> {
         publisherField.setPromptText("Publisher");
         quantityField.setPromptText("Quantity");
         doneButton = new Button("Done");
+        doneButton.setTranslateX(130);
         applyStylesAndClasses(doneButton, "/styles/library.css", "button");
     }
 
